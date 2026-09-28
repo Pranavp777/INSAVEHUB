@@ -280,6 +280,15 @@ def _render_without_db(dist_dir: Path) -> None:
     (dist_dir / "sw.js").write_bytes(service_worker(req_root).content)
     (dist_dir / "robots.txt").write_bytes(robots_txt(req_root).content)
 
+    sitemap_xml_content = """<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://insavehub.workers.dev/</loc><priority>1.0</priority></url>
+  <url><loc>https://insavehub.workers.dev/tools/</loc><priority>0.8</priority></url>
+  <url><loc>https://insavehub.workers.dev/downloads/</loc><priority>0.8</priority></url>
+  <url><loc>https://insavehub.workers.dev/donations/</loc><priority>0.7</priority></url>
+</urlset>"""
+    (dist_dir / "sitemap.xml").write_text(sitemap_xml_content, encoding="utf-8")
+
 
 def main() -> None:
     print(f"[InSave Hub Build] Initializing Django (HAS_SQLITE3={HAS_SQLITE3})...")

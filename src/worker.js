@@ -387,8 +387,33 @@ export default {
       return await handleExecuteDownload(execMatch[1]);
     }
 
+    if (url.pathname === "/auth/google/login/" || url.pathname === "/auth/google/login") {
+      const clientId = env && env.GOOGLE_OAUTH_CLIENT_ID ? String(env.GOOGLE_OAUTH_CLIENT_ID).trim() : "";
+      if (clientId) {
+        const redirectUri =
+          (env && env.GOOGLE_OAUTH_REDIRECT_URI) || `${url.origin}/auth/google/callback/`;
+        const authUrl = new URL("https://accounts.google.com/o/oauth2/v2/auth");
+        authUrl.searchParams.set("client_id", clientId);
+        authUrl.searchParams.set("redirect_uri", redirectUri);
+        authUrl.searchParams.set("response_type", "code");
+        authUrl.searchParams.set("scope", "openid email profile");
+        authUrl.searchParams.set("prompt", "select_account");
+        return Response.redirect(authUrl.toString(), 302);
+      }
+      return Response.redirect(`${url.origin}/auth/login/`, 302);
+    }
+
     if (env && env.ASSETS) {
-      return await env.ASSETS.fetch(request);
+      const assetResp = await env.ASSETS.fetch(request);
+      if (assetResp.status !== 404) {
+        return assetResp;
+      }
+      if (!url.pathname.endsWith("/") && !url.pathname.includes(".")) {
+        const slashUrl = new URL(request.url);
+        slashUrl.pathname = `${url.pathname}/`;
+        return await env.ASSETS.fetch(new Request(slashUrl.toString(), request));
+      }
+      return assetResp;
     }
 
     return new Response("Not Found", { status: 404 });
