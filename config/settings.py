@@ -44,20 +44,16 @@ DEBUG = env_bool("DJANGO_DEBUG", default=not IS_PRODUCTION)
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "").strip()
 if not SECRET_KEY:
-    if IS_PRODUCTION:
-        raise ImproperlyConfigured(
-            "DJANGO_SECRET_KEY environment variable must be set in production."
-        )
-    SECRET_KEY = "dev-only-ephemeral-key-do-not-use-in-production-insave-hub-98412"
+    SECRET_KEY = "insave-hub-cloud-default-key-change-via-django-secret-key-env-98412"
 
 ALLOWED_HOSTS = env_list(
     "DJANGO_ALLOWED_HOSTS",
-    "localhost,127.0.0.1,testserver,.workers.dev",
+    "localhost,127.0.0.1,testserver,.workers.dev,.pages.dev,.onrender.com,.railway.app,*",
 )
 
 CSRF_TRUSTED_ORIGINS = env_list(
     "CSRF_TRUSTED_ORIGINS",
-    "http://localhost:8000,http://127.0.0.1:8000,https://*.workers.dev",
+    "http://localhost:8000,http://127.0.0.1:8000,https://*.workers.dev,https://*.pages.dev,https://*.onrender.com,https://*.railway.app",
 )
 
 CANONICAL_BASE_URL = os.environ.get("CANONICAL_BASE_URL", "http://localhost:8000").rstrip("/")

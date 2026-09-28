@@ -263,11 +263,140 @@ def _extract_via_ytdlp(url: str, shortcode: str) -> Optional[Dict[str, Any]]:
         return None
 
 
+_IG_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
+
+
+def _shortcode_to_media_id(shortcode: str) -> Optional[str]:
+    """Convert an 11-character Instagram shortcode into its numeric media_id (pk)."""
+    clean = (shortcode or "").strip()[:11]
+    if not clean or any(ch not in _IG_ALPHABET for ch in clean):
+        return None
+    pk = 0
+    for ch in clean:
+        pk = (pk * 64) + _IG_ALPHABET.index(ch)
+    return str(pk)
+
+
 def _extract_via_graphql(shortcode: str) -> Optional[Dict[str, Any]]:
     """
     Stage 2: Extract real direct video, high-res photo, or carousel items from
-    Instagram's public GraphQL endpoint (PolarisPostActionLoadPostQueryQuery).
+    Instagram's public GraphQL endpoint (PolarisLoggedOutDesktopWWWPostRootContentQuery
+    and PolarisPostActionLoadPostQueryQuery).
     """
+    req_kwargs = _get_requests_kwargs()
+    media_id = _shortcode_to_media_id(shortcode)
+
+    if media_id:
+        try:
+            polaris_resp = requests.post(
+                "https://www.instagram.com/api/graphql",
+                headers={
+                    "User-Agent": _get_user_agent(),
+                    "Accept": "*/*",
+                    "Accept-Language": "en-US,en;q=0.9",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-IG-App-ID": "936619743392459",
+                    "X-FB-Friendly-Name": "PolarisLoggedOutDesktopWWWPostRootContentQuery",
+                    "X-FB-LSD": "AVqbxe3J_YA",
+                    "X-ASBD-ID": "129477",
+                    "Origin": "https://www.instagram.com",
+                    "Referer": f"https://www.instagram.com/p/{shortcode}/",
+                },
+                data={
+                    "lsd": "AVqbxe3J_YA",
+                    "fb_api_caller_class": "RelayModern",
+                    "fb_api_req_friendly_name": "PolarisLoggedOutDesktopWWWPostRootContentQuery",
+                    "server_timestamps": "true",
+                    "variables": json.dumps({"media_id": media_id}, separators=(",", ":")),
+                    "doc_id": "27130156389949648",
+                },
+                **req_kwargs,
+            )
+            if polaris_resp.status_code == 200:
+                p_data = polaris_resp.json()
+                raw_product = (
+                    (p_data.get("data") or {})
+                    .get("xig_polaris_media", {})
+                    .get("if_not_gated_logged_out")
+                )
+                product = raw_product[0] if isinstance(raw_product, list) and raw_product else raw_product
+                if isinstance(product, dict):
+                    video_versions = product.get("video_versions") or []
+                    img_candidates = (product.get("image_versions2") or {}).get("candidates") or []
+                    carousel_raw = product.get("carousel_media") or []
+
+                    carousel_items: List[Dict[str, Any]] = []
+                    for idx, slide in enumerate(carousel_raw, start=1):
+                        if not isinstance(slide, dict):
+                            continue
+                        s_vids = slide.get("video_versions") or []
+                        s_imgs = (slide.get("image_versions2") or {}).get("candidates") or []
+                        if s_vids and s_vids[0].get("url"):
+                            carousel_items.append(
+                                {
+                                    "index": idx,
+                                    "url": s_vids[0]["url"],
+                                    "ext": "mp4",
+                                    "width": int(s_vids[0].get("width") or slide.get("original_width") or 1080),
+                                    "height": int(s_vids[0].get("height") or slide.get("original_height") or 1920),
+                                }
+                            )
+                        elif s_imgs and s_imgs[0].get("url"):
+                            carousel_items.append(
+                                {
+                                    "index": idx,
+                                    "url": s_imgs[0]["url"],
+                                    "ext": "jpg",
+                                    "width": int(s_imgs[0].get("width") or slide.get("original_width") or 1080),
+                                    "height": int(s_imgs[0].get("height") or slide.get("original_height") or 1350),
+                                }
+                            )
+
+                    is_video = bool(video_versions)
+                    direct_url = ""
+                    if video_versions and video_versions[0].get("url"):
+                        direct_url = str(video_versions[0]["url"])
+                    elif carousel_items:
+                        direct_url = str(carousel_items[0]["url"])
+                        is_video = carousel_items[0]["ext"] == "mp4"
+                    elif img_candidates and img_candidates[0].get("url"):
+                        direct_url = str(img_candidates[0]["url"])
+                        is_video = False
+
+                    if direct_url:
+                        width = int(product.get("original_width") or 1080)
+                        height = int(product.get("original_height") or (1920 if is_video else 1350))
+                        owner = (product.get("user") or {}).get("username") or "instagram_creator"
+                        thumb_url = (
+                            img_candidates[0]["url"]
+                            if img_candidates and img_candidates[0].get("url")
+                            else (direct_url if not is_video else "")
+                        )
+                        caption_obj = product.get("caption") or {}
+                        caption_text = caption_obj.get("text") if isinstance(caption_obj, dict) else ""
+                        clean_title = re.sub(r"[^\x20-\x7E]+", " ", str(caption_text or ""))
+                        clean_title = re.sub(r"\s+", " ", clean_title).strip()[:100]
+                        if not clean_title:
+                            clean_title = f"Instagram {'Video' if is_video else 'Post'} by @{owner.lstrip('@')}"
+
+                        return {
+                            "direct_media_url": direct_url,
+                            "thumbnail_url": thumb_url,
+                            "width": width,
+                            "height": height,
+                            "duration_seconds": round(float(product.get("video_duration") or 0), 1),
+                            "file_size_bytes": 0,
+                            "author_handle": f"@{owner.lstrip('@')[:30]}",
+                            "media_title": clean_title,
+                            "ext": "mp4" if is_video else "jpg",
+                            "is_video": is_video,
+                            "carousel_count": len(carousel_items) if carousel_items else 1,
+                            "carousel_items": carousel_items[:10],
+                            "extractor_source": "instagram-polaris-graphql",
+                        }
+        except Exception as exc:
+            logger.debug("Polaris GraphQL extraction skipped for %s: %s", shortcode, exc)
+
     graphql_url = "https://www.instagram.com/graphql/query"
     headers = {
         "User-Agent": _get_user_agent(),
@@ -280,8 +409,6 @@ def _extract_via_graphql(shortcode: str) -> Optional[Dict[str, Any]]:
         "Origin": "https://www.instagram.com",
         "Referer": f"https://www.instagram.com/p/{shortcode}/",
     }
-
-    req_kwargs = _get_requests_kwargs()
 
     for doc_id in ("8845758582119845", "10015901848480474"):
         try:
@@ -314,7 +441,7 @@ def _extract_via_graphql(shortcode: str) -> Optional[Dict[str, Any]]:
             )
             direct_url = media.get("video_url") if is_video else best_display_url
 
-            carousel_items: List[Dict[str, Any]] = []
+            carousel_items = []
             if media.get("edge_sidecar_to_children"):
                 edges = media["edge_sidecar_to_children"].get("edges") or []
                 for idx, edge in enumerate(edges, start=1):
@@ -357,7 +484,7 @@ def _extract_via_graphql(shortcode: str) -> Optional[Dict[str, Any]]:
             if caption_edges:
                 caption_text = (caption_edges[0].get("node") or {}).get("text") or ""
             title = (
-                re.sub(r"\s+", " ", caption_text).strip()[:100]
+                re.sub(r"[^\x20-\x7E]+", " ", str(caption_text)).strip()[:100]
                 or f"Instagram {'Video' if is_video else 'Post'} [{shortcode}]"
             )
 

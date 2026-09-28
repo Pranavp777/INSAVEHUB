@@ -1,42 +1,22 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "insave-hub",
-  "main": "src/entry.py",
-  "compatibility_date": "2026-03-01",
-  "compatibility_flags": [
-    "python_workers"
-  ],
+  "name": "insavehub",
+  "main": "src/worker.js",
+  "compatibility_date": "2025-01-01",
   "observability": {
     "enabled": true
   },
   "assets": {
-    "directory": "./staticfiles",
-    "binding": "ASSETS"
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": true
   },
   "vars": {
     "DJANGO_SETTINGS_MODULE": "config.settings",
     "DJANGO_ENV": "production",
     "DJANGO_DEBUG": "False",
-    "DJANGO_ALLOWED_HOSTS": ".workers.dev,insavehub.example.com,localhost,127.0.0.1",
-    "CSRF_TRUSTED_ORIGINS": "https://*.workers.dev,https://insavehub.example.com",
-    "USE_CLOUDFLARE_D1": "True",
-    "USE_CLOUDFLARE_R2": "False",
     "PAYMENT_PROVIDER": "razorpay",
     "DONATION_CURRENCY": "INR",
     "AD_COUNTDOWN_SECONDS": "30",
     "FREE_ACCESS_HOURS": "24"
-  },
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "insave-hub-db",
-      "database_id": "00000000-0000-0000-0000-000000000000"
-    }
-  ],
-  "r2_buckets": [
-    {
-      "binding": "MEDIA_BUCKET",
-      "bucket_name": "insave-hub-media"
-    }
-  ]
+  }
 }
