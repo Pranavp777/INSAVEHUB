@@ -5,8 +5,7 @@
  */
 
 const IG_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
-const USER_AGENT =
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36";
+const USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36";
 
 function shortcodeToMediaId(shortcode) {
   const clean = (shortcode || "").trim().slice(0, 11);
@@ -76,7 +75,6 @@ export async function extractInstagramMediaEdge(shortcode) {
           "X-FB-Friendly-Name": "PolarisLoggedOutDesktopWWWPostRootContentQuery",
           "X-FB-LSD": "AVqbxe3J_YA",
           "X-ASBD-ID": "129477",
-          Origin: "https://www.instagram.com",
           Referer: `https://www.instagram.com/p/${shortcode}/`,
         },
         body: body.toString(),
@@ -144,7 +142,7 @@ export async function extractInstagramMediaEdge(shortcode) {
     }
   }
 
-  // Fallback: PolarisPostActionLoadPostQueryQuery
+  // Fallback 1: PolarisPostActionLoadPostQueryQuery
   for (const docId of ["8845758582119845", "10015901848480474"]) {
     try {
       const body = new URLSearchParams({
@@ -187,6 +185,51 @@ export async function extractInstagramMediaEdge(shortcode) {
     } catch (_e) {
       // Continue
     }
+  }
+
+  // Fallback 2: Embed & OpenGraph parser
+  try {
+    const embedResp = await fetch(`https://www.instagram.com/p/${shortcode}/embed/captioned/`, {
+      headers: {
+        "User-Agent": USER_AGENT,
+        Accept: "text/html,application/xhtml+xml",
+        Referer: "https://www.instagram.com/",
+      },
+    });
+    if (embedResp.ok) {
+      const html = await embedResp.text();
+      const unescapeUrl = (s) =>
+        s
+          .replace(/\\\//g, "/")
+          .replace(/\\u0026/g, "&")
+          .replace(/&amp;/g, "&");
+      const vidMatch =
+        html.match(/\\"video_url\\":\\"(https:[^"\\]+)\\"/) ||
+        html.match(/"video_url"\s*:\s*"(https:[^"]+)"/);
+      const imgMatch =
+        html.match(/\\"display_url\\":\\"(https:[^"\\]+)\\"/) ||
+        html.match(/class="[^"]*EmbeddedMediaImage[^"]*"[^>]*src="([^"]+)"/);
+
+      if (vidMatch || imgMatch) {
+        const isVideo = Boolean(vidMatch);
+        const directUrl = unescapeUrl((vidMatch || imgMatch)[1]);
+        if (isSafeCdnUrl(directUrl)) {
+          return {
+            direct_media_url: directUrl,
+            thumbnail_url: imgMatch ? unescapeUrl(imgMatch[1]) : "",
+            width: 1080,
+            height: isVideo ? 1920 : 1350,
+            author_handle: "@instagram_creator",
+            media_title: `Instagram ${isVideo ? "Video" : "Post"} [${shortcode}]`,
+            ext: isVideo ? "mp4" : "jpg",
+            is_video: isVideo,
+            carousel_count: 1,
+          };
+        }
+      }
+    }
+  } catch (_e) {
+    // Ignore
   }
 
   return null;

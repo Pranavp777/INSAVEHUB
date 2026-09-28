@@ -2,8 +2,13 @@
   "name": "insavehub",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "InSave Hub — Instagram Video, Reel & Post Downloader",
   "scripts": {
-    "build": "python scripts/build_cloudflare.py"
+    "build": "node scripts/build_cloudflare.mjs",
+    "build:django": "python scripts/build_cloudflare.py"
+  },
+  "devDependencies": {
+    "wrangler": "^4.14.0"
   }
 }

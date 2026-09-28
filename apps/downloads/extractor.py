@@ -291,7 +291,7 @@ def _extract_via_graphql(shortcode: str) -> Optional[Dict[str, Any]]:
             polaris_resp = requests.post(
                 "https://www.instagram.com/api/graphql",
                 headers={
-                    "User-Agent": _get_user_agent(),
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
                     "Accept": "*/*",
                     "Accept-Language": "en-US,en;q=0.9",
                     "Content-Type": "application/x-www-form-urlencoded",
@@ -299,7 +299,6 @@ def _extract_via_graphql(shortcode: str) -> Optional[Dict[str, Any]]:
                     "X-FB-Friendly-Name": "PolarisLoggedOutDesktopWWWPostRootContentQuery",
                     "X-FB-LSD": "AVqbxe3J_YA",
                     "X-ASBD-ID": "129477",
-                    "Origin": "https://www.instagram.com",
                     "Referer": f"https://www.instagram.com/p/{shortcode}/",
                 },
                 data={

@@ -1,0 +1,257 @@
+/* ==========================================================================
+   INSAVE HUB — GLASS ORBIT VISUAL ENGINE & SKY-BLUE/WHITE GRADIENT SURFACES
+   ========================================================================== */
+
+/* Luminous Sky Blue & White Atmospheric Background Canvas */
+.atmosphere-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 14% 16%, rgba(56, 189, 248, 0.34) 0%, transparent 45%),
+    radial-gradient(circle at 86% 20%, rgba(255, 255, 255, 0.95) 0%, transparent 48%),
+    radial-gradient(circle at 50% 82%, rgba(14, 165, 233, 0.25) 0%, transparent 52%),
+    radial-gradient(circle at 80% 78%, rgba(186, 230, 253, 0.65) 0%, transparent 44%),
+    linear-gradient(145deg, #D8F0FE 0%, #EFF8FF 36%, #FFFFFF 68%, #C3E7FD 100%);
+}
+
+.atmosphere-grid {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-image: url('/static/images/orbit-grid.svg');
+  background-position: center top;
+  background-repeat: repeat;
+  opacity: 0.78;
+}
+
+.ambient-particle-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.95;
+}
+
+/* Core Sky-Blue & White Frosted Glassmorphism Panel Hierarchy */
+.glass-panel {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.84) 0%,
+    rgba(240, 249, 255, 0.72) 55%,
+    rgba(224, 242, 254, 0.66) 100%
+  );
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+  border: 1px solid var(--border-hairline);
+  border-top-color: var(--border-refraction-top);
+  border-left-color: rgba(255, 255, 255, 0.88);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-panel);
+  transition:
+    transform var(--duration-normal) var(--ease-out-expo),
+    border-color var(--duration-normal) var(--ease-standard),
+    box-shadow var(--duration-normal) var(--ease-standard),
+    background var(--duration-normal) var(--ease-standard);
+}
+
+.glass-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(56, 189, 248, 0.08) 45%,
+    transparent 80%
+  );
+}
+
+.glass-panel-interactive:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-cyan-glow);
+  box-shadow: var(--shadow-interactive);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.94) 0%,
+    rgba(224, 242, 254, 0.82) 100%
+  );
+}
+
+.glass-subpanel {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.78) 0%,
+    rgba(224, 242, 254, 0.55) 100%
+  );
+  backdrop-filter: var(--blur-sm);
+  -webkit-backdrop-filter: var(--blur-sm);
+  border: 1px solid rgba(14, 165, 233, 0.2);
+  border-top-color: rgba(255, 255, 255, 0.9);
+  border-radius: var(--radius-sm);
+}
+
+/* Signature Brand Visual Element: The "Glass Orbit" Interactive Apparatus */
+.orbit-stage {
+  position: relative;
+  width: 100%;
+  min-height: 460px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1200px;
+}
+
+.orbit-ring-system {
+  position: relative;
+  width: 420px;
+  height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.orbit-ring {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  border: 1.5px solid rgba(14, 165, 233, 0.22);
+  box-shadow: inset 0 0 24px rgba(255, 255, 255, 0.65);
+  transition: transform 600ms var(--ease-out-expo), border-color 400ms ease;
+}
+
+.orbit-ring-outer {
+  width: 410px;
+  height: 410px;
+  border-top-color: rgba(2, 132, 199, 0.65);
+  border-bottom-color: rgba(255, 255, 255, 0.95);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.22) 0%, rgba(186, 230, 253, 0.14) 100%);
+  animation: orbitRotateSlow 38s linear infinite;
+}
+
+.orbit-ring-middle {
+  width: 310px;
+  height: 310px;
+  border-left-color: rgba(14, 165, 233, 0.68);
+  border-right-color: rgba(255, 255, 255, 0.92);
+  animation: orbitRotateReverse 26s linear infinite;
+}
+
+.orbit-ring-inner {
+  width: 210px;
+  height: 210px;
+  border: 1.5px dashed rgba(2, 132, 199, 0.38);
+  animation: orbitRotateSlow 19s linear infinite;
+}
+
+/* Core Glass Console Inside the Orbit */
+.orbit-core-console {
+  position: relative;
+  z-index: 3;
+  width: 340px;
+  padding: var(--space-6);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(224, 242, 254, 0.84) 100%
+  );
+  backdrop-filter: var(--blur-lg);
+  -webkit-backdrop-filter: var(--blur-lg);
+  border: 1px solid rgba(14, 165, 233, 0.42);
+  border-top-color: #FFFFFF;
+  border-radius: var(--radius-md);
+  box-shadow:
+    0 24px 60px rgba(2, 132, 199, 0.22),
+    0 0 40px rgba(56, 189, 248, 0.2),
+    inset 0 1px 2px #FFFFFF;
+}
+
+/* Floating Satellite Glass Nodes on the Orbit */
+.orbit-satellite {
+  position: absolute;
+  z-index: 4;
+  padding: var(--space-2) var(--space-3);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(224, 242, 254, 0.85) 100%);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+  border: 1px solid rgba(14, 165, 233, 0.35);
+  border-top-color: #FFFFFF;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-panel);
+  cursor: pointer;
+  transition:
+    transform var(--duration-normal) var(--ease-out-expo),
+    border-color var(--duration-fast) ease,
+    background var(--duration-fast) ease,
+    color var(--duration-fast) ease;
+}
+
+.orbit-satellite:hover,
+.orbit-satellite.is-active {
+  border-color: var(--light-cyan);
+  background: linear-gradient(135deg, #0284C7 0%, #0EA5E9 100%);
+  color: #FFFFFF;
+  transform: scale(1.06);
+  box-shadow: 0 10px 25px rgba(14, 165, 233, 0.35);
+}
+
+.orbit-satellite-1 { top: 8px; left: 18px; }
+.orbit-satellite-2 { top: 28px; right: 4px; }
+.orbit-satellite-3 { bottom: 34px; left: 6px; }
+.orbit-satellite-4 { bottom: 12px; right: 18px; }
+
+/* Scroll Reveal Animation States */
+.reveal-item {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity var(--duration-slow) var(--ease-out-expo),
+    transform var(--duration-slow) var(--ease-out-expo);
+}
+
+.reveal-item.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes orbitRotateSlow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes orbitRotateReverse {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes pulseLuminescence {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+/* Strict Accessibility: Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal-item {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

@@ -1,0 +1,208 @@
+/* ==========================================================================
+   INSAVE HUB — RESPONSIVE & MOBILE-FIRST ERGONOMIC ADAPTATIONS
+   Sky Blue & White Gradient Edition
+   ========================================================================== */
+
+/* Mobile Navigation Toggle & Bottom Dock (Hidden on Desktop) */
+.mobile-menu-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(224, 242, 254, 0.8) 100%);
+  border: 1px solid rgba(14, 165, 233, 0.35);
+  border-radius: var(--radius-xs);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.mobile-drawer {
+  display: none;
+  position: fixed;
+  top: 72px;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(224, 242, 254, 0.94) 100%);
+  backdrop-filter: var(--blur-lg);
+  -webkit-backdrop-filter: var(--blur-lg);
+  border-bottom: 1px solid rgba(14, 165, 233, 0.42);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-ambient);
+}
+
+.mobile-drawer.is-open {
+  display: block;
+}
+
+.mobile-bottom-dock {
+  display: none;
+}
+
+/* Laptop & Compact Desktop (<= 1100px) */
+@media (max-width: 1100px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-10);
+  }
+
+  .orbit-stage {
+    min-height: 390px;
+  }
+
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .result-spec-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Tablet & Large Mobile (<= 860px) */
+@media (max-width: 860px) {
+  .nav-links,
+  .nav-actions .hide-tablet {
+    display: none;
+  }
+
+  .mobile-menu-toggle {
+    display: inline-flex;
+  }
+
+  .grid-3,
+  .grid-2,
+  .video-preview-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6);
+  }
+
+  .main-viewport {
+    padding-bottom: 6.5rem;
+  }
+
+  /* Dedicated Mobile Bottom Control Dock */
+  .mobile-bottom-dock {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 98;
+    height: 64px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.94) 0%, rgba(224, 242, 254, 0.94) 100%);
+    backdrop-filter: var(--blur-md);
+    -webkit-backdrop-filter: var(--blur-md);
+    border-top: 1px solid rgba(14, 165, 233, 0.32);
+    box-shadow: 0 -4px 20px rgba(14, 165, 233, 0.1);
+    padding: 0 var(--space-2);
+  }
+
+  .dock-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    min-height: 48px;
+  }
+
+  .dock-item.is-active,
+  .dock-item:hover {
+    color: var(--light-cyan);
+  }
+}
+
+/* Mobile Handsets — iOS & Android (<= 600px) */
+@media (max-width: 600px) {
+  .container-shell {
+    padding: 0 var(--space-4);
+  }
+
+  .hero-section {
+    padding: var(--space-6) 0 var(--space-10);
+  }
+
+  .hero-headline {
+    font-size: 2rem;
+  }
+
+  .hero-cta-group {
+    flex-direction: column;
+  }
+
+  .hero-cta-group .btn-glass {
+    width: 100%;
+    min-height: 48px;
+  }
+
+  .hero-metrics-bar {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .orbit-ring-system {
+    width: 300px;
+    height: 300px;
+  }
+
+  .orbit-ring-outer {
+    width: 290px;
+    height: 290px;
+  }
+
+  .orbit-ring-middle {
+    width: 230px;
+    height: 230px;
+  }
+
+  .orbit-ring-inner {
+    width: 165px;
+    height: 165px;
+  }
+
+  .orbit-core-console {
+    width: 270px;
+    padding: var(--space-4);
+  }
+
+  .analyzer-bar {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+
+  .analyzer-bar .btn-glass {
+    width: 100%;
+    min-height: 48px;
+  }
+
+  .result-spec-grid,
+  .grid-4,
+  .donation-tier-grid,
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tier-btn,
+  .btn-glass,
+  .glass-input,
+  .glass-select {
+    min-height: 48px;
+  }
+
+  .ad-countdown-stage {
+    padding: var(--space-5) var(--space-4);
+  }
+}

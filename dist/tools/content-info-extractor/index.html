@@ -1,0 +1,421 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Content Information Extractor | InSave Hub</title>
+  <meta name="description" content="Generate structured technical metadata reports for public Instagram permalinks.">
+  <link rel="canonical" href="http://localhost:8000/tools/content-info-extractor/">
+
+  <!-- Open Graph Metadata -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="InSave Hub">
+  <meta property="og:title" content="Content Information Extractor | InSave Hub">
+  <meta property="og:description" content="Generate structured technical metadata reports for public Instagram permalinks.">
+  <meta property="og:url" content="http://localhost:8000/tools/content-info-extractor/">
+
+  <!-- Twitter / X Metadata -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Content Information Extractor | InSave Hub">
+  <meta name="twitter:description" content="Generate structured technical metadata reports for public Instagram permalinks.">
+
+  <!-- Progressive Web App (PWA) & Mobile Install Metadata -->
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#0284C7">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="InSave Hub">
+  <link rel="icon" type="image/svg+xml" href="/static/images/logo-mark.svg">
+  <link rel="apple-touch-icon" href="/static/images/icon-192.png">
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Glass Orbit Design System Stylesheets -->
+  <link rel="stylesheet" href="/static/css/tokens.css">
+  <link rel="stylesheet" href="/static/css/glass-orbit.css">
+  <link rel="stylesheet" href="/static/css/components.css">
+  <link rel="stylesheet" href="/static/css/responsive.css">
+
+  <!-- Structured Metadata -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "InSave Hub",
+    "url": "http://localhost:8000",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "All",
+    "description": "Public Instagram content management and media utility platform."
+  }
+  </script>
+  
+</head>
+<body>
+  <a href="#mainContent" class="sr-only">Skip to main content</a>
+
+  <!-- Atmospheric Layers & Subtle Light Particles -->
+  <div class="atmosphere-layer" aria-hidden="true"></div>
+  <div class="atmosphere-grid" aria-hidden="true"></div>
+  <canvas id="ambientParticleCanvas" class="ambient-particle-canvas" aria-hidden="true"></canvas>
+
+  <!-- Glass Control Navigation -->
+  <header class="glass-header" role="banner">
+    <div class="container-shell nav-inner">
+      <a href="/" class="brand-identity" aria-label="InSave Hub Home">
+        <img src="/static/images/logo-mark.svg" alt="" class="brand-mark" width="34" height="34">
+        <div>
+          <span class="brand-wordmark">INSAVE HUB</span>
+        </div>
+      </a>
+
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-links">
+          <li><a href="/" class="nav-link ">Home</a></li>
+          <li><a href="/tools/" class="nav-link is-current">Instagram Tools</a></li>
+          <li><a href="/downloads/" class="nav-link ">Downloader</a></li>
+          
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- Access Status Pill -->
+        <div class="telemetry-pill hide-tablet" title="Access Status">
+          
+            <span class="status-dot"></span>
+            <span>FREE ACCESS</span>
+          
+        </div>
+
+        <!-- Install App Button (PWA / Native Install) -->
+        <button type="button" id="installAppNavBtn" class="btn-glass btn-sm nav-install-btn" title="Install InSave Hub App" aria-label="Install InSave Hub App">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v12"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <path d="M5 21h14"></path>
+          </svg>
+          <span>Install App</span>
+        </button>
+
+        <!-- Small "Buy Us Cofee" Icon Option on Navigation Bar -->
+        <a href="/donations/"
+           class="nav-icon-btn nav-donate-icon "
+           title="Buy Us Cofee"
+           aria-label="Buy Us Cofee">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+            <line x1="6" y1="1" x2="6" y2="4"></line>
+            <line x1="10" y1="1" x2="10" y2="4"></line>
+            <line x1="14" y1="1" x2="14" y2="4"></line>
+          </svg>
+        </a>
+
+        
+          <a href="/auth/login/" class="btn-glass btn-primary btn-sm hide-tablet">Sign In</a>
+        
+
+        <button type="button" id="mobileMenuToggle" class="mobile-menu-toggle" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobileDrawer">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6">
+            <line x1="3" y1="6" x2="17" y2="6"></line>
+            <line x1="3" y1="10" x2="17" y2="10"></line>
+            <line x1="3" y1="14" x2="17" y2="14"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Slide Drawer -->
+  <div id="mobileDrawer" class="mobile-drawer" role="region" aria-label="Mobile Navigation Drawer">
+    <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+      <div class="telemetry-pill" style="justify-content: space-between; width: 100%;">
+        <span>ACCESS STATE</span>
+        
+          <strong>AVAILABLE</strong>
+        
+      </div>
+      <a href="/" class="nav-link">Home</a>
+      <a href="/tools/" class="nav-link">Instagram Tools</a>
+      <a href="/downloads/" class="nav-link">Downloader</a>
+      <a href="/downloads/history/" class="nav-link">Download History</a>
+      <a href="/donations/" class="nav-link">Buy Us Cofee</a>
+      <button type="button" id="installAppMobileBtn" class="btn-glass btn-sm" style="justify-content: center;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3v12"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <path d="M5 21h14"></path>
+        </svg>
+        <span>Install InSave Hub App</span>
+      </button>
+      
+        <a href="/auth/login/" class="btn-glass btn-primary btn-sm" style="margin-top: var(--space-2); justify-content: center;">Sign In</a>
+      
+    </div>
+  </div>
+
+  <!-- Main Content Viewport -->
+  <main id="mainContent" class="main-viewport" role="main">
+    
+
+    
+<div class="container-shell" style="padding-top: var(--space-4);">
+  <div class="glass-panel reveal-item" style="padding: var(--space-8); margin-bottom: var(--space-8);">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4); margin-bottom: var(--space-6);">
+      <div>
+        <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2);">
+          <span class="tool-badge">MOD-06</span>
+          <span class="mono-label">Content Information Extractor</span>
+        </div>
+        <h1 style="font-size: clamp(1.75rem, 3vw, 2.45rem);">Content Information Extractor</h1>
+        <p style="color: var(--text-secondary); max-width: 68ch; margin-top: var(--space-2);">
+          Extracts public shortcode identifiers, canonical URLs, aspect ratio geometry, and publication parameters into a clean JSON document for editorial workflows.
+        </p>
+      </div>
+      <div class="telemetry-pill">
+        <span class="status-dot status-dot-emerald"></span>
+        <span>OUTPUT: JSON Technical Manifest</span>
+      </div>
+    </div>
+
+    <form id="instagramAnalyzerForm" action="/api/downloads/analyze/" method="post" novalidate>
+      <input type="hidden" name="csrfmiddlewaretoken" value="eKwzHqz7D8TdWfpPuLysuUvQxtLXeKQEnEW5UiEL7n73tDbkvuKbAtdCdJLYiHYB">
+      <input type="hidden" id="instagramToolSlug" name="tool_slug" value="content-info-extractor">
+      <label for="instagramUrlInput" class="form-label">Paste Public Instagram URL</label>
+      <div class="analyzer-bar">
+        <input type="url" id="instagramUrlInput" name="url" class="glass-input"
+               placeholder="https://www.instagram.com/p/... or https://www.instagram.com/reel/..."
+               required aria-label="Paste Public Instagram URL">
+        <button type="button" id="pasteClipboardBtn" class="btn-glass btn-sm">Paste Link</button>
+        <button type="submit" id="analyzeSubmitBtn" class="btn-glass btn-primary">Analyze &amp; Download</button>
+      </div>
+    </form>
+
+    <div id="analyzerStatusBox" hidden role="alert" style="margin-top: var(--space-4);"></div>
+
+    <div id="analyzerResultPanel" class="glass-panel result-panel" hidden>
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4); padding-bottom: var(--space-4); border-bottom: 1px solid var(--border-hairline);">
+        <div>
+          <span class="mono-label" id="resContentType">Content Information Extractor</span>
+          <h2 style="font-size: 1.25rem; margin-top: var(--space-1);" id="resMediaTitle">Analyzed Media</h2>
+        </div>
+        <div class="telemetry-pill">
+          <span class="status-dot status-dot-emerald"></span>
+          <span id="resAccessStatus">Free Access Available</span>
+        </div>
+      </div>
+
+      <div class="result-spec-grid">
+        <div class="spec-cell">
+          <span class="spec-label">AVAILABLE FORMAT</span>
+          <span class="spec-val" id="resMediaFormat">-</span>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-label">DIMENSIONS</span>
+          <span class="spec-val" id="resResolution">-</span>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-label">FILE INFORMATION</span>
+          <span class="spec-val" id="resFileSize">-</span>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-label">HANDLE / SHORTCODE</span>
+          <span class="spec-val"><span id="resAuthorHandle">-</span> [<span id="resShortcode">-</span>]</span>
+        </div>
+      </div>
+
+      <div id="resAdRequirementNotice" class="glass-alert glass-alert-warning" hidden style="margin-bottom: var(--space-4);">
+        <span>Your next download will be available after the advertisement. Completing the 30-second sponsor interval unlocks 24 hours of uninterrupted access.</span>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end;">
+        <a id="resDownloadActionBtn" href="#" class="btn-glass btn-primary">Download Media Artifact</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Other Modules -->
+  <div>
+    <span class="mono-label" style="display: block; margin-bottom: var(--space-4);">ADDITIONAL UTILITY MODULES</span>
+    <div class="grid-3">
+      
+        <div class="glass-panel tool-card" style="padding: var(--space-5);">
+          <div>
+            <span class="tool-badge">MOD-01</span>
+            <h3 style="font-size: 1.05rem; margin: var(--space-2) 0;">Instagram Reel Downloader</h3>
+            <p style="font-size: 0.84rem; color: var(--text-secondary);">Extract public vertical Reels in original frame rate with synchronized audio tracks.</p>
+          </div>
+          <a href="/tools/reel-downloader/" class="btn-glass btn-sm">Switch Module</a>
+        </div>
+      
+        <div class="glass-panel tool-card" style="padding: var(--space-5);">
+          <div>
+            <span class="tool-badge">MOD-02</span>
+            <h3 style="font-size: 1.05rem; margin: var(--space-2) 0;">Instagram Video Downloader</h3>
+            <p style="font-size: 0.84rem; color: var(--text-secondary);">Download long-form public video broadcasts and feed videos at native bitrate.</p>
+          </div>
+          <a href="/tools/video-downloader/" class="btn-glass btn-sm">Switch Module</a>
+        </div>
+      
+        <div class="glass-panel tool-card" style="padding: var(--space-5);">
+          <div>
+            <span class="tool-badge">MOD-03</span>
+            <h3 style="font-size: 1.05rem; margin: var(--space-2) 0;">Instagram Image Downloader</h3>
+            <p style="font-size: 0.84rem; color: var(--text-secondary);">Retrieve full-resolution public photography assets with original color profile.</p>
+          </div>
+          <a href="/tools/image-downloader/" class="btn-glass btn-sm">Switch Module</a>
+        </div>
+      
+        <div class="glass-panel tool-card" style="padding: var(--space-5);">
+          <div>
+            <span class="tool-badge">MOD-04</span>
+            <h3 style="font-size: 1.05rem; margin: var(--space-2) 0;">Public Post Downloader</h3>
+            <p style="font-size: 0.84rem; color: var(--text-secondary);">Unified inspector for multi-slide carousels and mixed-media public publications.</p>
+          </div>
+          <a href="/tools/public-post-downloader/" class="btn-glass btn-sm">Switch Module</a>
+        </div>
+      
+        <div class="glass-panel tool-card" style="padding: var(--space-5);">
+          <div>
+            <span class="tool-badge">MOD-05</span>
+            <h3 style="font-size: 1.05rem; margin: var(--space-2) 0;">Profile Media Utility</h3>
+            <p style="font-size: 0.84rem; color: var(--text-secondary);">Inspect public profile identity headers, avatar dimensions, and public handle status.</p>
+          </div>
+          <a href="/tools/profile-media-utility/" class="btn-glass btn-sm">Switch Module</a>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+  </main>
+
+  <!-- Dedicated Mobile Ergonomic Bottom Control Dock -->
+  <nav class="mobile-bottom-dock" aria-label="Mobile Quick Access Dock">
+    <a href="/" class="dock-item ">
+      <span>Home</span>
+    </a>
+    <a href="/tools/" class="dock-item is-active">
+      <span>Tools</span>
+    </a>
+    <a href="/downloads/" class="dock-item ">
+      <span>Download</span>
+    </a>
+    <a href="/donations/" class="dock-item ">
+      <span>Cofee</span>
+    </a>
+  </nav>
+
+  <!-- Glass Footer -->
+  <footer class="glass-footer" role="contentinfo">
+    <div class="container-shell">
+      <div class="footer-grid" style="grid-template-columns: 1.5fr 1fr 1fr;">
+        <div>
+          <div class="brand-identity" style="margin-bottom: var(--space-3);">
+            <img src="/static/images/logo-mark.svg" alt="" class="brand-mark" width="28" height="28">
+            <span class="brand-wordmark">INSAVE HUB</span>
+          </div>
+          <p style="color: var(--text-muted); font-size: 0.88rem; max-width: 38ch;">
+            Fast Instagram Video, Reel, Photo, and Post downloader.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">INSTAGRAM TOOLS</h4>
+          <ul class="footer-links">
+            <li><a href="/tools/video-downloader/">Video Downloader</a></li>
+            <li><a href="/tools/reel-downloader/">Reel Downloader</a></li>
+            <li><a href="/tools/public-post-downloader/">Public Post Downloader</a></li>
+            <li><a href="/tools/image-downloader/">Photo Downloader</a></li>
+            <li><a href="/tools/profile-media-utility/">Profile Media</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">QUICK LINKS</h4>
+          <ul class="footer-links">
+            <li><a href="/downloads/">Downloader</a></li>
+            <li><a href="/downloads/history/">Download History</a></li>
+            <li><a href="/donations/">Buy Us Cofee</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="padding-top: var(--space-6); border-top: 1px solid var(--border-hairline); display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-4); font-size: 0.8rem; color: var(--text-dim);">
+        <span>InSave Hub. All rights reserved.</span>
+        <span>Not affiliated with Instagram or Meta Platforms, Inc.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Glass App Installation Modal (Desktop & Mobile PWA) -->
+  <div id="appInstallModal" class="app-install-modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="appInstallModalTitle">
+    <div class="glass-panel app-install-modal">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-4); padding-bottom: var(--space-4); border-bottom: 1px solid var(--border-hairline);">
+        <div style="display: flex; align-items: center; gap: var(--space-3);">
+          <img src="/static/images/logo-mark.svg" alt="" width="38" height="38">
+          <div>
+            <span class="mono-label">INSTALL APPLICATION</span>
+            <h2 id="appInstallModalTitle" style="font-size: 1.25rem; margin-top: 2px;">Install InSave Hub App</h2>
+          </div>
+        </div>
+        <button type="button" id="closeAppInstallModal" class="nav-icon-btn" aria-label="Close App Install Dialog">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin: var(--space-4) 0;">
+        Install InSave Hub directly to your desktop or mobile home screen for instant one-tap launching, standalone window mode, and high-speed Instagram video and post downloading.
+      </p>
+
+      <div id="nativeInstallPromptWrap" class="glass-subpanel" style="padding: var(--space-4); margin-bottom: var(--space-4); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-3);">
+        <div>
+          <span class="spec-label">DIRECT BROWSER INSTALLATION</span>
+          <span class="spec-val" id="nativeInstallStatusText" style="font-size: 0.86rem;">Standalone App Package Ready</span>
+        </div>
+        <button type="button" id="triggerNativeInstallBtn" class="btn-glass btn-primary btn-sm">
+          Install App Now
+        </button>
+      </div>
+
+      <div class="grid-3" style="gap: var(--space-3);">
+        <div class="glass-subpanel" style="padding: var(--space-4);">
+          <span class="tool-badge" style="margin-bottom: var(--space-2);">DESKTOP</span>
+          <h3 style="font-size: 0.92rem; margin-bottom: var(--space-1);">Chrome / Edge / Brave</h3>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">
+            Click <strong>Install App Now</strong> above, or click the install icon on the right side of your browser address bar.
+          </p>
+        </div>
+
+        <div class="glass-subpanel" style="padding: var(--space-4);">
+          <span class="tool-badge" style="margin-bottom: var(--space-2);">ANDROID</span>
+          <h3 style="font-size: 0.92rem; margin-bottom: var(--space-1);">Chrome / Samsung</h3>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">
+            Tap <strong>Install App Now</strong> or open the browser menu and select <strong>Install App / Add to Home Screen</strong>.
+          </p>
+        </div>
+
+        <div class="glass-subpanel" style="padding: var(--space-4);">
+          <span class="tool-badge" style="margin-bottom: var(--space-2);">IOS &amp; IPADOS</span>
+          <h3 style="font-size: 0.92rem; margin-bottom: var(--space-1);">Safari Browser</h3>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">
+            Tap the <strong>Share</strong> button in Safari's toolbar, scroll down, and select <strong>Add to Home Screen</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Core Scripts -->
+  <script src="/static/js/orbit-engine.js" defer></script>
+  <script src="/static/js/downloader.js" defer></script>
+  
+</body>
+</html>

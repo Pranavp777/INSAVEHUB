@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Allow: /tools/
+Allow: /downloads/
+Allow: /donations/
+Disallow: /admin/
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /ads/
+Sitemap: http://localhost:8000/sitemap.xml
