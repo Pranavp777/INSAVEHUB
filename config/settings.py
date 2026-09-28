@@ -123,16 +123,30 @@ if DATABASE_URL:
         )
     }
 else:
-    sqlite_path = os.environ.get("SQLITE_DB_PATH", str(BASE_DIR / "db.sqlite3"))
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": sqlite_path,
-            "OPTIONS": {
-                "timeout": 20,
-            },
+    try:
+        import _sqlite3  # noqa: F401
+
+        _has_sqlite3 = True
+    except ImportError:
+        _has_sqlite3 = False
+
+    if _has_sqlite3:
+        sqlite_path = os.environ.get("SQLITE_DB_PATH", str(BASE_DIR / "db.sqlite3"))
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.sqlite3",
+                "NAME": sqlite_path,
+                "OPTIONS": {
+                    "timeout": 20,
+                },
+            }
         }
-    }
+    else:
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.dummy",
+            }
+        }
 
 # Cache Configuration: Redis compatible with automatic local memory fallback
 REDIS_URL = os.environ.get("REDIS_URL", "").strip()
