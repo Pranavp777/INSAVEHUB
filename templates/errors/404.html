@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-shell" style="max-width: 580px; padding-top: var(--space-10);">
+  <div class="glass-panel reveal-item" style="padding: var(--space-8); text-align: center;">
+    <span class="mono-label" style="color: var(--light-cyan);">HTTP STATUS // 404</span>
+    <h1 style="font-size: 2rem; margin: var(--space-2) 0 var(--space-3);">{{ error_title|default:"Requested Coordinate Not Found" }}</h1>
+    <p style="color: var(--text-secondary); margin-bottom: var(--space-6);">
+      {{ error_message|default:"The page or media artifact you requested does not exist at this address or has been relocated." }}
+    </p>
+    <div style="display: flex; justify-content: center; gap: var(--space-3);">
+      <a href="{% url 'core:home' %}" class="btn-glass btn-primary">Return Home</a>
+      <a href="{% url 'downloads:tools_list' %}" class="btn-glass">Browse Utilities</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

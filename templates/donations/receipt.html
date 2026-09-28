@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-shell" style="max-width: 640px; padding-top: var(--space-6);">
+  <div class="glass-panel reveal-item" style="padding: var(--space-8);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+      <span class="mono-label">BUY US COFEE RECEIPT</span>
+      <div class="telemetry-pill">
+        <span class="status-dot {% if donation.status == 'completed' %}status-dot-emerald{% elif donation.status == 'failed' %}status-dot-rose{% else %}status-dot-amber{% endif %}"></span>
+        <span>{{ donation.get_status_display|upper }}</span>
+      </div>
+    </div>
+
+    <h1 style="font-size: 1.75rem; margin-bottom: var(--space-2);">
+      {{ donation.currency }} {{ donation.amount }}
+    </h1>
+    <p style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); margin-bottom: var(--space-6);">
+      ORDER ID: {{ donation.provider_order_id }}
+    </p>
+
+    <div class="result-spec-grid" style="grid-template-columns: repeat(2, 1fr);">
+      <div class="spec-cell">
+        <span class="spec-label">SUPPORTER</span>
+        <span class="spec-val">{{ donation.public_donor_label }}</span>
+      </div>
+      <div class="spec-cell">
+        <span class="spec-label">PAYMENT METHOD</span>
+        <span class="spec-val">{{ donation.get_provider_display }}</span>
+      </div>
+      <div class="spec-cell">
+        <span class="spec-label">DATE</span>
+        <span class="spec-val">{{ donation.created_at|date:"Y-m-d H:i" }} UTC</span>
+      </div>
+      <div class="spec-cell">
+        <span class="spec-label">STATUS</span>
+        <span class="spec-val">{{ donation.get_status_display }}</span>
+      </div>
+    </div>
+
+    {% if donation.status != 'completed' %}
+      {% if gateway_configured and razorpay_key_id %}
+        <div class="glass-subpanel" style="padding: var(--space-4); margin-bottom: var(--space-5);">
+          <button type="button" id="launchRazorpayBtn" class="btn-glass btn-primary btn-block">
+            Complete Payment ({{ donation.currency }} {{ donation.amount }})
+          </button>
+        </div>
+
+        <form id="razorpayVerifyForm" method="post" action="{% url 'donations:verify' %}" hidden>
+          {% csrf_token %}
+          <input type="hidden" name="razorpay_order_id" id="rzpOrderId" value="{{ donation.provider_order_id }}">
+          <input type="hidden" name="razorpay_payment_id" id="rzpPaymentId" value="">
+          <input type="hidden" name="razorpay_signature" id="rzpSignature" value="">
+        </form>
+      {% else %}
+        <div class="glass-alert glass-alert-info" style="margin-bottom: var(--space-5);">
+          <span>
+            Your order ({{ donation.provider_order_id }}) has been recorded. Online checkout will open automatically when payment gateway checkout is active.
+          </span>
+        </div>
+      {% endif %}
+    {% else %}
+      <div class="glass-alert glass-alert-success" style="margin-bottom: var(--space-5);">
+        <span>Thank you for buying us a coffee. Reference: {{ donation.provider_payment_id }}</span>
+      </div>
+    {% endif %}
+
+    <div style="display: flex; gap: var(--space-3);">
+      <a href="{% url 'donations:index' %}" class="btn-glass btn-block">Back to Buy Us Cofee</a>
+      <a href="{% url 'core:home' %}" class="btn-glass btn-block">Back to Home</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+{% if gateway_configured and razorpay_key_id and donation.status != 'completed' %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const btn = document.getElementById("launchRazorpayBtn");
+    if (!btn || typeof window.Razorpay === "undefined") return;
+    btn.addEventListener("click", function () {
+      const options = {
+        key: "{{ razorpay_key_id }}",
+        amount: "{{ donation.amount }}",
+        currency: "{{ donation.currency }}",
+        name: "InSave Hub",
+        description: "Buy Us Cofee",
+        order_id: "{{ donation.provider_order_id }}",
+        handler: function (response) {
+          document.getElementById("rzpPaymentId").value = response.razorpay_payment_id;
+          document.getElementById("rzpSignature").value = response.razorpay_signature;
+          document.getElementById("razorpayVerifyForm").submit();
+        }
+      };
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    });
+  });
+</script>
+{% endif %}
+{% endblock %}

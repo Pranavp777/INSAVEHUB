@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <defs>
+    <linearGradient id="orbitStroke" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0284C7"/>
+      <stop offset="55%" stop-color="#0EA5E9"/>
+      <stop offset="100%" stop-color="#38BDF8"/>
+    </linearGradient>
+    <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.48"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="32" cy="32" r="28" fill="url(#coreGlow)"/>
+  <circle cx="32" cy="32" r="26" stroke="url(#orbitStroke)" stroke-width="1.5" stroke-opacity="0.75"/>
+  <ellipse cx="32" cy="32" rx="26" ry="11" transform="rotate(-28 32 32)" stroke="url(#orbitStroke)" stroke-width="1.75"/>
+  <ellipse cx="32" cy="32" rx="26" ry="11" transform="rotate(32 32 32)" stroke="#0284C7" stroke-opacity="0.45" stroke-width="1.2"/>
+  <rect x="23" y="23" width="18" height="18" rx="4" fill="#FFFFFF" fill-opacity="0.92" stroke="url(#orbitStroke)" stroke-width="1.75"/>
+  <circle cx="32" cy="32" r="4" fill="#0284C7"/>
+</svg>

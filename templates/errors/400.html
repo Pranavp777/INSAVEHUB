@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-shell" style="max-width: 580px; padding-top: var(--space-10);">
+  <div class="glass-panel reveal-item" style="padding: var(--space-8); text-align: center;">
+    <span class="mono-label" style="color: var(--light-amber);">HTTP STATUS // 400</span>
+    <h1 style="font-size: 2rem; margin: var(--space-2) 0 var(--space-3);">{{ error_title|default:"Malformed Request Payload" }}</h1>
+    <p style="color: var(--text-secondary); margin-bottom: var(--space-6);">
+      {{ error_message|default:"The server could not process the submitted request parameters. Please verify the URL or input format and try again." }}
+    </p>
+    <div style="display: flex; justify-content: center; gap: var(--space-3);">
+      <a href="{% url 'downloads:interface' %}" class="btn-glass btn-primary">Open Download Console</a>
+      <a href="{% url 'core:home' %}" class="btn-glass">Return Home</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

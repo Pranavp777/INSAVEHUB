@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-shell" style="padding-top: var(--space-4);">
+  <!-- 1. Welcome Area & Control Center Header -->
+  <div class="glass-panel reveal-item" style="padding: var(--space-8); margin-bottom: var(--space-6);">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-6);">
+      <div>
+        <span class="mono-label">USER CONTROL CENTER // SESSION ACTIVE</span>
+        <h1 style="font-size: clamp(1.6rem, 2.5vw, 2.2rem); margin-top: var(--space-1);">
+          Welcome, {{ profile.display_name|default:user.username }}
+        </h1>
+        <p style="color: var(--text-secondary); font-size: 0.94rem; margin-top: var(--space-1);">
+          Manage your Instagram content utilities, monitor your 24-hour free access pass, and review download history.
+        </p>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: var(--space-3);">
+        <a href="{% url 'downloads:interface' %}" class="btn-glass btn-primary">New URL Analysis</a>
+        <a href="{% url 'accounts:profile' %}" class="btn-glass">Account &amp; Security</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Usage Statistics, Free Access Status & Advertisement Status -->
+  <div class="grid-3" style="margin-bottom: var(--space-6);">
+    <!-- Free Access Status Panel -->
+    <div class="glass-panel reveal-item" style="padding: var(--space-6);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3);">
+        <span class="mono-label">FREE ACCESS</span>
+        {% if access_summary.has_free_24h %}
+          <span class="status-dot status-dot-emerald"></span>
+        {% elif access_summary.ad_required %}
+          <span class="status-dot status-dot-amber"></span>
+        {% else %}
+          <span class="status-dot"></span>
+        {% endif %}
+      </div>
+
+      {% if access_summary.has_free_24h %}
+        <div style="font-size: 0.85rem; color: var(--light-emerald); font-family: var(--font-mono); margin-bottom: var(--space-1);">
+          Available (24-Hour Pass Active)
+        </div>
+        <div style="font-size: 0.78rem; color: var(--text-muted);">Free access expires in</div>
+        <div style="font-family: var(--font-mono); font-size: 2rem; font-weight: 600; color: var(--text-primary); margin: var(--space-1) 0;"
+             data-free-access-seconds="{{ access_summary.free_24h_remaining_seconds }}">
+          {{ access_summary.free_24h_formatted }}
+        </div>
+        <div style="font-size: 0.78rem; color: var(--text-muted);">
+          Next access reset: {{ access_summary.free_24h_expires_at|date:"Y-m-d H:i" }} UTC
+        </div>
+      {% elif access_summary.ad_required %}
+        <div style="font-size: 0.9rem; color: var(--light-amber); font-family: var(--font-mono); margin-bottom: var(--space-2);">
+          Awaiting 30-Second Advertisement
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: var(--space-4);">
+          Complete the 30-second sponsor verification to unlock your next download and activate a 24-hour free access window.
+        </p>
+        <a href="{% url 'advertisements:gate' %}" class="btn-glass btn-primary btn-sm">Complete 30s Verification</a>
+      {% else %}
+        <div style="font-size: 0.9rem; color: var(--light-cyan); font-family: var(--font-mono); margin-bottom: var(--space-1);">
+          Available
+        </div>
+        <div style="font-family: var(--font-mono); font-size: 1.65rem; font-weight: 600; color: var(--text-primary); margin: var(--space-1) 0;">
+          IMMEDIATE ACCESS
+        </div>
+        <p style="font-size: 0.82rem; color: var(--text-muted);">
+          Next access reset triggers after your initial completed download.
+        </p>
+      {% endif %}
+    </div>
+
+    <!-- Advertisement Status Panel -->
+    <div class="glass-panel reveal-item" style="padding: var(--space-6);">
+      <span class="mono-label">ADVERTISEMENT STATUS</span>
+      <h2 style="font-size: 1.25rem; margin: var(--space-2) 0;">
+        {% if access_summary.has_free_24h %}
+          Interstitial Exempt (24h Window)
+        {% elif access_summary.ad_required %}
+          30-Second Gate Required
+        {% else %}
+          Standby Mode
+        {% endif %}
+      </h2>
+      <p style="font-size: 0.86rem; color: var(--text-secondary); margin-bottom: var(--space-4);">
+        Completed Sponsor Sessions: <strong>{{ ad_completed_count }}</strong>
+      </p>
+      <div class="glass-subpanel" style="padding: var(--space-3); font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);">
+        RULE: {{ site_config.ad_countdown_seconds }}S AD GRANTS {{ site_config.free_access_hours }}H UNINTERRUPTED ACCESS
+      </div>
+    </div>
+
+    <!-- Usage Statistics & Account Summary -->
+    <div class="glass-panel reveal-item" style="padding: var(--space-6);">
+      <span class="mono-label">USAGE STATISTICS &amp; ACCOUNT</span>
+      <div class="grid-2" style="gap: var(--space-3); margin-top: var(--space-3); margin-bottom: var(--space-4);">
+        <div class="spec-cell">
+          <span class="spec-label">ANALYZED URLS</span>
+          <span class="spec-val">{{ total_downloads }}</span>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-label">DOWNLOADED</span>
+          <span class="spec-val">{{ completed_downloads }}</span>
+        </div>
+      </div>
+      <div style="font-size: 0.82rem; color: var(--text-secondary); display: flex; justify-content: space-between; border-top: 1px solid var(--border-hairline); padding-top: var(--space-3);">
+        <span>Identity: {{ user.email }}</span>
+        <span class="mono-label">{% if profile.email_verified %}VERIFIED{% else %}UNVERIFIED{% endif %}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Available Instagram Tools -->
+  <div class="glass-panel reveal-item" style="padding: var(--space-6); margin-bottom: var(--space-6);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-5);">
+      <div>
+        <span class="mono-label">AVAILABLE TOOLS</span>
+        <h2 style="font-size: 1.35rem; margin-top: 2px;">Instagram Utility Modules</h2>
+      </div>
+      <a href="{% url 'downloads:tools_list' %}" class="btn-glass btn-sm">View Full Catalog</a>
+    </div>
+
+    <div class="grid-3">
+      {% for tool in tools %}
+        <div class="glass-subpanel" style="padding: var(--space-4); display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-3);">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2);">
+              <span class="tool-badge">{{ tool.badge_code }}</span>
+              <span class="mono-label">{{ tool.get_category_display }}</span>
+            </div>
+            <h3 style="font-size: 1.02rem; margin-bottom: var(--space-1);">{{ tool.name }}</h3>
+            <p style="font-size: 0.82rem; color: var(--text-secondary);">{{ tool.short_description }}</p>
+          </div>
+          <a href="{% url 'downloads:tool_detail' slug=tool.slug %}" class="btn-glass btn-sm">Open Module</a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- 4. Recent Activity / Download History -->
+  <div class="glass-panel reveal-item" style="padding: var(--space-6); margin-bottom: var(--space-6);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+      <div>
+        <span class="mono-label">RECENT ACTIVITY</span>
+        <h2 style="font-size: 1.35rem; margin-top: 2px;">Download History</h2>
+      </div>
+      <a href="{% url 'downloads:history' %}" class="btn-glass btn-sm">Full History</a>
+    </div>
+
+    {% if recent_downloads %}
+      <div class="glass-table-wrap">
+        <table class="glass-table">
+          <thead>
+            <tr>
+              <th>Tool Used</th>
+              <th>URL / Content Identifier</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Download Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for dl in recent_downloads %}
+              <tr>
+                <td>{{ dl.tool.name|default:"Instagram Utility" }}</td>
+                <td style="font-family: var(--font-mono); font-size: 0.8rem;">
+                  <span style="color: var(--text-primary);">{{ dl.shortcode }}</span>
+                  <span style="color: var(--text-dim); display: block; font-size: 0.72rem;">{{ dl.source_url|truncatechars:42 }}</span>
+                </td>
+                <td style="font-family: var(--font-mono); font-size: 0.8rem;">{{ dl.created_at|date:"Y-m-d H:i" }}</td>
+                <td>
+                  <span class="mono-label">{{ dl.get_status_display }}</span>
+                </td>
+                <td>
+                  <a href="{% url 'downloads:execute' token=dl.download_token %}" class="btn-glass btn-sm">
+                    Download
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p style="color: var(--text-muted); font-size: 0.9rem;">
+        No downloads recorded yet. Start by analyzing a public Instagram URL in the <a href="{% url 'downloads:interface' %}" style="color: var(--light-cyan);">Download Console</a>.
+      </p>
+    {% endif %}
+  </div>
+
+  <!-- 5. Dashboard Donation & Account Information Section -->
+  <div class="grid-2">
+    <div class="glass-panel reveal-item" style="padding: var(--space-6);">
+      <span class="mono-label" style="color: var(--light-violet);">COMMUNITY SUPPORT</span>
+      <h2 style="font-size: 1.25rem; margin: var(--space-1) 0 var(--space-2);">Support the Project</h2>
+      <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: var(--space-4);">
+        Help us keep the service fast, maintained and accessible. Donations are optional and do not alter account permissions.
+      </p>
+      <div style="display: flex; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-4);">
+        {% for amt in preset_amounts %}
+          <a href="{% url 'donations:index' %}?amount={{ amt }}" class="btn-glass btn-sm">{{ site_config.donation_currency }} {{ amt }}</a>
+        {% endfor %}
+      </div>
+      <a href="{% url 'donations:index' %}" class="btn-glass btn-primary btn-sm">Contribution Center</a>
+    </div>
+
+    <div class="glass-panel reveal-item" style="padding: var(--space-6);">
+      <span class="mono-label">ACCOUNT INFORMATION</span>
+      <h2 style="font-size: 1.25rem; margin: var(--space-1) 0 var(--space-3);">Operator Credentials</h2>
+      <div style="display: flex; flex-direction: column; gap: var(--space-2); font-size: 0.88rem; color: var(--text-secondary); margin-bottom: var(--space-4);">
+        <div>Username: <strong style="color: var(--text-primary);">{{ user.username }}</strong></div>
+        <div>Email: <strong style="color: var(--text-primary);">{{ user.email }}</strong></div>
+        <div>Authentication Method: <strong style="color: var(--text-primary);">{{ profile.get_auth_provider_display }}</strong></div>
+        <div>Member Since: <strong style="color: var(--text-primary);">{{ user.date_joined|date:"F j, Y" }}</strong></div>
+      </div>
+      <a href="{% url 'accounts:profile' %}" class="btn-glass btn-sm">Manage Profile &amp; Security</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

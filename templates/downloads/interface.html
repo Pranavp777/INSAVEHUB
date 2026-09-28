@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-shell" style="padding-top: var(--space-4);">
+  <div class="section-header reveal-item">
+    <span class="mono-label">CENTRAL DOWNLOAD INTERFACE</span>
+    <h1 class="section-title">Instagram Stream Analyzer &amp; Downloader</h1>
+    <p class="section-subtitle">
+      Paste any public Instagram URL below to inspect content format, resolution, and file metadata before executing a server-authorized download.
+    </p>
+  </div>
+
+  <!-- Central Input Interface -->
+  <div class="glass-panel reveal-item" style="padding: var(--space-8); margin-bottom: var(--space-8);">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4); margin-bottom: var(--space-5);">
+      <div class="telemetry-pill">
+        {% if access_state.has_free_24h %}
+          <span class="status-dot status-dot-emerald"></span>
+          <span>Free access expires in <strong data-free-access-seconds="{{ access_state.free_24h_remaining_seconds }}">{{ access_state.free_24h_formatted }}</strong></span>
+        {% elif access_state.ad_required %}
+          <span class="status-dot status-dot-amber"></span>
+          <span>30-Second Advertisement Required Before Next Download</span>
+        {% else %}
+          <span class="status-dot"></span>
+          <span>Initial Free Download Available</span>
+        {% endif %}
+      </div>
+      <a href="{% url 'downloads:history' %}" class="btn-glass btn-sm">View Download History</a>
+    </div>
+
+    <form id="instagramAnalyzerForm" action="{% url 'downloads:analyze_api' %}" method="post" novalidate>
+      {% csrf_token %}
+      <div class="grid-2" style="gap: var(--space-4); margin-bottom: var(--space-4);">
+        <div>
+          <label for="instagramUrlInput" class="form-label">Paste Public Instagram URL</label>
+          <input type="url" id="instagramUrlInput" name="url" class="glass-input"
+                 value="{{ prefill_url }}"
+                 placeholder="https://www.instagram.com/p/... or https://www.instagram.com/reel/..."
+                 required aria-label="Paste Public Instagram URL">
+        </div>
+        <div>
+          <label for="instagramToolSlug" class="form-label">Utility Module (Auto-Detect or Specific)</label>
+          <select id="instagramToolSlug" name="tool_slug" class="glass-select">
+            <option value="">Auto-Detect Content Type</option>
+            {% for t in tools %}
+              <option value="{{ t.slug }}" {% if selected_tool_slug == t.slug %}selected{% endif %}>{{ t.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4);">
+        <div style="display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center;">
+          <span class="mono-label">SUPPORTED:</span>
+          <span class="tool-badge">POSTS (/p/)</span>
+          <span class="tool-badge">REELS (/reel/)</span>
+          <span class="tool-badge">VIDEOS (/tv/)</span>
+          <span class="tool-badge">PUBLIC PROFILES</span>
+        </div>
+        <div style="display: flex; gap: var(--space-2);">
+          <button type="button" id="pasteClipboardBtn" class="btn-glass btn-sm">Paste Link</button>
+          <button type="submit" id="analyzeSubmitBtn" class="btn-glass btn-primary">Analyze &amp; Download</button>
+        </div>
+      </div>
+    </form>
+
+    <div id="analyzerStatusBox" hidden role="alert" style="margin-top: var(--space-4);"></div>
+
+    <!-- Glass Result Panel -->
+    <div id="analyzerResultPanel" class="glass-panel result-panel" hidden>
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4); padding-bottom: var(--space-4); border-bottom: 1px solid var(--border-hairline);">
+        <div>
+          <span class="mono-label">PREVIEW &amp; CONTENT TYPE // <span id="resContentType">MEDIA</span></span>
+          <h2 style="font-size: 1.3rem; margin-top: var(--space-1);" id="resMediaTitle">Analyzed Instagram Content</h2>
+        </div>
+        <div class="telemetry-pill">
+          <span class="status-dot status-dot-emerald"></span>
+          <span id="resAccessStatus">Verified</span>
+        </div>
+      </div>
+
+      <div class="result-spec-grid">
+        <div class="spec-cell">
+          <span class="spec-label">AVAILABLE FORMAT</span>
+          <span class="spec-val" id="resMediaFormat">-</span>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-label">RESOLUTION</span>
+          <span class="spec-val" id="resResolution">-</span>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-label">FILE INFORMATION</span>
+          <span class="spec-val" id="resFileSize">-</span>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-label">CREATOR / SHORTCODE</span>
+          <span class="spec-val"><span id="resAuthorHandle">-</span> [<span id="resShortcode">-</span>]</span>
+        </div>
+      </div>
+
+      <div id="resAdRequirementNotice" class="glass-alert glass-alert-warning" hidden style="margin-bottom: var(--space-4);">
+        <span>Your next download will be available after the advertisement. Completing the 30-second countdown unlocks this download and activates your 24-hour free access pass.</span>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: var(--space-3);">
+        <a id="resDownloadActionBtn" href="#" class="btn-glass btn-primary">Download Media Artifact</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Session Activity -->
+  <div class="glass-panel reveal-item" style="padding: var(--space-6);">
+    <span class="mono-label">RECENT ANALYSES &amp; DOWNLOADS</span>
+    <h2 style="font-size: 1.25rem; margin: var(--space-1) 0 var(--space-4);">Recent Session Queue</h2>
+
+    {% if recent_downloads %}
+      <div class="glass-table-wrap">
+        <table class="glass-table">
+          <thead>
+            <tr>
+              <th>Tool Used</th>
+              <th>Content Identifier</th>
+              <th>Format &amp; Size</th>
+              <th>Status</th>
+              <th>Download Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for dl in recent_downloads %}
+              <tr>
+                <td>{{ dl.tool.name|default:dl.get_content_type_display }}</td>
+                <td style="font-family: var(--font-mono); font-size: 0.8rem;">{{ dl.shortcode }}</td>
+                <td style="font-family: var(--font-mono); font-size: 0.78rem;">{{ dl.media_format }} ({{ dl.file_size_label }})</td>
+                <td><span class="mono-label">{{ dl.get_status_display }}</span></td>
+                <td>
+                  <a href="{% url 'downloads:execute' token=dl.download_token %}" class="btn-glass btn-sm">
+                    Download
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p style="font-size: 0.88rem; color: var(--text-muted);">No URLs analyzed in this session yet.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

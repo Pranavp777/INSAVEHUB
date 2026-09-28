@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-shell" style="max-width: 520px; padding-top: var(--space-8);">
+  <div class="glass-panel reveal-item" style="padding: var(--space-8); text-align: center;">
+    <span class="mono-label">IDENTITY VERIFICATION</span>
+    {% if verified %}
+      <h1 style="font-size: 1.75rem; margin: var(--space-2) 0 var(--space-3);">Email Address Verified</h1>
+      <p style="color: var(--text-secondary); margin-bottom: var(--space-6);">
+        Your InSave Hub account identity is now confirmed. Full dashboard synchronization is active.
+      </p>
+      <a href="{% url 'dashboard:index' %}" class="btn-glass btn-primary btn-block">Enter Control Center</a>
+    {% else %}
+      <h1 style="font-size: 1.75rem; margin: var(--space-2) 0 var(--space-3);">Invalid Verification Token</h1>
+      <p style="color: var(--text-secondary); margin-bottom: var(--space-6);">
+        The verification token provided is invalid or has already been consumed.
+      </p>
+      <a href="{% url 'core:home' %}" class="btn-glass btn-block">Return Home</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

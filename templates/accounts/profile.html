@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-shell" style="padding-top: var(--space-4);">
+  <div class="section-header reveal-item">
+    <span class="mono-label">USER IDENTITY &amp; SECURITY</span>
+    <h1 class="section-title">Account Profile Panel</h1>
+    <p class="section-subtitle">
+      Review your identity records, download telemetry, 24-hour free access status, donation history, and security configuration.
+    </p>
+  </div>
+
+  <div class="grid-2" style="align-items: start;">
+    <!-- Left Column: Identity Card, Statistics, Free-Access Status & Donation History -->
+    <div style="display: flex; flex-direction: column; gap: var(--space-6);">
+      <div class="glass-panel reveal-item" style="padding: var(--space-6);">
+        <div style="display: flex; align-items: center; gap: var(--space-5); margin-bottom: var(--space-6);">
+          {% if profile.avatar_url %}
+            <img src="{{ profile.avatar_url }}" alt="{{ profile.display_name }}"
+                 style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 1px solid var(--light-cyan);">
+          {% else %}
+            <div style="width: 72px; height: 72px; border-radius: 50%; background: rgba(56, 189, 248, 0.14); border: 1px solid var(--light-cyan); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.4rem; font-weight: 600; color: var(--light-cyan);">
+              {{ profile.initials }}
+            </div>
+          {% endif %}
+          <div>
+            <span class="mono-label">AUTHENTICATED OPERATOR</span>
+            <h2 style="font-size: 1.4rem; margin-top: 2px;">{{ profile.display_name|default:user.username }}</h2>
+            <p style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);">
+              {{ user.email }} // {{ profile.get_auth_provider_display }}
+            </p>
+          </div>
+        </div>
+
+        <div class="result-spec-grid" style="grid-template-columns: repeat(2, 1fr); margin: 0;">
+          <div class="spec-cell">
+            <span class="spec-label">ACCOUNT CREATED</span>
+            <span class="spec-val">{{ user.date_joined|date:"Y-m-d" }}</span>
+          </div>
+          <div class="spec-cell">
+            <span class="spec-label">EMAIL STATUS</span>
+            <span class="spec-val">{% if profile.email_verified %}Verified{% else %}Pending{% endif %}</span>
+          </div>
+          <div class="spec-cell">
+            <span class="spec-label">TOTAL ANALYZED</span>
+            <span class="spec-val">{{ total_downloads }}</span>
+          </div>
+          <div class="spec-cell">
+            <span class="spec-label">COMPLETED DOWNLOADS</span>
+            <span class="spec-val">{{ completed_downloads }}</span>
+          </div>
+        </div>
+
+        <!-- Free-Access Status Box -->
+        <div class="glass-subpanel" style="padding: var(--space-4); margin-top: var(--space-5);">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="mono-label">FREE-ACCESS STATUS</span>
+            {% if access_state.has_free_24h %}
+              <span class="mono-label" style="color: var(--light-emerald);">24-HOUR PASS ACTIVE</span>
+            {% elif access_state.ad_required %}
+              <span class="mono-label" style="color: var(--light-amber);">30S AD REQUIRED</span>
+            {% else %}
+              <span class="mono-label" style="color: var(--light-cyan);">AVAILABLE</span>
+            {% endif %}
+          </div>
+          {% if access_state.has_free_24h %}
+            <p style="font-family: var(--font-mono); font-size: 1.15rem; margin-top: var(--space-2); color: var(--text-primary);">
+              Free access expires in <strong data-free-access-seconds="{{ access_state.free_24h_remaining_seconds }}">{{ access_state.free_24h_formatted }}</strong>
+            </p>
+          {% else %}
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: var(--space-2);">
+              {{ access_state.label }}
+            </p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Donation History -->
+      <div class="glass-panel reveal-item" style="padding: var(--space-6);">
+        <h3 style="font-size: 1.15rem; margin-bottom: var(--space-4);">Account Donation History</h3>
+        {% if user_donations %}
+          <div class="glass-table-wrap">
+            <table class="glass-table">
+              <thead>
+                <tr>
+                  <th>Order Ref</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for don in user_donations %}
+                  <tr>
+                    <td style="font-family: var(--font-mono); font-size: 0.78rem;">
+                      <a href="{% url 'donations:receipt' donation_id=don.id %}" style="color: var(--light-cyan);">{{ don.provider_order_id|truncatechars:18 }}</a>
+                    </td>
+                    <td>{{ don.currency }} {{ don.amount }}</td>
+                    <td>{{ don.created_at|date:"Y-m-d" }}</td>
+                    <td><span class="mono-label">{{ don.get_status_display }}</span></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p style="font-size: 0.88rem; color: var(--text-muted);">No donation records linked to this account.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Right Column: Edit Permitted Profile Info & Security Settings -->
+    <div style="display: flex; flex-direction: column; gap: var(--space-6);">
+      <div class="glass-panel reveal-item" style="padding: var(--space-6);">
+        <span class="mono-label">IDENTITY CONFIGURATION</span>
+        <h3 style="font-size: 1.2rem; margin: var(--space-1) 0 var(--space-4);">Update Profile Information</h3>
+
+        <form method="post" action="{% url 'accounts:profile' %}" novalidate>
+          {% csrf_token %}
+          <input type="hidden" name="form_action" value="update_profile">
+
+          <div class="form-group">
+            <label for="{{ profile_form.display_name.id_for_label }}" class="form-label">{{ profile_form.display_name.label }}</label>
+            {{ profile_form.display_name }}
+            {% if profile_form.display_name.errors %}
+              <small style="color: var(--light-rose);">{{ profile_form.display_name.errors|striptags }}</small>
+            {% endif %}
+          </div>
+
+          <div class="form-group">
+            <label for="{{ profile_form.email.id_for_label }}" class="form-label">{{ profile_form.email.label }}</label>
+            {{ profile_form.email }}
+            {% if profile_form.email.errors %}
+              <small style="color: var(--light-rose);">{{ profile_form.email.errors|striptags }}</small>
+            {% endif %}
+          </div>
+
+          <div class="form-group">
+            <label for="{{ profile_form.avatar_url.id_for_label }}" class="form-label">{{ profile_form.avatar_url.label }}</label>
+            {{ profile_form.avatar_url }}
+            {% if profile_form.avatar_url.errors %}
+              <small style="color: var(--light-rose);">{{ profile_form.avatar_url.errors|striptags }}</small>
+            {% endif %}
+          </div>
+
+          <div class="form-group" style="display: flex; align-items: center; gap: var(--space-3);">
+            {{ profile_form.security_alerts_enabled }}
+            <label for="{{ profile_form.security_alerts_enabled.id_for_label }}" style="font-size: 0.88rem; color: var(--text-secondary);">
+              {{ profile_form.security_alerts_enabled.label }}
+            </label>
+          </div>
+
+          <button type="submit" class="btn-glass btn-primary">Save Profile Settings</button>
+        </form>
+      </div>
+
+      <!-- Password & Security Settings -->
+      <div class="glass-panel reveal-item" style="padding: var(--space-6);">
+        <span class="mono-label">LOGIN &amp; SECURITY SETTINGS</span>
+        <h3 style="font-size: 1.2rem; margin: var(--space-1) 0 var(--space-4);">Update Account Password</h3>
+
+        <form method="post" action="{% url 'accounts:profile' %}" novalidate>
+          {% csrf_token %}
+          <input type="hidden" name="form_action" value="change_password">
+
+          <div class="form-group">
+            <label for="{{ password_form.new_password.id_for_label }}" class="form-label">{{ password_form.new_password.label }}</label>
+            {{ password_form.new_password }}
+            {% if password_form.new_password.errors %}
+              <small style="color: var(--light-rose);">{{ password_form.new_password.errors|striptags }}</small>
+            {% endif %}
+          </div>
+
+          <div class="form-group">
+            <label for="{{ password_form.confirm_password.id_for_label }}" class="form-label">{{ password_form.confirm_password.label }}</label>
+            {{ password_form.confirm_password }}
+            {% if password_form.confirm_password.errors %}
+              <small style="color: var(--light-rose);">{{ password_form.confirm_password.errors|striptags }}</small>
+            {% endif %}
+          </div>
+
+          <button type="submit" class="btn-glass">Rotate Password</button>
+        </form>
+
+        {% if recent_security_logs %}
+          <div style="margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--border-hairline);">
+            <span class="mono-label" style="display: block; margin-bottom: var(--space-2);">RECENT SECURITY AUDIT EVENTS</span>
+            {% for log in recent_security_logs %}
+              <div style="display: flex; justify-content: space-between; font-size: 0.78rem; padding: var(--space-1) 0; color: var(--text-muted); font-family: var(--font-mono);">
+                <span>{{ log.event_type }}</span>
+                <span>{{ log.created_at|date:"Y-m-d H:i" }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-shell" style="padding-top: var(--space-4);">
+  <div class="section-header reveal-item">
+    <span class="mono-label">BUY US COFEE</span>
+    <h1 class="section-title">Buy Us Cofee</h1>
+    <p class="section-subtitle">
+      Select an amount below to buy us a coffee.
+    </p>
+  </div>
+
+  <div class="grid-2" style="align-items: start; margin-bottom: var(--space-8);">
+    <!-- One-Time Contribution Form -->
+    <div class="glass-panel reveal-item" style="padding: var(--space-8);">
+      <span class="mono-label" style="color: var(--light-cyan);">SELECT AMOUNT</span>
+      <h2 style="font-size: 1.35rem; margin: var(--space-1) 0 var(--space-4);">Buy Us Cofee</h2>
+
+      <form method="post" action="{% url 'donations:create' %}" id="donationOrderForm">
+        {% csrf_token %}
+
+        <label class="form-label">Select Preset Amount ({{ site_config.donation_currency }})</label>
+        <div class="donation-tier-grid">
+          {% for amt in preset_amounts %}
+            <button type="button"
+                    class="tier-btn {% if request.GET.amount == amt|stringformat:'s' or forloop.first and not request.GET.amount %}is-selected{% endif %}"
+                    data-donation-amount="{{ amt }}">
+              {{ site_config.donation_currency }} {{ amt }}
+            </button>
+          {% endfor %}
+        </div>
+
+        <div class="form-group">
+          <label for="donationAmountInput" class="form-label">Custom or Selected Amount ({{ site_config.donation_currency }})</label>
+          <input type="number" id="donationAmountInput" name="amount" class="glass-input"
+                 value="{{ request.GET.amount|default:preset_amounts.0|default:250 }}"
+                 min="{{ site_config.minimum_donation_amount }}"
+                 max="{{ site_config.maximum_donation_amount }}"
+                 step="1" required>
+        </div>
+
+        <div class="form-group" style="display: flex; align-items: center; gap: var(--space-3);">
+          <input type="checkbox" id="donationAnonymousCheck" name="is_anonymous" value="true">
+          <label for="donationAnonymousCheck" style="font-size: 0.88rem; color: var(--text-secondary);">
+            Keep my name anonymous
+          </label>
+        </div>
+
+        <div id="donorNameGroup" class="grid-2" style="gap: var(--space-4); transition: opacity 200ms ease;">
+          <div class="form-group">
+            <label for="donorNameInput" class="form-label">Your Name (Optional)</label>
+            <input type="text" id="donorNameInput" name="donor_name" class="glass-input"
+                   value="{% if user.is_authenticated %}{{ user.username }}{% endif %}"
+                   placeholder="Your name">
+          </div>
+
+          <div class="form-group">
+            <label for="donorEmailInput" class="form-label">Receipt Email (Optional)</label>
+            <input type="email" id="donorEmailInput" name="donor_email" class="glass-input"
+                   value="{% if user.is_authenticated %}{{ user.email }}{% endif %}"
+                   placeholder="name@domain.com">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="donorMessageInput" class="form-label">Message (Optional)</label>
+          <input type="text" id="donorMessageInput" name="message" class="glass-input"
+                 maxlength="240" placeholder="Add a short message">
+        </div>
+
+        <button type="submit" class="btn-glass btn-primary btn-block">
+          Buy Us Cofee
+        </button>
+      </form>
+    </div>
+
+    <!-- History & Recent Supporters -->
+    <div style="display: flex; flex-direction: column; gap: var(--space-6);">
+      {% if user.is_authenticated %}
+        <div class="glass-panel reveal-item" style="padding: var(--space-6);">
+          <span class="mono-label">HISTORY</span>
+          <h2 style="font-size: 1.2rem; margin: var(--space-1) 0 var(--space-4);">Your Contributions</h2>
+
+          {% if user_donations %}
+            <div class="glass-table-wrap">
+              <table class="glass-table">
+                <thead>
+                  <tr>
+                    <th>Receipt</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for d in user_donations %}
+                    <tr>
+                      <td style="font-family: var(--font-mono); font-size: 0.78rem;">
+                        <a href="{% url 'donations:receipt' donation_id=d.id %}" style="color: var(--light-cyan);">{{ d.provider_order_id|truncatechars:18 }}</a>
+                      </td>
+                      <td>{{ d.currency }} {{ d.amount }}</td>
+                      <td><span class="mono-label">{{ d.get_status_display }}</span></td>
+                      <td style="font-family: var(--font-mono); font-size: 0.76rem;">{{ d.created_at|date:"Y-m-d" }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <p style="font-size: 0.88rem; color: var(--text-muted);">No previous contributions found.</p>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      <div class="glass-panel reveal-item" style="padding: var(--space-6);">
+        <span class="mono-label">RECENT SUPPORTERS</span>
+        <h2 style="font-size: 1.2rem; margin: var(--space-1) 0 var(--space-4);">Recent Cofee Supporters</h2>
+
+        {% if recent_verified %}
+          <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+            {% for v in recent_verified %}
+              <div class="glass-subpanel" style="padding: var(--space-3) var(--space-4); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <strong style="font-size: 0.9rem;">{{ v.public_donor_label }}</strong>
+                  {% if v.message %}
+                    <p style="font-size: 0.8rem; color: var(--text-secondary);">{{ v.message }}</p>
+                  {% endif %}
+                </div>
+                <span class="mono-label" style="color: var(--light-emerald);">{{ v.currency }} {{ v.amount }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p style="font-size: 0.88rem; color: var(--text-muted);">
+            Be the first to buy us a coffee.
+          </p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/donations.js' %}" defer></script>
+{% endblock %}

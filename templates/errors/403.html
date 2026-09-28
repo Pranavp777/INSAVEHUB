@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-shell" style="max-width: 580px; padding-top: var(--space-10);">
+  <div class="glass-panel reveal-item" style="padding: var(--space-8); text-align: center;">
+    <span class="mono-label" style="color: var(--light-rose);">HTTP STATUS // 403</span>
+    <h1 style="font-size: 2rem; margin: var(--space-2) 0 var(--space-3);">{{ error_title|default:"Access Authorization Denied" }}</h1>
+    <p style="color: var(--text-secondary); margin-bottom: var(--space-6);">
+      {{ error_message|default:"Your current session does not hold permission for this action, or the security verification token is invalid." }}
+    </p>
+    <div style="display: flex; justify-content: center; gap: var(--space-3);">
+      <a href="{% url 'core:home' %}" class="btn-glass btn-primary">Return to Overview</a>
+      <a href="{% url 'accounts:login' %}" class="btn-glass">Authenticate Session</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

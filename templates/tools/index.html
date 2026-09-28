@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-shell" style="padding-top: var(--space-4);">
+  <div class="section-header reveal-item">
+    <span class="mono-label">INSTAGRAM CONTENT UTILITIES</span>
+    <h1 class="section-title">Modular Glass Tool Suite</h1>
+    <p class="section-subtitle">
+      Select an Instagram utility module below to inspect public permalinks, verify stream parameters, and download supported public assets.
+    </p>
+  </div>
+
+  <div class="grid-3" style="margin-bottom: var(--space-10);">
+    {% for tool in tools %}
+      <article class="glass-panel glass-panel-interactive tool-card reveal-item">
+        <div>
+          <div class="tool-card-header">
+            <span class="tool-badge">{{ tool.badge_code }}</span>
+            <span class="tool-format-tag">{{ tool.get_category_display }}</span>
+          </div>
+          <h2 style="font-size: 1.28rem; margin-bottom: var(--space-2);">{{ tool.name }}</h2>
+          <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: var(--space-4);">
+            {{ tool.detailed_description }}
+          </p>
+        </div>
+
+        <div>
+          <div class="glass-subpanel" style="padding: var(--space-3); margin-bottom: var(--space-4);">
+            <span class="spec-label">SUPPORTED PATTERN</span>
+            <span class="spec-val" style="font-size: 0.75rem; word-break: break-all;">{{ tool.supported_url_hint }}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="{% url 'downloads:tool_detail' slug=tool.slug %}" class="btn-glass btn-primary btn-sm">Launch Utility</a>
+            <span class="mono-label">{{ tool.output_formats|truncatechars:26 }}</span>
+          </div>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+
+  <div class="glass-panel reveal-item" style="padding: var(--space-6);">
+    <span class="mono-label">PUBLIC ACCESS &amp; COPYRIGHT POLICY</span>
+    <p style="font-size: 0.88rem; color: var(--text-secondary); margin-top: var(--space-2);">
+      All InSave Hub modules are engineered strictly for publicly accessible Instagram URLs. Private accounts, stories, direct messages, and authentication-gated routes are rejected automatically by our URL validator. Users are responsible for respecting creator copyright and Instagram's terms of service.
+    </p>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-shell" style="max-width: 560px; padding-top: var(--space-8);">
+  <div class="glass-panel reveal-item" style="padding: var(--space-8);">
+    <span class="mono-label">ACCOUNT CONFIRMATION STATUS</span>
+    <h1 style="font-size: 1.75rem; margin: var(--space-2) 0 var(--space-3);">Account Initialized</h1>
+    <p style="color: var(--text-secondary); margin-bottom: var(--space-5);">
+      Welcome, <strong>{{ profile.display_name|default:user.username }}</strong>. Your control center session is active.
+    </p>
+
+    <div class="glass-subpanel" style="padding: var(--space-4); margin-bottom: var(--space-6);">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="mono-label">EMAIL VERIFICATION</span>
+        {% if profile.email_verified %}
+          <span class="mono-label" style="color: var(--light-emerald);">VERIFIED</span>
+        {% else %}
+          <span class="mono-label" style="color: var(--light-amber);">PENDING CONFIRMATION</span>
+        {% endif %}
+      </div>
+      <p style="font-size: 0.86rem; color: var(--text-secondary); margin-top: var(--space-2);">
+        Registered address: <strong>{{ user.email }}</strong>
+      </p>
+    </div>
+
+    {% if not profile.email_verified %}
+      <form method="post" action="{% url 'accounts:resend_verification' %}" style="margin-bottom: var(--space-4);">
+        {% csrf_token %}
+        <button type="submit" class="btn-glass btn-block">Resend Verification Email</button>
+      </form>
+    {% endif %}
+
+    <a href="{% url 'dashboard:index' %}" class="btn-glass btn-primary btn-block">Proceed to Control Center</a>
+  </div>
+</div>
+{% endblock %}

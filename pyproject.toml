@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "insave-hub"
+version = "1.0.0"
+description = "Production Instagram Social Media Management and Content Utility Platform with Glass Orbit Architecture"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Proprietary" }
+authors = [
+    { name = "InSave Hub Engineering" }
+]
+dependencies = [
+    "Django>=5.0,<5.2",
+    "djangorestframework>=3.15.0",
+    "python-dotenv>=1.0.0",
+    "dj-database-url>=2.1.0",
+    "whitenoise>=6.6.0",
+    "requests>=2.31.0",
+    "httpx>=0.27.0",
+    "yt-dlp>=2026.0.0",
+    "cryptography>=42.0.0",
+    "django-storages[s3]>=1.14.0",
+    "boto3>=1.34.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-django>=4.8.0",
+]
+
+[dependency-groups]
+dev = [
+    "workers-py>=1.0.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["config*", "apps*", "src*"]

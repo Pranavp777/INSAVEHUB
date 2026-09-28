@@ -1,0 +1,370 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- 1. HERO SECTION WITH INTERACTIVE GLASS ORBIT VISUALIZATION -->
+<section class="hero-section">
+  <div class="container-shell hero-grid">
+    <div class="reveal-item">
+      <h1 class="hero-headline">Your Instagram Workflow, Refined.</h1>
+      <p class="hero-lead">
+        Download public Instagram Videos, Reels, Photos, and Carousels in original 1080p MP4 and full-resolution JPEG format instantly.
+      </p>
+      <div class="hero-cta-group">
+        <a href="#videoDownloader" class="btn-glass btn-primary">Download Video</a>
+        <button type="button" id="installAppHeroBtn" class="btn-glass" data-install-app-trigger>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v12"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <path d="M5 21h14"></path>
+          </svg>
+          <span>Install App</span>
+        </button>
+        <a href="#featureShowcase" class="btn-glass">All Tools</a>
+      </div>
+
+      <div class="hero-metrics-bar">
+        <div>
+          <div class="metric-value">1080P MP4</div>
+          <div class="metric-caption">Direct Video &amp; Reel Stream</div>
+        </div>
+        <div>
+          <div class="metric-value">FULL HD</div>
+          <div class="metric-caption">Original Photo &amp; Post Quality</div>
+        </div>
+        <div>
+          <div class="metric-value">FAST</div>
+          <div class="metric-caption">One-Click Direct Download</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Glass Orbit Visualization -->
+    <div class="orbit-stage reveal-item" aria-label="Interactive Glass Orbit Platform Visualization">
+      <div class="orbit-ring-system">
+        <div class="orbit-ring orbit-ring-outer"></div>
+        <div class="orbit-ring orbit-ring-middle"></div>
+        <div class="orbit-ring orbit-ring-inner"></div>
+
+        <button type="button" class="orbit-satellite orbit-satellite-1 is-active"
+                data-orbit-tool="video"
+                data-title="Instagram Video &amp; Post Downloader"
+                data-category="FULL HD 1080P"
+                data-format="MP4 Progressive 1080p / Original JPEG"
+                data-sample-url="https://www.instagram.com/p/...">
+          VIDEO &amp; POST
+        </button>
+
+        <button type="button" class="orbit-satellite orbit-satellite-2"
+                data-orbit-tool="reel"
+                data-title="Instagram Reel Downloader"
+                data-category="VERTICAL 9:16"
+                data-format="MP4 (H.264 1080x1920) / AAC"
+                data-sample-url="https://www.instagram.com/reel/...">
+          REEL DOWNLOADER
+        </button>
+
+        <button type="button" class="orbit-satellite orbit-satellite-3"
+                data-orbit-tool="image"
+                data-title="Instagram Photo &amp; Carousel Downloader"
+                data-category="ORIGINAL QUALITY"
+                data-format="Original sRGB JPEG / 1080x1350"
+                data-sample-url="https://www.instagram.com/p/...">
+          PHOTO &amp; CAROUSEL
+        </button>
+
+        <button type="button" class="orbit-satellite orbit-satellite-4"
+                data-orbit-tool="metadata"
+                data-title="Caption &amp; Hashtag Extractor"
+                data-category="CONTENT UTILITY"
+                data-format="Clean Caption &amp; Hashtags"
+                data-sample-url="https://www.instagram.com/p/...">
+          CAPTION &amp; TAGS
+        </button>
+
+        <div class="orbit-core-console">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3); padding-bottom: var(--space-2); border-bottom: 1px solid var(--border-hairline);">
+            <span class="mono-label" id="orbitConsoleCategory">FULL HD 1080P</span>
+            <span class="status-dot status-dot-emerald"></span>
+          </div>
+          <h2 style="font-size: 1.08rem; margin-bottom: var(--space-2);" id="orbitConsoleTitle">Instagram Video &amp; Post Downloader</h2>
+          <p style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--light-cyan); margin-bottom: var(--space-4); word-break: break-all;" id="orbitConsoleUrl">
+            https://www.instagram.com/p/...
+          </p>
+          <div class="glass-subpanel" style="padding: var(--space-3); margin-bottom: var(--space-4);">
+            <span class="spec-label">QUALITY</span>
+            <span class="spec-val" id="orbitConsoleFormat" style="font-size: 0.8rem;">MP4 Progressive 1080p / Original JPEG</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted);">
+            <span>ACCESS: {% if access_state.has_free_24h %}24H PASS ACTIVE{% else %}READY{% endif %}</span>
+            <a href="#videoDownloader" style="color: var(--light-cyan); font-weight: 600;">OPEN DOWNLOADER</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. INSTAGRAM VIDEO & POST DOWNLOADER ON HOME PAGE -->
+<section class="section-block" id="videoDownloader" style="padding-top: var(--space-8);">
+  <div class="container-shell">
+    <div class="section-header reveal-item">
+      <span class="mono-label">INSTAGRAM VIDEO, REEL &amp; POST DOWNLOADER</span>
+      <h2 class="section-title">Instagram Video &amp; Post Downloader</h2>
+      <p class="section-subtitle">
+        Paste any public Instagram Post (<code>/p/</code>), Reel (<code>/reel/</code>), or Video (<code>/tv/</code>) link to extract and download original 1080p MP4 video streams and full-resolution JPEG publications.
+      </p>
+    </div>
+
+    <div class="glass-panel reveal-item" style="padding: var(--space-8);">
+      <!-- Interactive Downloader Mode Switcher Tabs -->
+      <div class="downloader-mode-tabs" role="tablist" aria-label="Instagram Downloader Modes">
+        <button type="button" role="tab" aria-selected="true"
+                class="downloader-tab-btn is-active"
+                data-downloader-tab="video-downloader"
+                data-placeholder="https://www.instagram.com/p/... or https://www.instagram.com/reel/..."
+                data-label="Paste Public Instagram Video or Post URL"
+                data-button-text="Analyze &amp; Download Video">
+          <span>Instagram Video Downloader</span>
+        </button>
+
+        <button type="button" role="tab" aria-selected="false"
+                class="downloader-tab-btn"
+                data-downloader-tab="reel-downloader"
+                data-placeholder="https://www.instagram.com/reel/..."
+                data-label="Paste Public Instagram Reel URL"
+                data-button-text="Analyze &amp; Download Reel">
+          <span>Reel Downloader</span>
+        </button>
+
+        <button type="button" role="tab" aria-selected="false"
+                class="downloader-tab-btn"
+                data-downloader-tab="public-post-downloader"
+                data-placeholder="https://www.instagram.com/p/..."
+                data-label="Paste Public Instagram Post or Carousel URL"
+                data-button-text="Analyze &amp; Download Post">
+          <span>Public Post Downloader</span>
+        </button>
+
+        <button type="button" role="tab" aria-selected="false"
+                class="downloader-tab-btn"
+                data-downloader-tab="image-downloader"
+                data-placeholder="https://www.instagram.com/p/..."
+                data-label="Paste Public Instagram Photo URL"
+                data-button-text="Analyze &amp; Download Photo">
+          <span>Photo Downloader</span>
+        </button>
+
+        <button type="button" role="tab" aria-selected="false"
+                class="downloader-tab-btn"
+                data-downloader-tab="profile-media-utility"
+                data-placeholder="https://www.instagram.com/username/"
+                data-label="Paste Public Instagram Profile URL"
+                data-button-text="Inspect Profile Media">
+          <span>Profile Media</span>
+        </button>
+      </div>
+
+      <form id="instagramAnalyzerForm" action="{% url 'downloads:analyze_api' %}" method="post" novalidate>
+        {% csrf_token %}
+        <input type="hidden" id="instagramToolSlug" name="tool_slug" value="video-downloader">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2);">
+          <label for="instagramUrlInput" id="instagramUrlLabel" class="form-label" style="margin-bottom: 0;">
+            Paste Public Instagram Video or Post URL
+          </label>
+          <span class="mono-label">ORIGINAL CDN STREAM // MP4 &amp; JPEG</span>
+        </div>
+
+        <div class="analyzer-bar">
+          <input type="url" id="instagramUrlInput" name="url" class="glass-input"
+                 placeholder="https://www.instagram.com/p/... or https://www.instagram.com/reel/..."
+                 required aria-label="Paste Public Instagram URL">
+          <button type="button" id="pasteClipboardBtn" class="btn-glass btn-sm" title="Paste URL from Clipboard">
+            Paste Link
+          </button>
+          <button type="submit" id="analyzeSubmitBtn" class="btn-glass btn-primary">
+            Analyze &amp; Download Video
+          </button>
+        </div>
+      </form>
+
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-3); margin-top: var(--space-4); align-items: center;">
+        <div style="display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center;">
+          <span class="mono-label">SUPPORTED ROUTES:</span>
+          <span class="tool-badge">/p/ POSTS &amp; CAROUSELS</span>
+          <span class="tool-badge">/reel/ VERTICAL REELS</span>
+          <span class="tool-badge">/tv/ BROADCAST VIDEOS</span>
+        </div>
+        <a href="{% url 'downloads:interface' %}" class="mono-label" style="color: var(--light-cyan); font-weight: 600;">
+          OPEN FULL DOWNLOAD CONTROL CENTER
+        </a>
+      </div>
+
+      <div id="analyzerStatusBox" hidden role="alert" style="margin-top: var(--space-4);"></div>
+
+      <!-- Asynchronous Glass Media Result Panel -->
+      <div id="analyzerResultPanel" class="glass-panel result-panel" hidden>
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4); padding-bottom: var(--space-4); border-bottom: 1px solid var(--border-hairline);">
+          <div>
+            <span class="mono-label" id="resContentType">INSTAGRAM MEDIA</span>
+            <h3 style="font-size: 1.3rem; margin-top: var(--space-1);" id="resMediaTitle">Verified Instagram Stream</h3>
+          </div>
+          <div class="telemetry-pill">
+            <span class="status-dot status-dot-emerald"></span>
+            <span id="resAccessStatus">Free Access Available</span>
+          </div>
+        </div>
+
+        <div class="video-preview-layout">
+          <!-- Visual Stream Preview Frame -->
+          <div class="video-preview-screen" id="resPreviewContainer" aria-label="Media Stream Preview Card">
+            <div style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 0.7rem; position: relative; z-index: 2;">
+              <span style="background: rgba(255,255,255,0.22); padding: 2px 8px; border-radius: 4px;" id="resPreviewAspect">1080P HD</span>
+              <span>LIVE CDN STREAM</span>
+            </div>
+            <div class="video-preview-play-badge" aria-hidden="true" style="position: relative; z-index: 2;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="#FFFFFF">
+                <polygon points="8,5 19,12 8,19"></polygon>
+              </svg>
+            </div>
+            <div style="font-family: var(--font-mono); font-size: 0.72rem; opacity: 0.94; position: relative; z-index: 2;">
+              <div id="resPreviewCodec">H.264 / sRGB</div>
+              <div style="opacity: 0.85;">SHORTCODE: <span id="resPreviewShortcode">-</span></div>
+            </div>
+          </div>
+
+          <!-- Technical Specifications & Direct Download Action -->
+          <div style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div class="result-spec-grid" style="grid-template-columns: repeat(2, 1fr); margin-top: 0;">
+              <div class="spec-cell">
+                <span class="spec-label">AVAILABLE FORMAT</span>
+                <span class="spec-val" id="resMediaFormat">-</span>
+              </div>
+              <div class="spec-cell">
+                <span class="spec-label">DIMENSIONS</span>
+                <span class="spec-val" id="resResolution">-</span>
+              </div>
+              <div class="spec-cell">
+                <span class="spec-label">FILE SIZE</span>
+                <span class="spec-val" id="resFileSize">-</span>
+              </div>
+              <div class="spec-cell">
+                <span class="spec-label">CREATOR / SHORTCODE</span>
+                <span class="spec-val"><span id="resAuthorHandle">-</span> [<span id="resShortcode">-</span>]</span>
+              </div>
+            </div>
+
+            <div id="resAdRequirementNotice" class="glass-alert glass-alert-warning" hidden style="margin-bottom: var(--space-4);">
+              <span>Your initial download allowance has been used. Completing a single 30-second sponsor interval will unlock this download and grant 24 hours of uninterrupted free access.</span>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-3);">
+              <span class="mono-label">SERVER-VERIFIED DIRECT STREAM</span>
+              <a id="resDownloadActionBtn" href="#" class="btn-glass btn-primary" style="min-width: 240px;">
+                Download Media
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. DEDICATED INSTAGRAM TOOLS SHOWCASE -->
+<section class="section-block" id="featureShowcase">
+  <div class="container-shell">
+    <div class="section-header reveal-item">
+      <span class="mono-label">INSTAGRAM TOOLS</span>
+      <h2 class="section-title">Instagram Content Utilities</h2>
+      <p class="section-subtitle">
+        Download public Instagram videos, reels, photos, carousels, captions, and profile avatars in original quality.
+      </p>
+    </div>
+
+    <div class="grid-3">
+      {% for tool in tools %}
+        <article class="glass-panel glass-panel-interactive tool-card reveal-item">
+          <div>
+            <div class="tool-card-header">
+              <span class="tool-format-tag">{{ tool.get_category_display }}</span>
+            </div>
+            <h3 style="font-size: 1.2rem; margin-bottom: var(--space-2);">{{ tool.name }}</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: var(--space-4);">
+              {{ tool.short_description }}
+            </p>
+          </div>
+          <div>
+            <div class="glass-subpanel" style="padding: var(--space-2) var(--space-3); margin-bottom: var(--space-4); font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-muted);">
+              FORMAT: {{ tool.output_formats }}
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <a href="{% url 'downloads:tool_detail' slug=tool.slug %}" class="btn-glass btn-sm">Open Tool</a>
+            </div>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- BUY US COFEE SECTION -->
+<section class="section-block">
+  <div class="container-shell">
+    <div class="glass-panel reveal-item" style="padding: var(--space-10);">
+      <div class="grid-2" style="align-items: center;">
+        <div>
+          <span class="mono-label" style="color: var(--light-cyan);">APPRECIATION</span>
+          <h2 class="section-title">Buy Us Cofee</h2>
+          <p style="color: var(--text-secondary); margin-bottom: var(--space-6);">
+            Enjoying fast Instagram video and post downloads? You can buy us a coffee anytime.
+          </p>
+          <a href="{% url 'donations:index' %}" class="btn-glass btn-primary">Buy Us Cofee</a>
+        </div>
+
+        <div class="glass-subpanel" style="padding: var(--space-6);">
+          <span class="mono-label" style="display: block; margin-bottom: var(--space-3);">BUY US COFEE ({{ site_config.donation_currency }})</span>
+          <form action="{% url 'donations:create' %}" method="post">
+            {% csrf_token %}
+            <div class="donation-tier-grid">
+              {% for amt in preset_amounts %}
+                <button type="button" class="tier-btn {% if forloop.first %}is-selected{% endif %}" data-donation-amount="{{ amt }}">
+                  {{ site_config.donation_currency }} {{ amt }}
+                </button>
+              {% endfor %}
+            </div>
+            <div class="form-group">
+              <label for="donationAmountInput" class="form-label">Amount ({{ site_config.donation_currency }})</label>
+              <input type="number" id="donationAmountInput" name="amount" class="glass-input" value="{{ preset_amounts.0|default:250 }}" min="{{ site_config.minimum_donation_amount }}" max="{{ site_config.maximum_donation_amount }}" required>
+            </div>
+            <button type="submit" class="btn-glass btn-primary btn-block">Buy Us Cofee</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FREQUENTLY ASKED QUESTIONS -->
+<section class="section-block">
+  <div class="container-shell">
+    <div class="section-header reveal-item">
+      <span class="mono-label">HELP &amp; FAQ</span>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+    </div>
+
+    <div class="grid-2">
+      {% for item in faqs %}
+        <div class="glass-panel reveal-item" style="padding: var(--space-6);">
+          <h3 style="font-size: 1.05rem; margin-bottom: var(--space-2);">{{ item.question }}</h3>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">{{ item.answer }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/donations.js' %}" defer></script>
+{% endblock %}

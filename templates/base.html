@@ -1,0 +1,319 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page_title|default:"InSave Hub | Your Instagram Workflow, Refined." }}</title>
+  <meta name="description" content="{{ meta_description|default:'Practical Instagram content utilities and public media downloading through a fast, privacy-conscious Glass Orbit interface.' }}">
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  <!-- Open Graph Metadata -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ site_config.site_name }}">
+  <meta property="og:title" content="{{ page_title|default:'InSave Hub | Your Instagram Workflow, Refined.' }}">
+  <meta property="og:description" content="{{ meta_description|default:'Practical Instagram content utilities and public media downloading through a fast, privacy-conscious Glass Orbit interface.' }}">
+  <meta property="og:url" content="{{ canonical_url }}">
+
+  <!-- Twitter / X Metadata -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ page_title|default:'InSave Hub | Your Instagram Workflow, Refined.' }}">
+  <meta name="twitter:description" content="{{ meta_description|default:'Practical Instagram content utilities and public media downloading through a fast, privacy-conscious Glass Orbit interface.' }}">
+
+  <!-- Progressive Web App (PWA) & Mobile Install Metadata -->
+  <link rel="manifest" href="{% url 'core:web_manifest' %}">
+  <meta name="theme-color" content="#0284C7">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="InSave Hub">
+  <link rel="icon" type="image/svg+xml" href="{% static 'images/logo-mark.svg' %}">
+  <link rel="apple-touch-icon" href="{% static 'images/icon-192.png' %}">
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Glass Orbit Design System Stylesheets -->
+  <link rel="stylesheet" href="{% static 'css/tokens.css' %}">
+  <link rel="stylesheet" href="{% static 'css/glass-orbit.css' %}">
+  <link rel="stylesheet" href="{% static 'css/components.css' %}">
+  <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+
+  <!-- Structured Metadata -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "{{ site_config.site_name }}",
+    "url": "{{ canonical_base_url }}",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "All",
+    "description": "Public Instagram content management and media utility platform."
+  }
+  </script>
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <a href="#mainContent" class="sr-only">Skip to main content</a>
+
+  <!-- Atmospheric Layers & Subtle Light Particles -->
+  <div class="atmosphere-layer" aria-hidden="true"></div>
+  <div class="atmosphere-grid" aria-hidden="true"></div>
+  <canvas id="ambientParticleCanvas" class="ambient-particle-canvas" aria-hidden="true"></canvas>
+
+  <!-- Glass Control Navigation -->
+  <header class="glass-header" role="banner">
+    <div class="container-shell nav-inner">
+      <a href="{% url 'core:home' %}" class="brand-identity" aria-label="InSave Hub Home">
+        <img src="{% static 'images/logo-mark.svg' %}" alt="" class="brand-mark" width="34" height="34">
+        <div>
+          <span class="brand-wordmark">INSAVE HUB</span>
+        </div>
+      </a>
+
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-links">
+          <li><a href="{% url 'core:home' %}" class="nav-link {% if request.path == '/' %}is-current{% endif %}">Home</a></li>
+          <li><a href="{% url 'downloads:tools_list' %}" class="nav-link {% if '/tools/' in request.path %}is-current{% endif %}">Instagram Tools</a></li>
+          <li><a href="{% url 'downloads:interface' %}" class="nav-link {% if request.path == '/downloads/' %}is-current{% endif %}">Downloader</a></li>
+          {% if user.is_authenticated %}
+            <li><a href="{% url 'dashboard:index' %}" class="nav-link {% if request.path == '/dashboard/' %}is-current{% endif %}">Dashboard</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- Access Status Pill -->
+        <div class="telemetry-pill hide-tablet" title="Access Status">
+          {% if access_state.has_free_24h %}
+            <span class="status-dot status-dot-emerald"></span>
+            <span>24H PASS: <strong data-free-access-seconds="{{ access_state.free_24h_remaining_seconds }}">{{ access_state.free_24h_formatted }}</strong></span>
+          {% elif access_state.ad_required %}
+            <span class="status-dot status-dot-amber"></span>
+            <span>AD PENDING</span>
+          {% else %}
+            <span class="status-dot"></span>
+            <span>FREE ACCESS</span>
+          {% endif %}
+        </div>
+
+        <!-- Install App Button (PWA / Native Install) -->
+        <button type="button" id="installAppNavBtn" class="btn-glass btn-sm nav-install-btn" title="Install InSave Hub App" aria-label="Install InSave Hub App">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v12"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <path d="M5 21h14"></path>
+          </svg>
+          <span>Install App</span>
+        </button>
+
+        <!-- Small "Buy Us Cofee" Icon Option on Navigation Bar -->
+        <a href="{% url 'donations:index' %}"
+           class="nav-icon-btn nav-donate-icon {% if '/donations/' in request.path %}is-active{% endif %}"
+           title="Buy Us Cofee"
+           aria-label="Buy Us Cofee">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+            <line x1="6" y1="1" x2="6" y2="4"></line>
+            <line x1="10" y1="1" x2="10" y2="4"></line>
+            <line x1="14" y1="1" x2="14" y2="4"></line>
+          </svg>
+        </a>
+
+        {% if user.is_authenticated %}
+          <a href="{% url 'accounts:profile' %}" class="btn-glass btn-sm hide-tablet">Profile</a>
+          <a href="{% url 'accounts:logout' %}" class="btn-glass btn-sm hide-tablet">Sign Out</a>
+        {% else %}
+          <a href="{% url 'accounts:login' %}" class="btn-glass btn-primary btn-sm hide-tablet">Sign In</a>
+        {% endif %}
+
+        <button type="button" id="mobileMenuToggle" class="mobile-menu-toggle" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobileDrawer">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6">
+            <line x1="3" y1="6" x2="17" y2="6"></line>
+            <line x1="3" y1="10" x2="17" y2="10"></line>
+            <line x1="3" y1="14" x2="17" y2="14"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Slide Drawer -->
+  <div id="mobileDrawer" class="mobile-drawer" role="region" aria-label="Mobile Navigation Drawer">
+    <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+      <div class="telemetry-pill" style="justify-content: space-between; width: 100%;">
+        <span>ACCESS STATE</span>
+        {% if access_state.has_free_24h %}
+          <strong data-free-access-seconds="{{ access_state.free_24h_remaining_seconds }}">{{ access_state.free_24h_formatted }}</strong>
+        {% elif access_state.ad_required %}
+          <strong>30S AD REQUIRED</strong>
+        {% else %}
+          <strong>AVAILABLE</strong>
+        {% endif %}
+      </div>
+      <a href="{% url 'core:home' %}" class="nav-link">Home</a>
+      <a href="{% url 'downloads:tools_list' %}" class="nav-link">Instagram Tools</a>
+      <a href="{% url 'downloads:interface' %}" class="nav-link">Downloader</a>
+      <a href="{% url 'downloads:history' %}" class="nav-link">Download History</a>
+      <a href="{% url 'donations:index' %}" class="nav-link">Buy Us Cofee</a>
+      <button type="button" id="installAppMobileBtn" class="btn-glass btn-sm" style="justify-content: center;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3v12"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <path d="M5 21h14"></path>
+        </svg>
+        <span>Install InSave Hub App</span>
+      </button>
+      {% if user.is_authenticated %}
+        <a href="{% url 'dashboard:index' %}" class="nav-link">Dashboard</a>
+        <a href="{% url 'accounts:profile' %}" class="nav-link">Profile</a>
+        <a href="{% url 'accounts:logout' %}" class="btn-glass btn-sm">Sign Out</a>
+      {% else %}
+        <a href="{% url 'accounts:login' %}" class="btn-glass btn-primary btn-sm" style="margin-top: var(--space-2); justify-content: center;">Sign In</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Main Content Viewport -->
+  <main id="mainContent" class="main-viewport" role="main">
+    {% if messages %}
+      <div class="container-shell alerts-stack" role="status" aria-live="polite">
+        {% for message in messages %}
+          <div class="glass-alert glass-alert-{{ message.tags|default:'info' }}">
+            <span>{{ message }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Dedicated Mobile Ergonomic Bottom Control Dock -->
+  <nav class="mobile-bottom-dock" aria-label="Mobile Quick Access Dock">
+    <a href="{% url 'core:home' %}" class="dock-item {% if request.path == '/' %}is-active{% endif %}">
+      <span>Home</span>
+    </a>
+    <a href="{% url 'downloads:tools_list' %}" class="dock-item {% if '/tools/' in request.path %}is-active{% endif %}">
+      <span>Tools</span>
+    </a>
+    <a href="{% url 'downloads:interface' %}" class="dock-item {% if '/downloads/' in request.path %}is-active{% endif %}">
+      <span>Download</span>
+    </a>
+    <a href="{% url 'donations:index' %}" class="dock-item {% if '/donations/' in request.path %}is-active{% endif %}">
+      <span>Cofee</span>
+    </a>
+  </nav>
+
+  <!-- Glass Footer -->
+  <footer class="glass-footer" role="contentinfo">
+    <div class="container-shell">
+      <div class="footer-grid" style="grid-template-columns: 1.5fr 1fr 1fr;">
+        <div>
+          <div class="brand-identity" style="margin-bottom: var(--space-3);">
+            <img src="{% static 'images/logo-mark.svg' %}" alt="" class="brand-mark" width="28" height="28">
+            <span class="brand-wordmark">INSAVE HUB</span>
+          </div>
+          <p style="color: var(--text-muted); font-size: 0.88rem; max-width: 38ch;">
+            Fast Instagram Video, Reel, Photo, and Post downloader.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">INSTAGRAM TOOLS</h4>
+          <ul class="footer-links">
+            <li><a href="{% url 'downloads:tool_detail' slug='video-downloader' %}">Video Downloader</a></li>
+            <li><a href="{% url 'downloads:tool_detail' slug='reel-downloader' %}">Reel Downloader</a></li>
+            <li><a href="{% url 'downloads:tool_detail' slug='public-post-downloader' %}">Public Post Downloader</a></li>
+            <li><a href="{% url 'downloads:tool_detail' slug='image-downloader' %}">Photo Downloader</a></li>
+            <li><a href="{% url 'downloads:tool_detail' slug='profile-media-utility' %}">Profile Media</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">QUICK LINKS</h4>
+          <ul class="footer-links">
+            <li><a href="{% url 'downloads:interface' %}">Downloader</a></li>
+            <li><a href="{% url 'downloads:history' %}">Download History</a></li>
+            <li><a href="{% url 'donations:index' %}">Buy Us Cofee</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="padding-top: var(--space-6); border-top: 1px solid var(--border-hairline); display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-4); font-size: 0.8rem; color: var(--text-dim);">
+        <span>InSave Hub. All rights reserved.</span>
+        <span>Not affiliated with Instagram or Meta Platforms, Inc.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Glass App Installation Modal (Desktop & Mobile PWA) -->
+  <div id="appInstallModal" class="app-install-modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="appInstallModalTitle">
+    <div class="glass-panel app-install-modal">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-4); padding-bottom: var(--space-4); border-bottom: 1px solid var(--border-hairline);">
+        <div style="display: flex; align-items: center; gap: var(--space-3);">
+          <img src="{% static 'images/logo-mark.svg' %}" alt="" width="38" height="38">
+          <div>
+            <span class="mono-label">INSTALL APPLICATION</span>
+            <h2 id="appInstallModalTitle" style="font-size: 1.25rem; margin-top: 2px;">Install InSave Hub App</h2>
+          </div>
+        </div>
+        <button type="button" id="closeAppInstallModal" class="nav-icon-btn" aria-label="Close App Install Dialog">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin: var(--space-4) 0;">
+        Install InSave Hub directly to your desktop or mobile home screen for instant one-tap launching, standalone window mode, and high-speed Instagram video and post downloading.
+      </p>
+
+      <div id="nativeInstallPromptWrap" class="glass-subpanel" style="padding: var(--space-4); margin-bottom: var(--space-4); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-3);">
+        <div>
+          <span class="spec-label">DIRECT BROWSER INSTALLATION</span>
+          <span class="spec-val" id="nativeInstallStatusText" style="font-size: 0.86rem;">Standalone App Package Ready</span>
+        </div>
+        <button type="button" id="triggerNativeInstallBtn" class="btn-glass btn-primary btn-sm">
+          Install App Now
+        </button>
+      </div>
+
+      <div class="grid-3" style="gap: var(--space-3);">
+        <div class="glass-subpanel" style="padding: var(--space-4);">
+          <span class="tool-badge" style="margin-bottom: var(--space-2);">DESKTOP</span>
+          <h3 style="font-size: 0.92rem; margin-bottom: var(--space-1);">Chrome / Edge / Brave</h3>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">
+            Click <strong>Install App Now</strong> above, or click the install icon on the right side of your browser address bar.
+          </p>
+        </div>
+
+        <div class="glass-subpanel" style="padding: var(--space-4);">
+          <span class="tool-badge" style="margin-bottom: var(--space-2);">ANDROID</span>
+          <h3 style="font-size: 0.92rem; margin-bottom: var(--space-1);">Chrome / Samsung</h3>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">
+            Tap <strong>Install App Now</strong> or open the browser menu and select <strong>Install App / Add to Home Screen</strong>.
+          </p>
+        </div>
+
+        <div class="glass-subpanel" style="padding: var(--space-4);">
+          <span class="tool-badge" style="margin-bottom: var(--space-2);">IOS &amp; IPADOS</span>
+          <h3 style="font-size: 0.92rem; margin-bottom: var(--space-1);">Safari Browser</h3>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">
+            Tap the <strong>Share</strong> button in Safari's toolbar, scroll down, and select <strong>Add to Home Screen</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Core Scripts -->
+  <script src="{% static 'js/orbit-engine.js' %}" defer></script>
+  <script src="{% static 'js/downloader.js' %}" defer></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

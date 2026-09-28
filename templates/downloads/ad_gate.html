@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-shell" style="padding-top: var(--space-6);">
+  <div id="adCountdownStage"
+       class="glass-panel ad-countdown-stage reveal-item"
+       data-session-id="{{ ad_session.id }}"
+       data-remaining-seconds="{{ remaining_seconds }}"
+       data-total-seconds="{{ total_duration_seconds }}">
+
+    <div class="telemetry-pill" style="margin-bottom: var(--space-4);">
+      <span class="status-dot status-dot-amber"></span>
+      <span id="adStateTelemetryLabel">SERVER-SYNCHRONIZED SPONSOR INTERVAL</span>
+    </div>
+
+    <h1 style="font-size: clamp(1.45rem, 2.4vw, 1.95rem); margin-bottom: var(--space-2);">
+      Your next download will be available after the advertisement.
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.92rem; max-width: 54ch; margin: 0 auto;">
+      Complete this single {{ total_duration_seconds }}-second sponsor verification to unlock your pending download and activate <strong>{{ site_config.free_access_hours }} hours of uninterrupted free access</strong>.
+    </p>
+
+    <!-- 30-Second Glass Countdown Dial -->
+    <div class="countdown-dial" role="timer" aria-live="polite">
+      <span id="adCountdownNumber" class="countdown-number">{{ remaining_seconds|stringformat:"02d" }}</span>
+      <span class="countdown-unit">SECONDS</span>
+    </div>
+
+    <div class="progress-track" aria-hidden="true">
+      <div id="adProgressBar" class="progress-fill"></div>
+    </div>
+
+    <!-- Sponsor Presentation Card -->
+    <div class="glass-subpanel" style="padding: var(--space-6); text-align: left; margin: var(--space-6) 0;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2);">
+        <span class="mono-label" style="color: var(--light-cyan);">PLATFORM SPONSOR BRIEFING</span>
+        <span class="mono-label">SESSION REF: {{ ad_session.id|truncatechars:12 }}</span>
+      </div>
+      <h2 style="font-size: 1.18rem; margin-bottom: var(--space-2);">{{ site_config.ad_sponsor_title }}</h2>
+      <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: var(--space-4);">
+        {{ site_config.ad_sponsor_body }}
+      </p>
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-3);">
+        <span class="mono-label">Refreshing this page will not reset or bypass the server clock.</span>
+        <a href="{{ site_config.ad_sponsor_cta_url }}" target="_blank" rel="noopener noreferrer" class="btn-glass btn-sm">
+          {{ site_config.ad_sponsor_cta_text }}
+        </a>
+      </div>
+    </div>
+
+    {% if pending_download %}
+      <div style="margin-bottom: var(--space-5); font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-muted);">
+        QUEUED ARTIFACT: {{ pending_download.media_title }} ({{ pending_download.media_format }})
+      </div>
+    {% endif %}
+
+    <!-- Server-Validated Completion Form -->
+    <form method="post" action="{% url 'advertisements:complete' %}" id="adCompleteForm">
+      {% csrf_token %}
+      <input type="hidden" name="ad_session_id" value="{{ ad_session.id }}">
+      <input type="hidden" name="nonce_token" value="{{ ad_session.nonce_token }}">
+      <button type="submit" id="adUnlockSubmitBtn" class="btn-glass btn-primary btn-block"
+              {% if remaining_seconds > 0 %}disabled{% endif %}>
+        {% if remaining_seconds > 0 %}
+          Verification In Progress ({{ remaining_seconds }}s)
+        {% else %}
+          Unlock Download &amp; Activate 24-Hour Free Access
+        {% endif %}
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/ad-gate.js' %}" defer></script>
+{% endblock %}

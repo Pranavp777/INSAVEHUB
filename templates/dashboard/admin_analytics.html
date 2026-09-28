@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-shell" style="padding-top: var(--space-4);">
+  <div class="glass-panel reveal-item" style="padding: var(--space-6); margin-bottom: var(--space-6);">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4);">
+      <div>
+        <span class="mono-label" style="color: var(--light-cyan);">PLATFORM ADMINISTRATION // TELEMETRY</span>
+        <h1 style="font-size: 1.85rem; margin-top: var(--space-1);">Admin Analytics &amp; Control Surface</h1>
+      </div>
+      <div style="display: flex; gap: var(--space-3);">
+        <a href="/admin/" class="btn-glass btn-primary btn-sm">Open Django Model Admin</a>
+        <a href="{% url 'dashboard:index' %}" class="btn-glass btn-sm">User Control Center</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Core Analytics Grid (10 Metrics) -->
+  <div class="grid-4" style="margin-bottom: var(--space-6);">
+    <div class="glass-panel reveal-item" style="padding: var(--space-5);">
+      <span class="spec-label">TOTAL USERS / ACTIVE</span>
+      <div class="metric-value">{{ total_users }} / {{ active_users }}</div>
+      <span class="metric-caption">Registered Accounts</span>
+    </div>
+
+    <div class="glass-panel reveal-item" style="padding: var(--space-5);">
+      <span class="spec-label">DOWNLOADS (TOTAL / SUCCESS)</span>
+      <div class="metric-value">{{ total_downloads }} / {{ successful_downloads }}</div>
+      <span class="metric-caption">Failed/Rejected Attempts: {{ failed_downloads }}</span>
+    </div>
+
+    <div class="glass-panel reveal-item" style="padding: var(--space-5);">
+      <span class="spec-label">AD COMPLETIONS / 24H ACTIVE</span>
+      <div class="metric-value">{{ ad_completions }} / {{ active_24h_sessions }}</div>
+      <span class="metric-caption">30s Ads Verified / Active 24h Passes</span>
+    </div>
+
+    <div class="glass-panel reveal-item" style="padding: var(--space-5);">
+      <span class="spec-label">DONATIONS &amp; REVENUE TOTAL</span>
+      <div class="metric-value">{{ site_config.donation_currency }} {{ donation_revenue_total }}</div>
+      <span class="metric-caption">{{ completed_donations_count }} Verified of {{ total_donations_count }} Orders</span>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom: var(--space-6); align-items: start;">
+    <!-- Popular Tools & Availability Management -->
+    <div class="glass-panel reveal-item" style="padding: var(--space-6);">
+      <span class="mono-label">TOOL AVAILABILITY &amp; POPULARITY</span>
+      <h2 style="font-size: 1.25rem; margin: var(--space-1) 0 var(--space-4);">Instagram Utility Modules</h2>
+
+      <div class="glass-table-wrap">
+        <table class="glass-table">
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Module</th>
+              <th>Uses</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for tool in popular_tools %}
+              <tr>
+                <td style="font-family: var(--font-mono); font-size: 0.75rem;">{{ tool.badge_code }}</td>
+                <td>{{ tool.name }}</td>
+                <td style="font-family: var(--font-mono);">{{ tool.total_uses }}</td>
+                <td>
+                  {% if tool.is_active %}
+                    <span class="mono-label" style="color: var(--light-emerald);">ONLINE</span>
+                  {% else %}
+                    <span class="mono-label" style="color: var(--light-rose);">DISABLED</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <form method="post" action="{% url 'dashboard:admin_analytics' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="admin_action" value="toggle_tool">
+                    <input type="hidden" name="tool_id" value="{{ tool.id }}">
+                    <button type="submit" class="btn-glass btn-sm">
+                      {% if tool.is_active %}Disable{% else %}Enable{% endif %}
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Advertisement & Free Access Rule Settings -->
+    <div class="glass-panel reveal-item" style="padding: var(--space-6);">
+      <span class="mono-label">SITE &amp; INTERSTITIAL CONFIGURATION</span>
+      <h2 style="font-size: 1.25rem; margin: var(--space-1) 0 var(--space-4);">Access &amp; Timer Parameters</h2>
+
+      <form method="post" action="{% url 'dashboard:admin_analytics' %}">
+        {% csrf_token %}
+        <input type="hidden" name="admin_action" value="update_access_rules">
+
+        <div class="grid-2" style="gap: var(--space-4);">
+          <div class="form-group">
+            <label for="adCountdownInput" class="form-label">Ad Countdown Seconds</label>
+            <input type="number" id="adCountdownInput" name="ad_countdown_seconds" class="glass-input"
+                   value="{{ site_config.ad_countdown_seconds }}" min="5" max="300" required>
+          </div>
+
+          <div class="form-group">
+            <label for="freeAccessHoursInput" class="form-label">Free Access Duration (Hours)</label>
+            <input type="number" id="freeAccessHoursInput" name="free_access_hours" class="glass-input"
+                   value="{{ site_config.free_access_hours }}" min="1" max="168" required>
+          </div>
+        </div>
+
+        <div class="form-group" style="display: flex; align-items: center; gap: var(--space-3);">
+          <input type="checkbox" id="enableAdsCheck" name="enable_advertisements" {% if site_config.enable_advertisements %}checked{% endif %}>
+          <label for="enableAdsCheck" style="font-size: 0.88rem; color: var(--text-secondary);">Enable 30-Second Advertisement Gate</label>
+        </div>
+
+        <div class="form-group" style="display: flex; align-items: center; gap: var(--space-3);">
+          <input type="checkbox" id="enableDonationsCheck" name="enable_donations" {% if site_config.enable_donations %}checked{% endif %}>
+          <label for="enableDonationsCheck" style="font-size: 0.88rem; color: var(--text-secondary);">Enable Donation Gateway</label>
+        </div>
+
+        <button type="submit" class="btn-glass btn-primary">Update Platform Configuration</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Audit & Error Telemetry Logs -->
+  <div class="glass-panel reveal-item" style="padding: var(--space-6);">
+    <span class="mono-label">SECURITY &amp; OPERATIONAL AUDIT TRAIL</span>
+    <h2 style="font-size: 1.25rem; margin: var(--space-1) 0 var(--space-4);">Recent System &amp; Security Events</h2>
+
+    <div class="glass-table-wrap">
+      <table class="glass-table">
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>Severity</th>
+            <th>Event Type</th>
+            <th>Actor</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for log in recent_audit_logs %}
+            <tr>
+              <td style="font-family: var(--font-mono); font-size: 0.76rem;">{{ log.created_at|date:"Y-m-d H:i:s" }}</td>
+              <td><span class="mono-label">{{ log.severity }}</span></td>
+              <td style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--light-cyan);">{{ log.event_type }}</td>
+              <td>{{ log.user.username|default:"Session/Anon" }}</td>
+              <td style="font-size: 0.84rem;">{{ log.description }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="5">No audit events recorded yet.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
