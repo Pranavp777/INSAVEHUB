@@ -20,39 +20,45 @@ def home(request: HttpRequest) -> HttpResponse:
 
     faqs = [
         {
-            "question": "What Instagram links can I download?",
+            "question": "How do I preview and download Instagram Videos or Reels in 1080p?",
             "answer": (
-                "You can download public Instagram Videos, Reels, Single Photos, Multi-Slide "
-                "Carousels, and Public Profile Avatars in full HD quality."
+                "Paste any public Instagram Reel, Video, or Post URL into the downloader box, "
+                "click Analyze, use the built-in Video Preview player, and tap Download MP4."
             ),
         },
         {
-            "question": "How does the 24-hour free access pass work?",
+            "question": "Can I watch a video preview before downloading?",
             "answer": (
-                "Your first download is immediate. Completing a single 30-second sponsor screen "
-                "unlocks 24 hours of uninterrupted downloads."
+                "Yes. Every analyzed Instagram Reel or Video includes an instant HD video preview "
+                "player with audio and fullscreen controls before you save the file."
             ),
         },
         {
-            "question": "Do I need to log into my Instagram account?",
+            "question": "Is INSTASAVE HUB free and does it require login?",
             "answer": (
-                "No. Simply copy and paste any public Instagram Post, Reel, or Video link into "
-                "the downloader box to save the media directly to your device."
+                "INSTASAVE HUB is free to use and never requires your Instagram login. "
+                "All public Reels, Videos, Photos, Carousels, and Profile Avatars are supported."
             ),
         },
         {
-            "question": "Can I install INSTASAVE HUB as an app on my phone or computer?",
+            "question": "Does it work on iPhone, Android, Mac, and Windows?",
             "answer": (
-                "Yes. Click the Install App button in the top navigation bar to add INSTASAVE HUB "
-                "to your desktop or mobile home screen."
+                "Yes. Works in any modern browser and can be installed as a standalone app "
+                "via the Install App button."
             ),
         },
     ]
 
     context = {
-        "page_title": "INSTASAVE HUB | Your Instagram Workflow, Refined.",
+        "page_title": "INSTASAVE HUB — Free Instagram Video, Reel & Photo Downloader (1080p HD)",
         "meta_description": (
-            "Fast Instagram Video, Reel, Photo, and Post downloader."
+            "Download Instagram Videos, Reels, Photos, Carousels, and Profile Pictures in original "
+            "1080p Full HD MP4 & JPG with live video preview. Fast, free, no login required."
+        ),
+        "meta_keywords": (
+            "instagram video downloader, instagram reel downloader, download instagram reels, "
+            "instagram photo downloader, instasave hub, save instagram video 1080p, ig video preview, "
+            "instagram carousel downloader, instagram post downloader, free ig downloader"
         ),
         "tools": tools,
         "preset_amounts": config.get_preset_amounts_list(),

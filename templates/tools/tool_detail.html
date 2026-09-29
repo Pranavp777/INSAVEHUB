@@ -1,22 +1,41 @@
 {% extends "base.html" %}
 
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "{{ tool.name|escapejs }} — INSTASAVE HUB",
+  "url": "{{ canonical_url }}",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "All",
+  "description": "{{ tool.short_description|escapejs }}",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="container-shell" style="padding-top: var(--space-4);">
   <div class="glass-panel reveal-item" style="padding: var(--space-8); margin-bottom: var(--space-8);">
-    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4); margin-bottom: var(--space-6);">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4); margin-bottom: var(--space-5);">
       <div>
         <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2);">
           <span class="tool-badge">{{ tool.badge_code }}</span>
           <span class="mono-label">{{ tool.get_category_display }}</span>
         </div>
-        <h1 style="font-size: clamp(1.75rem, 3vw, 2.45rem);">{{ tool.name }}</h1>
-        <p style="color: var(--text-secondary); max-width: 68ch; margin-top: var(--space-2);">
-          {{ tool.detailed_description }}
+        <h1 style="font-size: clamp(1.75rem, 3vw, 2.35rem);">{{ tool.name }}</h1>
+        <p style="color: var(--text-secondary); margin-top: var(--space-1);">
+          {{ tool.short_description }}
         </p>
       </div>
       <div class="telemetry-pill">
         <span class="status-dot status-dot-emerald"></span>
-        <span>OUTPUT: {{ tool.output_formats }}</span>
+        <span>{{ tool.output_formats }}</span>
       </div>
     </div>
 
@@ -26,10 +45,10 @@
       <label for="instagramUrlInput" class="form-label">Paste Public Instagram URL</label>
       <div class="analyzer-bar">
         <input type="url" id="instagramUrlInput" name="url" class="glass-input"
-               placeholder="https://www.instagram.com/p/... or https://www.instagram.com/reel/..."
+               placeholder="{{ tool.supported_url_hint }}"
                required aria-label="Paste Public Instagram URL">
         <button type="button" id="pasteClipboardBtn" class="btn-glass btn-sm">Paste Link</button>
-        <button type="submit" id="analyzeSubmitBtn" class="btn-glass btn-primary">Analyze &amp; Download</button>
+        <button type="submit" id="analyzeSubmitBtn" class="btn-glass btn-primary">Preview &amp; Download</button>
       </div>
     </form>
 
@@ -47,38 +66,90 @@
         </div>
       </div>
 
-      <div class="result-spec-grid">
-        <div class="spec-cell">
-          <span class="spec-label">AVAILABLE FORMAT</span>
-          <span class="spec-val" id="resMediaFormat">-</span>
-        </div>
-        <div class="spec-cell">
-          <span class="spec-label">DIMENSIONS</span>
-          <span class="spec-val" id="resResolution">-</span>
-        </div>
-        <div class="spec-cell">
-          <span class="spec-label">FILE INFORMATION</span>
-          <span class="spec-val" id="resFileSize">-</span>
-        </div>
-        <div class="spec-cell">
-          <span class="spec-label">HANDLE / SHORTCODE</span>
-          <span class="spec-val"><span id="resAuthorHandle">-</span> [<span id="resShortcode">-</span>]</span>
-        </div>
-      </div>
+      <div class="video-preview-layout">
+        <div class="video-preview-screen" id="resPreviewContainer" aria-label="Media Stream Preview Player">
+          <video id="resVideoPlayer" class="media-preview-video" controls playsinline preload="metadata" hidden></video>
+          <img id="resImagePreview" class="media-preview-image" alt="Instagram Media Preview" referrerpolicy="no-referrer" hidden>
 
-      <div id="resAdRequirementNotice" class="glass-alert glass-alert-warning" hidden style="margin-bottom: var(--space-4);">
-        <span>Your next download will be available after the advertisement. Completing the 30-second sponsor interval unlocks 24 hours of uninterrupted access.</span>
-      </div>
+          <div class="video-preview-overlay-top" id="resPreviewOverlayTop">
+            <span style="background: rgba(8, 15, 34, 0.78); border: 1px solid rgba(96, 165, 250, 0.32); padding: 2px 8px; border-radius: 6px;" id="resPreviewAspect">1080P HD</span>
+            <span style="background: rgba(8, 15, 34, 0.78); border: 1px solid rgba(96, 165, 250, 0.32); padding: 2px 8px; border-radius: 6px;" id="resPreviewStatusBadge">LIVE PREVIEW</span>
+          </div>
 
-      <div style="display: flex; justify-content: flex-end;">
-        <a id="resDownloadActionBtn" href="#" class="btn-glass btn-primary">Download Media Artifact</a>
+          <button type="button" id="resPreviewPlayOverlay" class="video-preview-play-badge" aria-label="Play Video Preview" title="Play Video Preview">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="#FFFFFF">
+              <polygon points="8,5 19,12 8,19"></polygon>
+            </svg>
+          </button>
+
+          <div class="video-preview-overlay-bottom" id="resPreviewOverlayBottom">
+            <div>
+              <div id="resPreviewCodec">H.264 / sRGB</div>
+              <div style="opacity: 0.85;">SHORTCODE: <span id="resPreviewShortcode">-</span></div>
+            </div>
+            <span style="color: var(--light-cyan);">STREAM READY</span>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div class="result-spec-grid" style="grid-template-columns: repeat(3, 1fr); margin-top: 0;">
+            <div class="spec-cell">
+              <span class="spec-label">FORMAT</span>
+              <span class="spec-val" id="resMediaFormat">-</span>
+            </div>
+            <div class="spec-cell">
+              <span class="spec-label">QUALITY</span>
+              <span class="spec-val" id="resResolution">-</span>
+            </div>
+            <div class="spec-cell">
+              <span class="spec-label">DURATION</span>
+              <span class="spec-val" id="resDuration">-</span>
+            </div>
+            <div class="spec-cell">
+              <span class="spec-label">FILE SIZE</span>
+              <span class="spec-val" id="resFileSize">-</span>
+            </div>
+            <div class="spec-cell" style="grid-column: span 2;">
+              <span class="spec-label">HANDLE / SHORTCODE</span>
+              <span class="spec-val"><span id="resAuthorHandle">-</span> [<span id="resShortcode">-</span>]</span>
+            </div>
+          </div>
+
+          <!-- Live Download Progress Bar -->
+          <div id="resDownloadProgressWrap" class="download-progress-wrap" hidden>
+            <div class="download-progress-header">
+              <span id="resDownloadProgressLabel" class="mono-label">DOWNLOADING MEDIA STREAM...</span>
+              <span id="resDownloadProgressPct" class="mono-label" style="color: var(--light-cyan);">0%</span>
+            </div>
+            <div class="progress-track" style="margin: 6px 0 0;">
+              <div id="resDownloadProgressBar" class="progress-fill"></div>
+            </div>
+          </div>
+
+          <div id="resAdRequirementNotice" class="glass-alert glass-alert-warning" hidden style="margin-bottom: var(--space-4);">
+            <span>Watch a 30-second advertisement and enjoy ad-free downloads for the next 24 hours.</span>
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-3);">
+            <span class="mono-label">VIDEO PREVIEW &amp; DOWNLOAD</span>
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3);">
+              <button type="button" id="resPreviewToggleBtn" class="btn-glass btn-secondary">
+                Preview Video
+              </button>
+              <button type="button" id="resFullscreenPreviewBtn" class="btn-glass btn-sm" title="Expand Preview to Fullscreen">
+                Fullscreen
+              </button>
+              <a id="resDownloadActionBtn" href="#" class="btn-glass btn-primary">Download</a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Other Modules -->
   <div>
-    <span class="mono-label" style="display: block; margin-bottom: var(--space-4);">ADDITIONAL UTILITY MODULES</span>
+    <span class="mono-label" style="display: block; margin-bottom: var(--space-4);">MORE INSTAGRAM TOOLS</span>
     <div class="grid-3">
       {% for other in other_tools %}
         <div class="glass-panel tool-card" style="padding: var(--space-5);">
@@ -87,7 +158,7 @@
             <h3 style="font-size: 1.05rem; margin: var(--space-2) 0;">{{ other.name }}</h3>
             <p style="font-size: 0.84rem; color: var(--text-secondary);">{{ other.short_description }}</p>
           </div>
-          <a href="{% url 'downloads:tool_detail' slug=other.slug %}" class="btn-glass btn-sm">Switch Module</a>
+          <a href="{% url 'downloads:tool_detail' slug=other.slug %}" class="btn-glass btn-sm">Open Tool</a>
         </div>
       {% endfor %}
     </div>

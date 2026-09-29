@@ -137,3 +137,78 @@ class AdvertisementAndFreeAccessTests(TestCase):
             HTTP_ACCEPT="application/json",
         )
         self.assertTrue(r5.json()["access"]["ad_required"])
+
+    def test_5s_initial_ad_and_download_session_4_states(self) -> None:
+        from apps.advertisements.models import DownloadSession
+
+        # State 1: First download analyze -> initial_5s_ad_required is True
+        r1 = self.client.post(
+            reverse("downloads:analyze_api"),
+            data=json.dumps({"url": "https://www.instagram.com/reel/StateOneReel/"}),
+            content_type="application/json",
+            HTTP_ACCEPT="application/json",
+        )
+        self.assertEqual(r1.status_code, 200)
+        access1 = r1.json()["access"]
+        self.assertEqual(access1["state"], "STATE_1_FIRST_DOWNLOAD")
+        self.assertTrue(access1["initial_5s_ad_required"])
+        dl_id = r1.json()["download"]["id"]
+        dl_exec_url = r1.json()["download"]["execute_url"]
+
+        # Visit 5-second advertisement page (?mode=5s)
+        gate_5s = self.client.get(f"{reverse('advertisements:gate')}?download_id={dl_id}&mode=5s")
+        self.assertEqual(gate_5s.status_code, 200)
+        self.assertContains(gate_5s, "ADVERTISEMENT")
+        self.assertContains(gate_5s, "Your download will begin shortly.")
+        self.assertContains(gate_5s, "00:05")
+
+        ad_5s = AdSession.objects.filter(ad_type=AdSession.AdType.INITIAL_5S).first()
+        self.assertIsNotNone(ad_5s)
+        self.assertEqual(ad_5s.required_duration_seconds, 5)
+
+        # Simulate 5 seconds elapsed -> complete 5s ad (does NOT grant 24h access yet)
+        ad_5s.started_at = timezone.now() - timedelta(seconds=6)
+        ad_5s.eligible_at = timezone.now() - timedelta(seconds=1)
+        ad_5s.save(update_fields=["started_at", "eligible_at"])
+
+        complete_5s = self.client.post(
+            reverse("advertisements:complete"),
+            data=json.dumps(
+                {
+                    "ad_session_id": str(ad_5s.id),
+                    "nonce_token": ad_5s.nonce_token,
+                }
+            ),
+            content_type="application/json",
+            HTTP_ACCEPT="application/json",
+        )
+        self.assertEqual(complete_5s.status_code, 200)
+        self.assertFalse(complete_5s.json()["free_access_granted"])
+        self.assertIn("auto_download=1", complete_5s.json()["redirect_url"])
+
+        # Execute the first download after the 5-second ad completes
+        exec_resp = self.client.get(dl_exec_url)
+        self.assertEqual(exec_resp.status_code, 200)
+
+        # Verify DownloadSession has first_download_completed=True, ad_completed=False
+        ds = DownloadSession.objects.first()
+        self.assertIsNotNone(ds)
+        self.assertTrue(ds.first_download_completed)
+        self.assertFalse(ds.ad_completed)
+
+        # Verify /ads/access-status/ now returns STATE_2_AD_REQUIRED
+        status_resp = self.client.get(reverse("advertisements:access_status"))
+        self.assertEqual(status_resp.status_code, 200)
+        self.assertEqual(status_resp.json()["access"]["state"], "STATE_2_AD_REQUIRED")
+        self.assertTrue(status_resp.json()["access"]["ad_required"])
+
+        # Verify Home page contains the "Unlock 24 Hours Free" popup modal
+        home_resp = self.client.get(reverse("core:home"))
+        self.assertContains(home_resp, "Unlock 24 Hours Free")
+        self.assertContains(
+            home_resp,
+            "Watch a 30-second advertisement and enjoy ad-free downloads for the next 24 hours.",
+        )
+        self.assertContains(home_resp, "Watch Ad")
+        self.assertContains(home_resp, "Not now")
+

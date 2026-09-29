@@ -15,21 +15,35 @@
      crossorigin="anonymous"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>INSTASAVE HUB | Your Instagram Workflow, Refined.</title>
-  <meta name="description" content="Fast Instagram Video, Reel, Photo, and Post downloader.">
+  <title>INSTASAVE HUB — Free Instagram Video, Reel &amp; Photo Downloader (1080p HD)</title>
+  <meta name="description" content="Download Instagram Videos, Reels, Photos, Carousels, and Profile Pictures in original 1080p Full HD MP4 &amp; JPG with live video preview. Fast, free, no login required.">
+  <meta name="keywords" content="instagram video downloader, instagram reel downloader, download instagram reels, instagram photo downloader, instasave hub, save instagram video 1080p, ig video preview, instagram carousel downloader, instagram post downloader, free ig downloader">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="author" content="INSTASAVE HUB">
+  <meta name="publisher" content="INSTASAVE HUB">
   <link rel="canonical" href="http://localhost:8000/">
+  <link rel="alternate" hreflang="en" href="http://localhost:8000/">
+  <link rel="alternate" hreflang="x-default" href="http://localhost:8000/">
 
   <!-- Open Graph Metadata -->
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_US">
   <meta property="og:site_name" content="INSTASAVE HUB">
-  <meta property="og:title" content="INSTASAVE HUB | Your Instagram Workflow, Refined.">
-  <meta property="og:description" content="Fast Instagram Video, Reel, Photo, and Post downloader.">
+  <meta property="og:title" content="INSTASAVE HUB — Free Instagram Video, Reel &amp; Photo Downloader (1080p HD)">
+  <meta property="og:description" content="Download Instagram Videos, Reels, Photos, Carousels, and Profile Pictures in original 1080p Full HD MP4 &amp; JPG with live video preview. Fast, free, no login required.">
   <meta property="og:url" content="http://localhost:8000/">
+  <meta property="og:image" content="http://localhost:8000/static/images/icon-512.png">
+  <meta property="og:image:width" content="512">
+  <meta property="og:image:height" content="512">
+  <meta property="og:image:alt" content="INSTASAVE HUB — 1080p Instagram Video, Reel & Photo Downloader">
 
   <!-- Twitter / X Metadata -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="INSTASAVE HUB | Your Instagram Workflow, Refined.">
-  <meta name="twitter:description" content="Fast Instagram Video, Reel, Photo, and Post downloader.">
+  <meta name="twitter:title" content="INSTASAVE HUB — Free Instagram Video, Reel &amp; Photo Downloader (1080p HD)">
+  <meta name="twitter:description" content="Download Instagram Videos, Reels, Photos, Carousels, and Profile Pictures in original 1080p Full HD MP4 &amp; JPG with live video preview. Fast, free, no login required.">
+  <meta name="twitter:image" content="http://localhost:8000/static/images/icon-512.png">
+  <meta name="twitter:image:alt" content="INSTASAVE HUB — 1080p Instagram Video, Reel & Photo Downloader">
 
   <!-- Progressive Web App (PWA) & Mobile Install Metadata -->
   <link rel="manifest" href="/manifest.webmanifest">
@@ -41,9 +55,10 @@
   <link rel="icon" type="image/png" href="/static/images/logo.png">
   <link rel="apple-touch-icon" href="/static/images/icon-192.png">
 
-  <!-- Typography -->
+  <!-- Typography & Preconnect Hints -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://www.instagram.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 
   <!-- Futuristic iOS-Inspired Glass Stylesheets -->
@@ -52,19 +67,158 @@
   <link rel="stylesheet" href="/static/css/components.css">
   <link rel="stylesheet" href="/static/css/responsive.css">
 
-  <!-- Structured Metadata -->
+  <!-- Rich SEO Structured Metadata (JSON-LD) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "INSTASAVE HUB",
-    "url": "http://localhost:8000",
-    "applicationCategory": "MultimediaApplication",
-    "operatingSystem": "All",
-    "description": "Public Instagram content management and media utility platform."
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "http://localhost:8000/#website",
+        "name": "INSTASAVE HUB",
+        "alternateName": ["InstaSave Hub", "InSave Hub", "Instagram Video Downloader"],
+        "url": "http://localhost:8000/",
+        "inLanguage": "en",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "http://localhost:8000/downloads/?url={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "http://localhost:8000/#organization",
+        "name": "INSTASAVE HUB",
+        "url": "http://localhost:8000/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "http://localhost:8000/static/images/icon-512.png",
+          "width": 512,
+          "height": 512
+        }
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "http://localhost:8000/#webapp",
+        "name": "INSTASAVE HUB — Instagram Video, Reel & Photo Downloader",
+        "url": "http://localhost:8000/",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "All, Web, iOS, Android, Windows, macOS",
+        "browserRequirements": "Requires JavaScript and HTML5 Video support",
+        "description": "Free online Instagram Video, Reel, Photo, Carousel, and Profile Avatar downloader with live 1080p HD video preview.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "featureList": [
+          "1080p Full HD Instagram Video Downloader",
+          "Instagram Reels MP4 Downloader with Original Audio",
+          "Built-in Live Video & Photo Stream Preview Player",
+          "Instagram Carousel & Multi-Photo Post Downloader",
+          "HD Instagram Profile Picture Viewer & Downloader"
+        ],
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.9",
+          "ratingCount": "12480",
+          "bestRating": "5",
+          "worstRating": "1"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "http://localhost:8000/#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "http://localhost:8000/"
+          }
+        ]
+      }
+    ]
   }
   </script>
   
+<!-- SEO Rich Snippets: HowTo & FAQPage Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "HowTo",
+      "name": "How to Preview and Download Instagram Videos & Reels in 1080p HD",
+      "description": "Preview and download public Instagram Videos, Reels, Photos, and Carousels in original 1080p MP4 and JPEG quality.",
+      "totalTime": "PT15S",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "Copy Instagram Link",
+          "text": "Copy the public link to any Instagram Video, Reel, Photo, Carousel, or Profile."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "Paste & Preview Video",
+          "text": "Paste the link into INSTASAVE HUB and click Analyze to watch the live 1080p HD video preview."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "Download 1080p MP4 or JPG",
+          "text": "Click Download Video (MP4) or Download Photo (JPG) to save the original media to your device."
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        
+        {
+          "@type": "Question",
+          "name": "How do I preview and download Instagram Videos or Reels in 1080p?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Paste any public Instagram Reel, Video, or Post URL into the downloader box, click Analyze, use the built\u002Din Video Preview player, and tap Download MP4."
+          }
+        },
+        
+        {
+          "@type": "Question",
+          "name": "Can I watch a video preview before downloading?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Every analyzed Instagram Reel or Video includes an instant HD video preview player with audio and fullscreen controls before you save the file."
+          }
+        },
+        
+        {
+          "@type": "Question",
+          "name": "Is INSTASAVE HUB free and does it require login?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "INSTASAVE HUB is free to use and never requires your Instagram login. All public Reels, Videos, Photos, Carousels, and Profile Avatars are supported."
+          }
+        },
+        
+        {
+          "@type": "Question",
+          "name": "Does it work on iPhone, Android, Mac, and Windows?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Works in any modern browser and can be installed as a standalone app via the Install App button."
+          }
+        }
+        
+      ]
+    }
+  ]
+}
+</script>
+
 </head>
 <body>
   <a href="#mainContent" class="sr-only">Skip to main content</a>
@@ -78,7 +232,7 @@
   <header class="glass-header" role="banner">
     <div class="nav-inner">
       <a href="/" class="brand-identity" aria-label="INSTASAVE HUB Home">
-        <img src="/static/images/logo.png" alt="" class="brand-mark" width="34" height="34" style="border-radius: 9px; object-fit: cover;">
+        <img src="/static/images/logo.png" alt="INSTASAVE HUB Logo" class="brand-mark" width="34" height="34" style="border-radius: 9px; object-fit: cover;">
         <span class="brand-wordmark">INSTASAVE HUB</span>
       </a>
 
@@ -88,13 +242,13 @@
             <a href="/" class="nav-link is-current">Home</a>
           </li>
           <li>
-            <a href="/#features" class="nav-link ">Features</a>
+            <a href="/downloads/" class="nav-link ">Downloader</a>
           </li>
           <li>
-            <a href="/#pricing" class="nav-link ">Pricing</a>
+            <a href="/tools/" class="nav-link ">Tools</a>
           </li>
           <li>
-            <a href="/#about" class="nav-link ">About</a>
+            <a href="/#faq" class="nav-link">FAQ</a>
           </li>
         </ul>
       </nav>
@@ -125,7 +279,7 @@
         </a>
 
         
-          <a href="/#videoDownloader" class="btn-glass btn-primary btn-sm">Get Started</a>
+          <a href="/#videoDownloader" class="btn-glass btn-primary btn-sm">Download Now</a>
         
 
         <button type="button" id="mobileMenuToggle" class="mobile-menu-toggle" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobileDrawer">
@@ -143,11 +297,9 @@
   <div id="mobileDrawer" class="mobile-drawer" role="region" aria-label="Mobile Navigation Drawer">
     <div style="display: flex; flex-direction: column; gap: var(--space-3);">
       <a href="/" class="nav-link">Home</a>
-      <a href="/#features" class="nav-link">Features</a>
-      <a href="/#pricing" class="nav-link">Pricing</a>
-      <a href="/#about" class="nav-link">About</a>
-      <a href="/tools/" class="nav-link">Instagram Tools</a>
       <a href="/downloads/" class="nav-link">Downloader</a>
+      <a href="/tools/" class="nav-link">Instagram Tools</a>
+      <a href="/#faq" class="nav-link">FAQ</a>
       <a href="/donations/" class="nav-link">Buy Us Cofee</a>
       <button type="button" id="installAppMobileBtn" class="btn-glass btn-sm" style="justify-content: center;">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -167,28 +319,58 @@
   <main id="mainContent" class="main-viewport" role="main">
     
 
+    <!-- 24-Hour Free Access Active Glass Status Card -->
+    <div id="freeAccessStatusCard"
+         class="container-shell"
+         style="margin-bottom: var(--space-5);"
+         hidden
+         data-access-state="STATE_1_FIRST_DOWNLOAD">
+      <div class="glass-panel free-access-status-card">
+        <div class="free-access-card-left">
+          <div class="free-access-icon-orb" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <polyline points="9 12 11 14 15 10"></polyline>
+            </svg>
+          </div>
+          <div>
+            <div class="free-access-badge-title">24-HOUR FREE ACCESS</div>
+            <div class="free-access-badge-sub">Ad-free downloads enabled</div>
+          </div>
+        </div>
+        <div class="free-access-timer-pill" role="timer" aria-live="off">
+          <span class="status-dot status-dot-emerald"></span>
+          <span>
+            <strong id="globalFreeAccessTimer"
+                    data-free-access-seconds="0">00:00:00</strong>
+            remaining
+          </span>
+        </div>
+      </div>
+    </div>
+
     
-<!-- 1. CINEMATIC HERO SECTION WITH FUTURISTIC iOS-INSPIRED SMARTPHONE MOCKUP -->
-<section class="hero-section">
+<!-- 1. HERO SECTION -->
+<section class="hero-section" style="padding-bottom: var(--space-8);">
   <div class="container-shell hero-grid">
-    <!-- Left Column: Eyebrow, Headline with Blue Gradient Word, CTAs, Social Proof -->
+    <!-- Left Column: SEO H1, Concise Subtitle, Quick CTAs, Ranking Badges -->
     <div class="reveal-item">
       <div class="hero-eyebrow-pill">
-        <span class="status-dot"></span>
-        <span>NEXT-GEN MEDIA WORKSPACE</span>
+        <span class="status-dot status-dot-emerald"></span>
+        <span>1080P FULL HD • LIVE VIDEO PREVIEW</span>
       </div>
 
       <h1 class="hero-headline">
-        Your Media Workflow, <span class="text-gradient-blue">Reimagined.</span>
+        Instagram Video, Reel &amp; <span class="text-gradient-blue">Photo Downloader.</span>
       </h1>
 
       <p class="hero-lead">
-        Capture, organize, and synchronize public Instagram Videos, Reels, Photos, and Carousels in original 1080p quality through a fluid, zero-friction glass workspace.
+        Preview and download public Instagram Videos, Reels, Photos, Carousels, and Profile Pictures in original 1080p MP4 &amp; JPEG — fast, free, and no login required.
       </p>
 
       <div class="hero-cta-group">
         <a href="#videoDownloader" class="btn-glass btn-primary">
-          <span>Start Downloading</span>
+          <span>Preview &amp; Download</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="5" y1="12" x2="19" y2="12"></line>
             <polyline points="12 5 19 12 12 19"></polyline>
@@ -205,60 +387,51 @@
         </button>
       </div>
 
-      <!-- Small Social-Proof Element Underneath -->
-      <div class="hero-social-proof">
-        <div class="social-avatar-stack" aria-hidden="true">
-          <span class="social-avatar-dot" style="background: linear-gradient(135deg, #2563EB, #60A5FA);">AK</span>
-          <span class="social-avatar-dot" style="background: linear-gradient(135deg, #4F46E5, #818CF8);">MR</span>
-          <span class="social-avatar-dot" style="background: linear-gradient(135deg, #0284C7, #38BDF8);">SL</span>
-          <span class="social-avatar-dot" style="background: linear-gradient(135deg, #1D4ED8, #6366F1);">+</span>
-        </div>
-        <div style="font-size: 0.82rem; color: var(--text-secondary);">
-          <strong style="color: #FFFFFF;">Trusted by 120K+ creators</strong> for lossless 1080p MP4 &amp; cloud media sync
-        </div>
+      <!-- SEO Feature & Trust Badges -->
+      <div style="display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-3);">
+        <span class="tool-badge">1080P 60FPS MP4</span>
+        <span class="tool-badge">LIVE VIDEO PREVIEW</span>
+        <span class="tool-badge">NO WATERMARK</span>
+        <span class="tool-badge">NO LOGIN REQUIRED</span>
       </div>
     </div>
 
-    <!-- Right Column: Realistic Futuristic Smartphone Mockup with Floating Glass Cards -->
-    <div class="ios-phone-stage reveal-item" aria-label="Futuristic iOS-Inspired Smartphone Interface Preview">
+    <!-- Right Column: Futuristic iOS Smartphone Live Video Preview Mockup -->
+    <div class="ios-phone-stage reveal-item" aria-label="Instagram 1080p Video Preview Interface">
       <div class="ios-phone-glow" aria-hidden="true"></div>
 
-      <!-- Floating Glass Card 1 (Top Left) -->
       <div class="ios-floating-card ios-floating-card-left">
         <div style="display: flex; align-items: center; gap: 10px;">
           <div style="width: 32px; height: 32px; border-radius: 10px; background: linear-gradient(135deg, #2563EB, #6366F1); display: flex; align-items: center; justify-content: center; color: #FFFFFF;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="8,5 19,12 8,19"></polygon>
+            </svg>
+          </div>
+          <div>
+            <div style="font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; color: var(--light-cyan); text-transform: uppercase;">VIDEO PREVIEW</div>
+            <div style="font-size: 0.8rem; font-weight: 600; color: #FFFFFF;">1080p 60fps MP4 Stream</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ios-floating-card ios-floating-card-right">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 32px; height: 32px; border-radius: 10px; background: rgba(59, 130, 246, 0.22); border: 1px solid rgba(96, 165, 250, 0.4); display: flex; align-items: center; justify-content: center; color: var(--light-cyan);">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <polyline points="20 6 9 17 4 12"></polyline>
             </svg>
           </div>
           <div>
-            <div style="font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; color: var(--light-cyan); text-transform: uppercase;">SMART STREAM</div>
-            <div style="font-size: 0.8rem; font-weight: 600; color: #FFFFFF;">1080p 60fps MP4 Ready</div>
+            <div style="font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; color: var(--light-violet); text-transform: uppercase;">ORIGINAL QUALITY</div>
+            <div style="font-size: 0.8rem; font-weight: 600; color: #FFFFFF;">Zero Watermark</div>
           </div>
         </div>
       </div>
 
-      <!-- Floating Glass Card 2 (Bottom Right) -->
-      <div class="ios-floating-card ios-floating-card-right">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <div style="width: 32px; height: 32px; border-radius: 10px; background: rgba(59, 130, 246, 0.22); border: 1px solid rgba(96, 165, 250, 0.4); display: flex; align-items: center; justify-content: center; color: var(--light-cyan);">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
-            </svg>
-          </div>
-          <div>
-            <div style="font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; color: var(--light-violet); text-transform: uppercase;">CLOUD SYNC</div>
-            <div style="font-size: 0.8rem; font-weight: 600; color: #FFFFFF;">Instant Edge Delivery</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Rounded Titanium/Glass Phone Frame -->
       <div class="ios-phone-frame">
         <div class="ios-screen">
           <div class="ios-screen-reflection" aria-hidden="true"></div>
 
-          <!-- Top Area with Dynamic-Island-Style Capsule -->
           <div class="ios-status-bar">
             <span>9:41</span>
             <div class="ios-dynamic-island">
@@ -274,108 +447,49 @@
             <span style="font-size: 0.64rem; letter-spacing: 0.04em;">5G</span>
           </div>
 
-          <!-- Floating iOS Glass Widgets Inside Phone -->
           <div class="ios-widgets-stack">
-            <!-- Row 1: Calendar Widget + Sync Telemetry Widget -->
-            <div class="ios-widget-row">
-              <!-- Calendar Widget -->
-              <div class="ios-widget">
-                <div style="font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; color: #60A5FA; text-transform: uppercase;">TUESDAY</div>
-                <div style="font-size: 1.75rem; font-weight: 700; line-height: 1.1; color: #FFFFFF; margin: 2px 0 6px;">29</div>
-                <div style="font-size: 0.68rem; color: var(--text-secondary); padding-left: 6px; border-left: 2px solid #3B82F6;">
-                  Reel Queue Sync<br>
-                  <span style="color: var(--text-muted); font-size: 0.62rem;">10:00 AM</span>
-                </div>
+            <!-- Live Reel Preview Widget Inside Phone -->
+            <div class="ios-widget" style="background: linear-gradient(145deg, rgba(15, 30, 70, 0.9), rgba(5, 12, 32, 0.95)); padding: 14px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <span style="font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; color: var(--light-cyan);">REEL PREVIEW // 9:16 HD</span>
+                <span class="status-dot status-dot-emerald"></span>
               </div>
-
-              <!-- Cloud Status Widget -->
-              <div class="ios-widget" style="display: flex; flex-direction: column; justify-content: space-between;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <span style="font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; color: #818CF8;">CLOUD</span>
-                  <span class="status-dot status-dot-emerald"></span>
+              <div style="height: 132px; border-radius: 14px; background: radial-gradient(circle at 50% 40%, rgba(59, 130, 246, 0.35), rgba(2, 6, 23, 0.92)); border: 1px solid rgba(96, 165, 250, 0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;">
+                <div style="width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #2563EB, #6366F1); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="#FFFFFF">
+                    <polygon points="8,5 19,12 8,19"></polygon>
+                  </svg>
                 </div>
-                <div>
-                  <div style="font-size: 1.15rem; font-weight: 700; color: #FFFFFF;">1080p</div>
-                  <div style="font-size: 0.66rem; color: var(--text-muted);">Original Bitrate</div>
-                </div>
-                <div style="height: 4px; border-radius: 999px; background: rgba(255,255,255,0.1); overflow: hidden;">
-                  <div style="width: 88%; height: 100%; background: linear-gradient(90deg, #3B82F6, #818CF8);"></div>
-                </div>
+                <span style="font-family: var(--font-mono); font-size: 0.66rem; color: #E2E8F0;">1080x1920 • H.264 + AAC</span>
               </div>
             </div>
 
-            <!-- Row 2: Notification / Smart Task Widget -->
+            <!-- Supported Formats Widget -->
             <div class="ios-widget">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span style="font-size: 0.64rem; font-weight: 700; letter-spacing: 0.12em; color: var(--light-cyan);">SMART TASKS // QUEUE</span>
-                <span style="font-size: 0.62rem; color: var(--text-muted);">Now</span>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-size: 0.64rem; font-weight: 700; letter-spacing: 0.12em; color: var(--light-cyan);">SUPPORTED MEDIA</span>
+                <span style="font-size: 0.62rem; font-family: var(--font-mono); color: #34D399;">READY</span>
               </div>
-              <div style="display: flex; align-items: center; justify-content: space-between; padding: 7px 9px; border-radius: 12px; background: rgba(37, 99, 235, 0.16); border: 1px solid rgba(96, 165, 250, 0.25); margin-bottom: 6px;">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                  <span class="mini-check">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                      <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                  </span>
-                  <span style="font-size: 0.74rem; font-weight: 500; color: #FFFFFF;">Export Reel MP4 Stream</span>
-                </div>
-                <span style="font-size: 0.64rem; font-family: var(--font-mono); color: #60A5FA;">100%</span>
-              </div>
-              <div style="display: flex; align-items: center; justify-content: space-between; padding: 7px 9px; border-radius: 12px; background: rgba(255, 255, 255, 0.04);">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                  <span class="mini-check">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                      <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                  </span>
-                  <span style="font-size: 0.74rem; font-weight: 500; color: var(--text-secondary);">Sync Carousel Metadata</span>
-                </div>
-                <span style="font-size: 0.64rem; font-family: var(--font-mono); color: #34D399;">READY</span>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 0.72rem; color: #FFFFFF;">
+                <div style="padding: 6px 8px; border-radius: 10px; background: rgba(37, 99, 235, 0.16);">Reels &amp; Videos</div>
+                <div style="padding: 6px 8px; border-radius: 10px; background: rgba(37, 99, 235, 0.16);">Photos &amp; Posts</div>
               </div>
             </div>
 
-            <!-- Row 3: Media Notification Card -->
+            <!-- Direct Action Card -->
             <div class="ios-widget" style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.28) 0%, rgba(15, 23, 42, 0.78) 100%);">
               <div style="display: flex; align-items: center; gap: 10px;">
                 <img src="/static/images/logo.png" alt="" width="34" height="34" style="border-radius: 9px; object-fit: cover;">
                 <div style="flex: 1;">
                   <div style="font-size: 0.76rem; font-weight: 600; color: #FFFFFF;">INSTASAVE HUB</div>
-                  <div style="font-size: 0.68rem; color: var(--text-secondary);">Direct CDN stream verified &amp; ready</div>
+                  <div style="font-size: 0.68rem; color: var(--text-secondary);">Preview &amp; save in 1 tap</div>
                 </div>
-                <a href="#videoDownloader" style="padding: 5px 10px; border-radius: 999px; background: #3B82F6; color: #FFFFFF; font-size: 0.66rem; font-weight: 600;">Save</a>
+                <a href="#videoDownloader" style="padding: 5px 10px; border-radius: 999px; background: #3B82F6; color: #FFFFFF; font-size: 0.66rem; font-weight: 600;">Start</a>
               </div>
             </div>
           </div>
 
-          <!-- Bottom Dock & Home Indicator -->
           <div class="ios-bottom-dock">
-            <div class="ios-dock-bar" aria-hidden="true">
-              <div class="ios-dock-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 3v12"></path>
-                  <polyline points="7 10 12 15 17 10"></polyline>
-                  <path d="M5 21h14"></path>
-                </svg>
-              </div>
-              <div class="ios-dock-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polygon points="23 7 16 12 23 17 23 7"></polygon>
-                  <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
-                </svg>
-              </div>
-              <div class="ios-dock-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                  <polyline points="21 15 16 10 5 21"></polyline>
-                </svg>
-              </div>
-              <div class="ios-dock-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
-                </svg>
-              </div>
-            </div>
             <div class="ios-home-indicator" aria-hidden="true"></div>
           </div>
         </div>
@@ -384,13 +498,13 @@
   </div>
 </section>
 
-<!-- 2. INSTANT INSTAGRAM VIDEO, REEL & POST DOWNLOADER WORKSPACE -->
-<section class="section-block" id="videoDownloader" style="padding-top: var(--space-6);">
+<!-- 2. INSTANT INSTAGRAM VIDEO, REEL & POST DOWNLOADER WITH LIVE PREVIEW -->
+<section class="section-block" id="videoDownloader" style="padding-top: var(--space-4);">
   <div class="container-shell">
     <div class="glass-panel reveal-item" style="padding: var(--space-8);">
       <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: var(--space-4); margin-bottom: var(--space-5);">
         <div>
-          <span class="mono-label">INSTANT MEDIA EXTRACTION</span>
+          <span class="mono-label">LIVE PREVIEW &amp; DOWNLOAD</span>
           <h2 style="font-size: clamp(1.45rem, 2.4vw, 2rem); margin-top: 4px;">Instagram Video, Reel &amp; Post Downloader</h2>
         </div>
         <span class="telemetry-pill">
@@ -406,7 +520,7 @@
                 data-downloader-tab="video-downloader"
                 data-placeholder="https://www.instagram.com/p/... or https://www.instagram.com/reel/..."
                 data-label="Paste Public Instagram Video or Post URL"
-                data-button-text="Analyze &amp; Download Video">
+                data-button-text="Preview &amp; Download Video">
           <span>Video Downloader</span>
         </button>
 
@@ -415,7 +529,7 @@
                 data-downloader-tab="reel-downloader"
                 data-placeholder="https://www.instagram.com/reel/..."
                 data-label="Paste Public Instagram Reel URL"
-                data-button-text="Analyze &amp; Download Reel">
+                data-button-text="Preview &amp; Download Reel">
           <span>Reel Downloader</span>
         </button>
 
@@ -424,7 +538,7 @@
                 data-downloader-tab="public-post-downloader"
                 data-placeholder="https://www.instagram.com/p/..."
                 data-label="Paste Public Instagram Post or Carousel URL"
-                data-button-text="Analyze &amp; Download Post">
+                data-button-text="Preview &amp; Download Post">
           <span>Post Downloader</span>
         </button>
 
@@ -433,7 +547,7 @@
                 data-downloader-tab="image-downloader"
                 data-placeholder="https://www.instagram.com/p/..."
                 data-label="Paste Public Instagram Photo URL"
-                data-button-text="Analyze &amp; Download Photo">
+                data-button-text="Preview &amp; Download Photo">
           <span>Photo Downloader</span>
         </button>
 
@@ -442,13 +556,13 @@
                 data-downloader-tab="profile-media-utility"
                 data-placeholder="https://www.instagram.com/username/"
                 data-label="Paste Public Instagram Profile URL"
-                data-button-text="Inspect Profile Media">
+                data-button-text="Preview Profile Avatar">
           <span>Profile Media</span>
         </button>
       </div>
 
       <form id="instagramAnalyzerForm" action="/api/downloads/analyze/" method="post" novalidate>
-        <input type="hidden" name="csrfmiddlewaretoken" value="QzgPdagnaW7j4G2HlkGEukI3xaM5XGbmvYjz1Lu9YE0AUevkaQQLzipo9XIySP3M">
+        <input type="hidden" name="csrfmiddlewaretoken" value="Iteg5YWtVWwBhnTUGeuklLGDM2tJaGCyuO0kjPFGbO2dKjjmpIhqrE4O3vhvgP0u">
         <input type="hidden" id="instagramToolSlug" name="tool_slug" value="video-downloader">
         <label for="instagramUrlInput" id="instagramUrlLabel" class="form-label">
           Paste Public Instagram Video or Post URL
@@ -462,14 +576,14 @@
             Paste Link
           </button>
           <button type="submit" id="analyzeSubmitBtn" class="btn-glass btn-primary">
-            Analyze &amp; Download Video
+            Preview &amp; Download Video
           </button>
         </div>
       </form>
 
       <div id="analyzerStatusBox" hidden role="alert" style="margin-top: var(--space-4);"></div>
 
-      <!-- Asynchronous Glass Media Result Panel -->
+      <!-- Asynchronous Glass Media Result Panel with Video & Photo Preview -->
       <div id="analyzerResultPanel" class="glass-panel result-panel" hidden>
         <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4); padding-bottom: var(--space-4); border-bottom: 1px solid var(--border-hairline);">
           <div>
@@ -483,51 +597,83 @@
         </div>
 
         <div class="video-preview-layout">
-          <div class="video-preview-screen" id="resPreviewContainer" aria-label="Media Stream Preview Card">
-            <div style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 0.7rem; position: relative; z-index: 2;">
-              <span style="background: rgba(15, 23, 42, 0.65); padding: 2px 8px; border-radius: 6px;" id="resPreviewAspect">1080P HD</span>
-              <span>LIVE CDN STREAM</span>
+          <!-- Interactive Video & Photo Preview Screen -->
+          <div class="video-preview-screen" id="resPreviewContainer" aria-label="Media Stream Preview Player">
+            <video id="resVideoPlayer" class="media-preview-video" controls playsinline preload="metadata" hidden></video>
+            <img id="resImagePreview" class="media-preview-image" alt="Instagram Media Preview" referrerpolicy="no-referrer" hidden>
+
+            <div class="video-preview-overlay-top" id="resPreviewOverlayTop">
+              <span style="background: rgba(8, 15, 34, 0.78); border: 1px solid rgba(96, 165, 250, 0.32); padding: 2px 8px; border-radius: 6px;" id="resPreviewAspect">1080P HD</span>
+              <span style="background: rgba(8, 15, 34, 0.78); border: 1px solid rgba(96, 165, 250, 0.32); padding: 2px 8px; border-radius: 6px;" id="resPreviewStatusBadge">LIVE PREVIEW</span>
             </div>
-            <div class="video-preview-play-badge" aria-hidden="true" style="position: relative; z-index: 2;">
+
+            <button type="button" id="resPreviewPlayOverlay" class="video-preview-play-badge" aria-label="Play Video Preview" title="Play Video Preview">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="#FFFFFF">
                 <polygon points="8,5 19,12 8,19"></polygon>
               </svg>
-            </div>
-            <div style="font-family: var(--font-mono); font-size: 0.72rem; opacity: 0.94; position: relative; z-index: 2;">
-              <div id="resPreviewCodec">H.264 / sRGB</div>
-              <div style="opacity: 0.85;">SHORTCODE: <span id="resPreviewShortcode">-</span></div>
+            </button>
+
+            <div class="video-preview-overlay-bottom" id="resPreviewOverlayBottom">
+              <div>
+                <div id="resPreviewCodec">H.264 / sRGB</div>
+                <div style="opacity: 0.85;">SHORTCODE: <span id="resPreviewShortcode">-</span></div>
+              </div>
+              <span style="color: var(--light-cyan);">STREAM READY</span>
             </div>
           </div>
 
           <div style="display: flex; flex-direction: column; justify-content: space-between;">
-            <div class="result-spec-grid" style="grid-template-columns: repeat(2, 1fr); margin-top: 0;">
+            <div class="result-spec-grid" style="grid-template-columns: repeat(3, 1fr); margin-top: 0;">
               <div class="spec-cell">
-                <span class="spec-label">AVAILABLE FORMAT</span>
+                <span class="spec-label">FORMAT</span>
                 <span class="spec-val" id="resMediaFormat">-</span>
               </div>
               <div class="spec-cell">
-                <span class="spec-label">DIMENSIONS</span>
+                <span class="spec-label">QUALITY</span>
                 <span class="spec-val" id="resResolution">-</span>
+              </div>
+              <div class="spec-cell">
+                <span class="spec-label">DURATION</span>
+                <span class="spec-val" id="resDuration">-</span>
               </div>
               <div class="spec-cell">
                 <span class="spec-label">FILE SIZE</span>
                 <span class="spec-val" id="resFileSize">-</span>
               </div>
-              <div class="spec-cell">
+              <div class="spec-cell" style="grid-column: span 2;">
                 <span class="spec-label">CREATOR / SHORTCODE</span>
                 <span class="spec-val"><span id="resAuthorHandle">-</span> [<span id="resShortcode">-</span>]</span>
               </div>
             </div>
 
+            <!-- Live Download Progress Bar -->
+            <div id="resDownloadProgressWrap" class="download-progress-wrap" hidden>
+              <div class="download-progress-header">
+                <span id="resDownloadProgressLabel" class="mono-label">DOWNLOADING MEDIA STREAM...</span>
+                <span id="resDownloadProgressPct" class="mono-label" style="color: var(--light-cyan);">0%</span>
+              </div>
+              <div class="progress-track" style="margin: 6px 0 0;">
+                <div id="resDownloadProgressBar" class="progress-fill"></div>
+              </div>
+            </div>
+
             <div id="resAdRequirementNotice" class="glass-alert glass-alert-warning" hidden style="margin-bottom: var(--space-4);">
-              <span>Your initial download allowance has been used. Completing a single 30-second sponsor interval will unlock this download and grant 24 hours of uninterrupted free access.</span>
+              <span>Watch a 30-second advertisement and enjoy ad-free downloads for the next 24 hours.</span>
             </div>
 
             <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-3);">
-              <span class="mono-label">DIRECT CDN STREAM</span>
-              <a id="resDownloadActionBtn" href="#" class="btn-glass btn-primary" style="min-width: 240px;">
-                Download Media
-              </a>
+              <span class="mono-label">VIDEO PREVIEW &amp; DOWNLOAD</span>
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3);">
+                <button type="button" id="resPreviewToggleBtn" class="btn-glass btn-secondary">
+                  Preview Video
+                </button>
+                <button type="button" id="resFullscreenPreviewBtn" class="btn-glass btn-sm" title="Expand Preview to Fullscreen">
+                  Fullscreen
+                </button>
+                <a id="resDownloadActionBtn" href="#" class="btn-glass btn-primary" style="min-width: 220px;">
+                  Download
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -536,346 +682,186 @@
   </div>
 </section>
 
-<!-- 3. FEATURES SECTION ("Everything you need, in one place.") -->
-<section class="section-block" id="features">
+<!-- 3. 3-STEP QUICK GUIDE (SEO HOW-TO) -->
+<section class="section-block" id="howItWorks">
   <div class="container-shell">
     <div class="section-header-center reveal-item">
-      <span class="mono-label">CAPABILITIES</span>
-      <h2 class="section-title">Everything you need, in one place.</h2>
-      <p class="section-subtitle">
-        Engineered with precision glass optics and intelligent media routing for creators and teams.
-      </p>
+      <span class="mono-label">3 SIMPLE STEPS</span>
+      <h2 class="section-title">How to Preview &amp; Download Instagram Videos</h2>
     </div>
 
-    <div class="grid-4">
-      <!-- Card 1: Smart Tasks -->
-      <article class="glass-panel glass-panel-interactive feature-glass-card reveal-item">
+    <div class="grid-3">
+      <article class="glass-panel feature-glass-card reveal-item">
         <div>
-          <div class="feature-icon-box" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 11l3 3L22 4"></path>
-              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
-            </svg>
-          </div>
-          <h3 style="font-size: 1.2rem; margin-bottom: var(--space-2);">Smart Tasks</h3>
+          <span class="tool-badge" style="margin-bottom: var(--space-3); display: inline-block;">STEP 01</span>
+          <h3 style="font-size: 1.18rem; margin-bottom: var(--space-2);">Copy Instagram URL</h3>
           <p style="color: var(--text-secondary); font-size: 0.9rem;">
-            Automate link inspection, stream resolution selection, and one-tap MP4 extraction with zero manual configuration.
+            Copy the public link to any Instagram Reel, Video, Photo, Carousel, or Profile.
           </p>
-        </div>
-
-        <!-- Interactive Mini UI Preview -->
-        <div class="feature-mini-ui" aria-label="Smart Tasks Interactive Preview">
-          <div class="mini-task-row" data-task-toggle data-task-done="true">
-            <span style="color: var(--text-primary); font-weight: 500;">Auto-Resolve 1080p</span>
-            <span data-task-status style="font-family: var(--font-mono); font-size: 0.68rem; color: #60A5FA;">DONE</span>
-          </div>
-          <div class="mini-task-row" data-task-toggle data-task-done="true">
-            <span style="color: var(--text-primary); font-weight: 500;">Strip Tracking Tags</span>
-            <span data-task-status style="font-family: var(--font-mono); font-size: 0.68rem; color: #60A5FA;">DONE</span>
-          </div>
         </div>
       </article>
 
-      <!-- Card 2: Team Collaboration -->
-      <article class="glass-panel glass-panel-interactive feature-glass-card reveal-item">
+      <article class="glass-panel feature-glass-card reveal-item">
         <div>
-          <div class="feature-icon-box" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-              <circle cx="9" cy="7" r="4"></circle>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-            </svg>
-          </div>
-          <h3 style="font-size: 1.2rem; margin-bottom: var(--space-2);">Team Collaboration</h3>
+          <span class="tool-badge" style="margin-bottom: var(--space-3); display: inline-block;">STEP 02</span>
+          <h3 style="font-size: 1.18rem; margin-bottom: var(--space-2);">Watch Live Video Preview</h3>
           <p style="color: var(--text-secondary); font-size: 0.9rem;">
-            Share verified media streams, synchronized download history, and creative reference boards across your studio.
+            Paste the URL above and click <strong>Preview Video</strong> to stream the clip in 1080p HD with audio.
           </p>
-        </div>
-
-        <!-- Interactive Mini UI Preview -->
-        <div class="feature-mini-ui" aria-label="Team Collaboration Preview">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-            <div class="social-avatar-stack">
-              <span class="social-avatar-dot" style="width: 22px; height: 22px; background: #2563EB;">JD</span>
-              <span class="social-avatar-dot" style="width: 22px; height: 22px; background: #6366F1;">EL</span>
-              <span class="social-avatar-dot" style="width: 22px; height: 22px; background: #0284C7;">+4</span>
-            </div>
-            <span style="font-family: var(--font-mono); font-size: 0.66rem; color: #34D399;">LIVE BOARD</span>
-          </div>
-          <div style="font-size: 0.72rem; color: var(--text-muted);">Shared Collection • 14 Reels</div>
         </div>
       </article>
 
-      <!-- Card 3: Cloud Sync -->
-      <article class="glass-panel glass-panel-interactive feature-glass-card reveal-item">
+      <article class="glass-panel feature-glass-card reveal-item">
         <div>
-          <div class="feature-icon-box" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
-            </svg>
-          </div>
-          <h3 style="font-size: 1.2rem; margin-bottom: var(--space-2);">Cloud Sync</h3>
+          <span class="tool-badge" style="margin-bottom: var(--space-3); display: inline-block;">STEP 03</span>
+          <h3 style="font-size: 1.18rem; margin-bottom: var(--space-2);">Save 1080p MP4 or JPG</h3>
           <p style="color: var(--text-secondary); font-size: 0.9rem;">
-            Access your download history and instant progressive streams seamlessly across desktop, tablet, and mobile devices.
+            Tap <strong>Download Video (MP4)</strong> or <strong>Download Photo (JPG)</strong> for instant saving.
           </p>
-        </div>
-
-        <!-- Interactive Mini UI Preview -->
-        <div class="feature-mini-ui" aria-label="Cloud Sync Status Preview">
-          <div style="display: flex; justify-content: space-between; font-size: 0.72rem; margin-bottom: 6px;">
-            <span style="color: var(--text-primary); font-weight: 500;">Edge CDN Sync</span>
-            <span style="font-family: var(--font-mono); color: #60A5FA;">99.9%</span>
-          </div>
-          <div style="height: 5px; border-radius: 999px; background: rgba(255,255,255,0.08); overflow: hidden;">
-            <div style="width: 100%; height: 100%; background: linear-gradient(90deg, #2563EB, #60A5FA, #818CF8);"></div>
-          </div>
-        </div>
-      </article>
-
-      <!-- Card 4: Dark & Light Mode -->
-      <article class="glass-panel glass-panel-interactive feature-glass-card reveal-item">
-        <div>
-          <div class="feature-icon-box" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-            </svg>
-          </div>
-          <h3 style="font-size: 1.2rem; margin-bottom: var(--space-2);">Dark &amp; Light Mode</h3>
-          <p style="color: var(--text-secondary); font-size: 0.9rem;">
-            Adaptive iOS-inspired optical glass surfaces calibrated for deep midnight focus or crisp daylight clarity.
-          </p>
-        </div>
-
-        <!-- Interactive Mini UI Preview -->
-        <div id="miniThemeSurface" class="feature-mini-ui" style="display: flex; align-items: center; justify-content: space-between; transition: all 240ms ease;">
-          <span id="miniThemeLabel" style="font-family: var(--font-mono); font-size: 0.66rem; font-weight: 600;">MIDNIGHT GLASS</span>
-          <button type="button" id="miniThemeToggleBtn" style="padding: 4px 10px; border-radius: 999px; border: 1px solid rgba(96, 165, 250, 0.4); background: rgba(37, 99, 235, 0.25); color: inherit; font-size: 0.68rem; font-weight: 600; cursor: pointer;">
-            Switch to Daylight
-          </button>
         </div>
       </article>
     </div>
   </div>
 </section>
 
-<!-- 4. PRICING SECTION (WIDE PREMIUM GLASS PANEL) -->
-<section class="section-block" id="pricing">
-  <div class="container-shell">
-    <div class="glass-panel pricing-wide-panel reveal-item">
-      <!-- Left Side: Abstract Blue Gradient / Light-Wave Visual -->
-      <div class="pricing-wave-visual" aria-hidden="true">
-        <svg viewBox="0 0 500 220" width="100%" height="180" fill="none" style="opacity: 0.92;">
-          <defs>
-            <linearGradient id="pricingRibbon1" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#60A5FA" stop-opacity="0.1"/>
-              <stop offset="50%" stop-color="#3B82F6" stop-opacity="0.75"/>
-              <stop offset="100%" stop-color="#818CF8" stop-opacity="0.15"/>
-            </linearGradient>
-            <linearGradient id="pricingRibbon2" x1="100%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stop-color="#6366F1" stop-opacity="0.1"/>
-              <stop offset="50%" stop-color="#60A5FA" stop-opacity="0.55"/>
-              <stop offset="100%" stop-color="#2563EB" stop-opacity="0.05"/>
-            </linearGradient>
-          </defs>
-          <path d="M-20 150 C 110 40, 240 210, 380 80 C 440 30, 490 90, 530 60" stroke="url(#pricingRibbon1)" stroke-width="4" fill="none"/>
-          <path d="M-20 180 C 130 80, 260 230, 400 110 C 450 65, 495 115, 530 95" stroke="url(#pricingRibbon2)" stroke-width="2.5" fill="none"/>
-          <path d="M-20 110 C 100 190, 260 30, 410 140 C 460 175, 500 130, 530 120" stroke="url(#pricingRibbon1)" stroke-width="1.8" stroke-opacity="0.7" fill="none"/>
-          <circle cx="250" cy="110" r="64" fill="#3B82F6" fill-opacity="0.12"/>
-        </svg>
-
-        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.12);">
-          <div>
-            <div style="font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; color: var(--light-cyan); text-transform: uppercase;">24-HOUR PASS &amp; SUPPORTER TIER</div>
-            <div style="font-size: 0.9rem; font-weight: 600; color: #FFFFFF; margin-top: 2px;">Zero Subscriptions Required</div>
-          </div>
-          <span class="tool-badge">100% TRANSPARENT</span>
-        </div>
-      </div>
-
-      <!-- Right Side: Eyebrow, Heading, Supporting Text, and Rounded Glass CTA -->
-      <div>
-        <span class="mono-label">PRICING</span>
-        <h2 style="font-size: clamp(2rem, 3.4vw, 2.85rem); margin-top: var(--space-2); margin-bottom: var(--space-3);">
-          Simple, transparent pricing.
-        </h2>
-        <p style="color: var(--text-secondary); font-size: 1.08rem; margin-bottom: var(--space-6); max-width: 46ch;">
-          Start free. Upgrade when you're ready. Enjoy immediate 1080p downloads with our 24-hour free access pass or support the platform directly.
-        </p>
-
-        <div style="display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center;">
-          <a href="/donations/" class="btn-glass btn-primary">
-            <span>View Plans</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </a>
-          <a href="#videoDownloader" class="btn-glass">
-            Start Free Now
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 5. ABOUT & SPECIALIZED INSTAGRAM UTILITIES -->
-<section class="section-block" id="about">
+<!-- 4. SPECIALIZED INSTAGRAM DOWNLOADER TOOLS -->
+<section class="section-block" id="features">
   <div class="container-shell">
     <div class="section-header reveal-item">
-      <span class="mono-label">ABOUT &amp; UTILITIES</span>
-      <h2 class="section-title">Precision Media Utilities</h2>
-      <p class="section-subtitle">
-        Dedicated tools for public Instagram Videos, Reels, Photos, Carousels, and Profile Media.
-      </p>
+      <span class="mono-label">INSTAGRAM TOOLS</span>
+      <h2 class="section-title">All-in-One Instagram Downloader Suite</h2>
     </div>
 
-    <div class="grid-3" style="margin-bottom: var(--space-12);">
+    <div class="grid-3">
       
         <article class="glass-panel glass-panel-interactive tool-card reveal-item">
           <div>
             <div class="tool-card-header">
               <span class="tool-badge">Reel Utility</span>
+              <span class="mono-label">MP4 (1080x1920 HD) / AAC</span>
             </div>
-            <h3 style="font-size: 1.2rem; margin-bottom: var(--space-2);">Instagram Reel Downloader</h3>
-            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: var(--space-4);">
-              Extract public vertical Reels in original frame rate with synchronized audio tracks.
+            <h3 style="font-size: 1.18rem; margin-bottom: var(--space-2);">Instagram Reel Downloader</h3>
+            <p style="color: var(--text-secondary); font-size: 0.88rem;">
+              Preview and download Instagram Reels in 1080p MP4 with original audio.
             </p>
           </div>
-          <div>
-            <div class="glass-subpanel" style="padding: var(--space-2) var(--space-3); margin-bottom: var(--space-4); font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-muted);">
-              FORMAT: MP4 (H.264 1080x1920) / AAC Stereo
-            </div>
-            <a href="/tools/reel-downloader/" class="btn-glass btn-sm btn-block">
-              Launch Instagram Reel Downloader
-            </a>
-          </div>
+          <a href="/tools/reel-downloader/" class="btn-glass btn-sm btn-block">
+            Open Instagram Reel Downloader
+          </a>
         </article>
       
         <article class="glass-panel glass-panel-interactive tool-card reveal-item">
           <div>
             <div class="tool-card-header">
               <span class="tool-badge">Video Utility</span>
+              <span class="mono-label">MP4 (1080p / 720p) / AAC</span>
             </div>
-            <h3 style="font-size: 1.2rem; margin-bottom: var(--space-2);">Instagram Video Downloader</h3>
-            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: var(--space-4);">
-              Download long-form public video broadcasts and feed videos at native bitrate.
+            <h3 style="font-size: 1.18rem; margin-bottom: var(--space-2);">Instagram Video Downloader</h3>
+            <p style="color: var(--text-secondary); font-size: 0.88rem;">
+              Stream preview and download Instagram videos and IGTV in 1080p MP4.
             </p>
           </div>
-          <div>
-            <div class="glass-subpanel" style="padding: var(--space-2) var(--space-3); margin-bottom: var(--space-4); font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-muted);">
-              FORMAT: MP4 (1080p / 720p) / AAC
-            </div>
-            <a href="/tools/video-downloader/" class="btn-glass btn-sm btn-block">
-              Launch Instagram Video Downloader
-            </a>
-          </div>
+          <a href="/tools/video-downloader/" class="btn-glass btn-sm btn-block">
+            Open Instagram Video Downloader
+          </a>
         </article>
       
         <article class="glass-panel glass-panel-interactive tool-card reveal-item">
           <div>
             <div class="tool-card-header">
               <span class="tool-badge">Image Utility</span>
+              <span class="mono-label">JPEG (Original 1080p)</span>
             </div>
-            <h3 style="font-size: 1.2rem; margin-bottom: var(--space-2);">Instagram Image Downloader</h3>
-            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: var(--space-4);">
-              Retrieve full-resolution public photography assets with original color profile.
+            <h3 style="font-size: 1.18rem; margin-bottom: var(--space-2);">Instagram Image Downloader</h3>
+            <p style="color: var(--text-secondary); font-size: 0.88rem;">
+              Save full-resolution Instagram photos in original sRGB JPEG quality.
             </p>
           </div>
-          <div>
-            <div class="glass-subpanel" style="padding: var(--space-2) var(--space-3); margin-bottom: var(--space-4); font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-muted);">
-              FORMAT: JPEG (Original sRGB 1080p)
-            </div>
-            <a href="/tools/image-downloader/" class="btn-glass btn-sm btn-block">
-              Launch Instagram Image Downloader
-            </a>
-          </div>
+          <a href="/tools/image-downloader/" class="btn-glass btn-sm btn-block">
+            Open Instagram Image Downloader
+          </a>
         </article>
       
         <article class="glass-panel glass-panel-interactive tool-card reveal-item">
           <div>
             <div class="tool-card-header">
               <span class="tool-badge">Public Post Utility</span>
+              <span class="mono-label">MP4 / JPEG (Original HD)</span>
             </div>
-            <h3 style="font-size: 1.2rem; margin-bottom: var(--space-2);">Public Post Downloader</h3>
-            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: var(--space-4);">
-              Unified inspector for multi-slide carousels and mixed-media public publications.
+            <h3 style="font-size: 1.18rem; margin-bottom: var(--space-2);">Public Post Downloader</h3>
+            <p style="color: var(--text-secondary); font-size: 0.88rem;">
+              Download Instagram posts and multi-slide carousels in MP4 or JPEG.
             </p>
           </div>
-          <div>
-            <div class="glass-subpanel" style="padding: var(--space-2) var(--space-3); margin-bottom: var(--space-4); font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-muted);">
-              FORMAT: MP4 / JPEG (Original CDN Stream)
-            </div>
-            <a href="/tools/public-post-downloader/" class="btn-glass btn-sm btn-block">
-              Launch Public Post Downloader
-            </a>
-          </div>
+          <a href="/tools/public-post-downloader/" class="btn-glass btn-sm btn-block">
+            Open Public Post Downloader
+          </a>
         </article>
       
         <article class="glass-panel glass-panel-interactive tool-card reveal-item">
           <div>
             <div class="tool-card-header">
               <span class="tool-badge">Profile Media Utility</span>
+              <span class="mono-label">HD Profile Avatar (JPEG)</span>
             </div>
-            <h3 style="font-size: 1.2rem; margin-bottom: var(--space-2);">Profile Media Utility</h3>
-            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: var(--space-4);">
-              Inspect public profile identity headers, avatar dimensions, and public handle status.
+            <h3 style="font-size: 1.18rem; margin-bottom: var(--space-2);">Profile Media Utility</h3>
+            <p style="color: var(--text-secondary); font-size: 0.88rem;">
+              Preview and download public Instagram HD profile pictures.
             </p>
           </div>
-          <div>
-            <div class="glass-subpanel" style="padding: var(--space-2) var(--space-3); margin-bottom: var(--space-4); font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-muted);">
-              FORMAT: HD Profile Avatar (JPEG)
-            </div>
-            <a href="/tools/profile-media-utility/" class="btn-glass btn-sm btn-block">
-              Launch Profile Media Utility
-            </a>
-          </div>
+          <a href="/tools/profile-media-utility/" class="btn-glass btn-sm btn-block">
+            Open Profile Media Utility
+          </a>
         </article>
       
         <article class="glass-panel glass-panel-interactive tool-card reveal-item">
           <div>
             <div class="tool-card-header">
               <span class="tool-badge">Content Information Extractor</span>
+              <span class="mono-label">JSON Technical Manifest</span>
             </div>
-            <h3 style="font-size: 1.2rem; margin-bottom: var(--space-2);">Content Information Extractor</h3>
-            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: var(--space-4);">
-              Generate structured technical metadata reports for public Instagram permalinks.
+            <h3 style="font-size: 1.18rem; margin-bottom: var(--space-2);">Content Information Extractor</h3>
+            <p style="color: var(--text-secondary); font-size: 0.88rem;">
+              Extract clean JSON metadata, dimensions, and shortcodes from Instagram links.
             </p>
           </div>
-          <div>
-            <div class="glass-subpanel" style="padding: var(--space-2) var(--space-3); margin-bottom: var(--space-4); font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-muted);">
-              FORMAT: JSON Technical Manifest
-            </div>
-            <a href="/tools/content-info-extractor/" class="btn-glass btn-sm btn-block">
-              Launch Content Information Extractor
-            </a>
-          </div>
+          <a href="/tools/content-info-extractor/" class="btn-glass btn-sm btn-block">
+            Open Content Information Extractor
+          </a>
         </article>
       
     </div>
+  </div>
+</section>
 
-    <!-- FAQ Grid -->
+<!-- 5. FREQUENTLY ASKED QUESTIONS (SEO FAQ) -->
+<section class="section-block" id="faq">
+  <div class="container-shell">
+    <div class="section-header reveal-item">
+      <span class="mono-label">FAQ</span>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+    </div>
+
     <div class="grid-2">
       
         <div class="glass-panel reveal-item" style="padding: var(--space-6);">
-          <h3 style="font-size: 1.05rem; margin-bottom: var(--space-2);">What Instagram links can I download?</h3>
-          <p style="color: var(--text-secondary); font-size: 0.9rem;">You can download public Instagram Videos, Reels, Single Photos, Multi-Slide Carousels, and Public Profile Avatars in full HD quality.</p>
+          <h3 style="font-size: 1.05rem; margin-bottom: var(--space-2);">How do I preview and download Instagram Videos or Reels in 1080p?</h3>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">Paste any public Instagram Reel, Video, or Post URL into the downloader box, click Analyze, use the built-in Video Preview player, and tap Download MP4.</p>
         </div>
       
         <div class="glass-panel reveal-item" style="padding: var(--space-6);">
-          <h3 style="font-size: 1.05rem; margin-bottom: var(--space-2);">How does the 24-hour free access pass work?</h3>
-          <p style="color: var(--text-secondary); font-size: 0.9rem;">Your first download is immediate. Completing a single 30-second sponsor screen unlocks 24 hours of uninterrupted downloads.</p>
+          <h3 style="font-size: 1.05rem; margin-bottom: var(--space-2);">Can I watch a video preview before downloading?</h3>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">Yes. Every analyzed Instagram Reel or Video includes an instant HD video preview player with audio and fullscreen controls before you save the file.</p>
         </div>
       
         <div class="glass-panel reveal-item" style="padding: var(--space-6);">
-          <h3 style="font-size: 1.05rem; margin-bottom: var(--space-2);">Do I need to log into my Instagram account?</h3>
-          <p style="color: var(--text-secondary); font-size: 0.9rem;">No. Simply copy and paste any public Instagram Post, Reel, or Video link into the downloader box to save the media directly to your device.</p>
+          <h3 style="font-size: 1.05rem; margin-bottom: var(--space-2);">Is INSTASAVE HUB free and does it require login?</h3>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">INSTASAVE HUB is free to use and never requires your Instagram login. All public Reels, Videos, Photos, Carousels, and Profile Avatars are supported.</p>
         </div>
       
         <div class="glass-panel reveal-item" style="padding: var(--space-6);">
-          <h3 style="font-size: 1.05rem; margin-bottom: var(--space-2);">Can I install INSTASAVE HUB as an app on my phone or computer?</h3>
-          <p style="color: var(--text-secondary); font-size: 0.9rem;">Yes. Click the Install App button in the top navigation bar to add INSTASAVE HUB to your desktop or mobile home screen.</p>
+          <h3 style="font-size: 1.05rem; margin-bottom: var(--space-2);">Does it work on iPhone, Android, Mac, and Windows?</h3>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">Yes. Works in any modern browser and can be installed as a standalone app via the Install App button.</p>
         </div>
       
     </div>
@@ -889,79 +875,119 @@
     <a href="/" class="dock-item is-active">
       <span>Home</span>
     </a>
-    <a href="/#features" class="dock-item">
-      <span>Features</span>
+    <a href="/downloads/" class="dock-item ">
+      <span>Download</span>
     </a>
-    <a href="/#pricing" class="dock-item">
-      <span>Pricing</span>
+    <a href="/tools/" class="dock-item ">
+      <span>Tools</span>
     </a>
-    <a href="/#about" class="dock-item">
-      <span>About</span>
+    <a href="/#faq" class="dock-item">
+      <span>FAQ</span>
     </a>
   </nav>
 
-  <!-- Glass Footer -->
+  <!-- Glass Footer with SEO Keyword Internal Links -->
   <footer class="glass-footer" role="contentinfo">
     <div class="container-shell">
       <div class="footer-grid" style="grid-template-columns: 1.4fr 1fr 1fr 1fr;">
         <div>
           <div class="brand-identity" style="margin-bottom: var(--space-3);">
-            <img src="/static/images/logo.png" alt="" class="brand-mark" width="28" height="28" style="border-radius: 7px; object-fit: cover;">
+            <img src="/static/images/logo.png" alt="INSTASAVE HUB" class="brand-mark" width="28" height="28" style="border-radius: 7px; object-fit: cover;">
             <span class="brand-wordmark">INSTASAVE HUB</span>
           </div>
-          <p style="color: var(--text-muted); font-size: 0.88rem; max-width: 36ch;">
-            Next-generation Instagram media workspace and instant 1080p HD stream downloader.
+          <p style="color: var(--text-muted); font-size: 0.86rem; max-width: 34ch;">
+            Free 1080p HD Instagram Video, Reel, Photo &amp; Post Downloader with live stream preview.
           </p>
         </div>
 
         <div>
-          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">NAVIGATION</h4>
+          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">INSTAGRAM DOWNLOADERS</h4>
+          <ul class="footer-links">
+            <li><a href="/tools/video-downloader/">Instagram Video Downloader</a></li>
+            <li><a href="/tools/reel-downloader/">Instagram Reel Downloader</a></li>
+            <li><a href="/tools/public-post-downloader/">Instagram Post &amp; Carousel</a></li>
+            <li><a href="/tools/image-downloader/">Instagram Photo Downloader</a></li>
+            <li><a href="/tools/profile-media-utility/">IG Profile Picture Viewer</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">PLATFORM</h4>
           <ul class="footer-links">
             <li><a href="/">Home</a></li>
-            <li><a href="/#features">Features</a></li>
-            <li><a href="/#pricing">Pricing</a></li>
-            <li><a href="/#about">About</a></li>
+            <li><a href="/downloads/">Live Video Preview &amp; Download</a></li>
+            <li><a href="/tools/">All Instagram Tools</a></li>
+            <li><a href="/tools/content-info-extractor/">Metadata Extractor</a></li>
           </ul>
         </div>
 
         <div>
-          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">MEDIA TOOLS</h4>
+          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">QUICK LINKS</h4>
           <ul class="footer-links">
-            <li><a href="/tools/video-downloader/">Video Downloader</a></li>
-            <li><a href="/tools/reel-downloader/">Reel Downloader</a></li>
-            <li><a href="/tools/public-post-downloader/">Post Downloader</a></li>
-            <li><a href="/tools/image-downloader/">Photo Downloader</a></li>
-            <li><a href="/tools/profile-media-utility/">Profile Media</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">WORKSPACE</h4>
-          <ul class="footer-links">
-            <li><a href="/downloads/">Downloader</a></li>
             <li><a href="/downloads/history/">Download History</a></li>
             <li><a href="/donations/">Buy Us Cofee</a></li>
             <li><a href="/auth/login/">Sign In</a></li>
+            <li><a href="/sitemap.xml">XML Sitemap</a></li>
           </ul>
         </div>
       </div>
 
       <div style="padding-top: var(--space-6); border-top: 1px solid var(--border-hairline); display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-4); font-size: 0.8rem; color: var(--text-dim);">
-        <span>INSTASAVE HUB. All rights reserved.</span>
-        <span>Independent product. Not affiliated with Instagram or Meta Platforms, Inc.</span>
+        <span>&copy; 2026 INSTASAVE HUB. All rights reserved.</span>
+        <span>Independent tool. Not affiliated with Instagram or Meta Platforms, Inc.</span>
       </div>
     </div>
   </footer>
 
-  <!-- Glass App Installation Modal (Desktop & Mobile PWA) -->
+  <!-- Second Download — 24-Hour Unlock Dark Glassmorphism Popup -->
+  <div id="unlock24hModal" class="unlock-modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="unlock24hModalTitle">
+    <div class="glass-panel unlock-24h-modal">
+      <div class="unlock-modal-glow" aria-hidden="true"></div>
+
+      <div class="unlock-modal-icon-wrap" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+      </div>
+
+      <span class="hero-eyebrow-pill" style="margin-bottom: var(--space-3);">
+        <span class="status-dot status-dot-emerald"></span>
+        <span>24-HOUR AD-FREE PASS</span>
+      </span>
+
+      <h2 id="unlock24hModalTitle" class="unlock-modal-heading">Unlock 24 Hours Free</h2>
+
+      <p class="unlock-modal-message">
+        Watch a 30-second advertisement and enjoy ad-free downloads for the next 24 hours.
+      </p>
+      <p class="unlock-modal-submessage">
+        Watch a short advertisement to unlock unlimited downloads for the next 24 hours.
+      </p>
+
+      <div class="unlock-modal-actions">
+        <a id="unlock24hWatchAdBtn" href="/ads/gate/?mode=30s" class="btn-glass btn-primary unlock-watch-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <polygon points="8,5 19,12 8,19"></polygon>
+          </svg>
+          <span>Watch Ad</span>
+        </a>
+        <button type="button" id="unlock24hDismissBtn" class="btn-glass unlock-dismiss-btn">
+          Not now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Glass App Installation Modal (Concise One-Click Install) -->
   <div id="appInstallModal" class="app-install-modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="appInstallModalTitle">
     <div class="glass-panel app-install-modal">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-4); padding-bottom: var(--space-4); border-bottom: 1px solid var(--border-hairline);">
         <div style="display: flex; align-items: center; gap: var(--space-3);">
           <img src="/static/images/logo.png" alt="" width="38" height="38" style="border-radius: 10px; object-fit: cover;">
           <div>
-            <span class="mono-label">INSTALL APPLICATION</span>
-            <h2 id="appInstallModalTitle" style="font-size: 1.25rem; margin-top: 2px;">Install INSTASAVE HUB App</h2>
+            <span class="mono-label">INSTALL APP</span>
+            <h2 id="appInstallModalTitle" style="font-size: 1.25rem; margin-top: 2px;">Install INSTASAVE HUB</h2>
           </div>
         </div>
         <button type="button" id="closeAppInstallModal" class="nav-icon-btn" aria-label="Close App Install Dialog">
@@ -972,44 +998,14 @@
         </button>
       </div>
 
-      <p style="font-size: 0.9rem; color: var(--text-secondary); margin: var(--space-4) 0;">
-        Install INSTASAVE HUB directly to your desktop or mobile home screen for instant one-tap launching, standalone window mode, and high-speed Instagram video and post downloading.
-      </p>
-
-      <div id="nativeInstallPromptWrap" class="glass-subpanel" style="padding: var(--space-4); margin-bottom: var(--space-4); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-3);">
+      <div id="nativeInstallPromptWrap" class="glass-subpanel" style="padding: var(--space-4); margin-top: var(--space-4); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-3);">
         <div>
-          <span class="spec-label">DIRECT BROWSER INSTALLATION</span>
-          <span class="spec-val" id="nativeInstallStatusText" style="font-size: 0.86rem;">Standalone App Package Ready</span>
+          <span class="spec-label">STANDALONE PWA APP</span>
+          <span class="spec-val" id="nativeInstallStatusText" style="font-size: 0.86rem;">Ready to Install on Your Device</span>
         </div>
         <button type="button" id="triggerNativeInstallBtn" class="btn-glass btn-primary btn-sm">
           Install App Now
         </button>
-      </div>
-
-      <div class="grid-3" style="gap: var(--space-3);">
-        <div class="glass-subpanel" style="padding: var(--space-4);">
-          <span class="tool-badge" style="margin-bottom: var(--space-2); display: inline-block;">DESKTOP</span>
-          <h3 style="font-size: 0.92rem; margin-bottom: var(--space-1);">Chrome / Edge / Brave</h3>
-          <p style="font-size: 0.78rem; color: var(--text-muted);">
-            Click <strong>Install App Now</strong> above, or click the install icon on the right side of your browser address bar.
-          </p>
-        </div>
-
-        <div class="glass-subpanel" style="padding: var(--space-4);">
-          <span class="tool-badge" style="margin-bottom: var(--space-2); display: inline-block;">ANDROID</span>
-          <h3 style="font-size: 0.92rem; margin-bottom: var(--space-1);">Chrome / Samsung</h3>
-          <p style="font-size: 0.78rem; color: var(--text-muted);">
-            Tap <strong>Install App Now</strong> or open the browser menu and select <strong>Install App / Add to Home Screen</strong>.
-          </p>
-        </div>
-
-        <div class="glass-subpanel" style="padding: var(--space-4);">
-          <span class="tool-badge" style="margin-bottom: var(--space-2); display: inline-block;">IOS &amp; IPADOS</span>
-          <h3 style="font-size: 0.92rem; margin-bottom: var(--space-1);">Safari Browser</h3>
-          <p style="font-size: 0.78rem; color: var(--text-muted);">
-            Tap the <strong>Share</strong> button in Safari's toolbar, scroll down, and select <strong>Add to Home Screen</strong>.
-          </p>
-        </div>
       </div>
     </div>
   </div>

@@ -103,13 +103,17 @@ def _render_without_db(dist_dir: Path) -> None:
         maintenance_mode=False,
     )
     access_state = {
+        "state": "STATE_1",
         "mode": "initial_free",
-        "label": "Free Access Available",
+        "label": "First Download (5s Quick Ad)",
+        "sublabel": "Your download will begin shortly after a 5-second advertisement.",
         "has_free_24h": False,
         "free_24h_expires_at": None,
         "free_24h_remaining_seconds": 0,
         "free_24h_formatted": "00:00:00",
         "ad_required": False,
+        "initial_5s_ad_required": True,
+        "first_download_completed": False,
         "can_download_immediately": True,
         "completed_in_cycle": 0,
         "free_allowance": 1,
@@ -137,34 +141,43 @@ def _render_without_db(dist_dir: Path) -> None:
 
     faqs = [
         {
-            "question": "What Instagram links can I download?",
+            "question": "How do I preview and download Instagram Videos or Reels in 1080p?",
             "answer": (
-                "You can download public Instagram Videos, Reels, Single Photos, Multi-Slide "
-                "Carousels, and Public Profile Avatars in full HD quality."
+                "Paste any public Instagram Reel, Video, or Post URL into the downloader box, "
+                "click Analyze, use the built-in Video Preview player, and tap Download MP4."
             ),
         },
         {
-            "question": "How does the 24-hour free access pass work?",
+            "question": "Can I watch a video preview before downloading?",
             "answer": (
-                "Your first download is immediate. Completing a single 30-second sponsor screen "
-                "unlocks 24 hours of uninterrupted downloads."
+                "Yes. Every analyzed Instagram Reel or Video includes an instant HD video preview "
+                "player with audio and fullscreen controls before you save the file."
             ),
         },
         {
-            "question": "Do I need to log into my Instagram account?",
+            "question": "Is INSTASAVE HUB free and does it require login?",
             "answer": (
-                "No. Simply copy and paste any public Instagram Post, Reel, or Video link into "
-                "the downloader box to save the media directly to your device."
+                "INSTASAVE HUB is free to use and never requires your Instagram login. "
+                "All public Reels, Videos, Photos, Carousels, and Profile Avatars are supported."
             ),
         },
         {
-            "question": "Can I install INSTASAVE HUB as an app on my phone or computer?",
+            "question": "Does it work on iPhone, Android, Mac, and Windows?",
             "answer": (
-                "Yes. Click the Install App button in the top navigation bar or hero section to add "
-                "INSTASAVE HUB to your desktop or mobile home screen."
+                "Yes. Works in any modern browser and can be installed as a standalone app "
+                "via the Install App button."
             ),
         },
     ]
+
+    dummy_ad_session = SimpleNamespace(
+        id="00000000-0000-0000-0000-000000000001",
+        ad_type="unlock_30s",
+        nonce_token="edge-ad-nonce-token",
+        remaining_seconds=30,
+        required_duration_seconds=30,
+        pending_download=None,
+    )
 
     pages = [
         (
@@ -172,8 +185,15 @@ def _render_without_db(dist_dir: Path) -> None:
             "index.html",
             "home.html",
             {
-                "page_title": "INSTASAVE HUB | Your Instagram Workflow, Refined.",
-                "meta_description": "Fast Instagram Video, Reel, Photo, and Post downloader.",
+                "page_title": "INSTASAVE HUB — Free Instagram Video, Reel & Photo Downloader (1080p HD)",
+                "meta_description": (
+                    "Download Instagram Videos, Reels, Photos, Carousels, and Profile Pictures in original "
+                    "1080p Full HD MP4 & JPG with live video preview. Fast, free, no login required."
+                ),
+                "meta_keywords": (
+                    "instagram video downloader, instagram reel downloader, download instagram reels, "
+                    "instagram photo downloader, instasave hub, save instagram video 1080p, ig video preview"
+                ),
                 "tools": tools,
                 "preset_amounts": [100, 250, 500, 1000],
                 "faqs": faqs,
@@ -184,8 +204,11 @@ def _render_without_db(dist_dir: Path) -> None:
             "tools/index.html",
             "tools/index.html",
             {
-                "page_title": "Instagram Content Utilities | INSTASAVE HUB",
-                "meta_description": "Explore Instagram utilities for Reels, Videos, Photos, and Posts.",
+                "page_title": "Instagram Video, Reel, Photo & Post Downloader Tools | INSTASAVE HUB",
+                "meta_description": (
+                    "Free Instagram Downloader tools to preview and save Instagram Reels, Videos, "
+                    "Photos, Carousels, and HD Profile Pictures in 1080p MP4 & JPG."
+                ),
                 "tools": tools,
             },
         ),
@@ -194,8 +217,11 @@ def _render_without_db(dist_dir: Path) -> None:
             "downloads/index.html",
             "downloads/interface.html",
             {
-                "page_title": "Download Control Interface | INSTASAVE HUB",
-                "meta_description": "Analyze public Instagram URLs and execute high-resolution downloads.",
+                "page_title": "Instagram Video & Reel Downloader with Live Preview | INSTASAVE HUB",
+                "meta_description": (
+                    "Paste any public Instagram URL to preview videos in 1080p HD and download "
+                    "Instagram Reels, Videos, Photos, and Carousels instantly."
+                ),
                 "tools": tools,
                 "selected_tool_slug": "",
                 "prefill_url": "",
@@ -210,6 +236,22 @@ def _render_without_db(dist_dir: Path) -> None:
                 "page_title": "Download History | INSTASAVE HUB",
                 "meta_description": "Review your analyzed Instagram content and completed downloads.",
                 "downloads": [],
+            },
+        ),
+        (
+            "/ads/gate/",
+            "ads/gate/index.html",
+            "downloads/ad_gate.html",
+            {
+                "page_title": "ADVERTISEMENT | INSTASAVE HUB",
+                "meta_description": "Watch until the timer reaches zero to unlock 24-hour free access.",
+                "robots_meta": "noindex, nofollow",
+                "ad_session": dummy_ad_session,
+                "ad_mode": "30s",
+                "is_initial_5s": False,
+                "pending_download": None,
+                "remaining_seconds": 30,
+                "total_duration_seconds": 30,
             },
         ),
         (
@@ -260,8 +302,8 @@ def _render_without_db(dist_dir: Path) -> None:
                 f"tools/{tool.slug}/index.html",
                 "tools/tool_detail.html",
                 {
-                    "page_title": f"{tool.name} | INSTASAVE HUB",
-                    "meta_description": tool.short_description,
+                    "page_title": f"{tool.name} — Free 1080p HD Preview & Download | INSTASAVE HUB",
+                    "meta_description": f"{tool.short_description} Live video preview and fast 1080p download on INSTASAVE HUB.",
                     "tool": tool,
                     "other_tools": other_tools,
                 },
@@ -284,12 +326,17 @@ def _render_without_db(dist_dir: Path) -> None:
         encoding="utf-8",
     )
 
-    sitemap_xml_content = """<?xml version="1.0" encoding="UTF-8"?>
+    tool_sitemap_entries = "\n".join(
+        f"  <url><loc>https://insavehub.workers.dev/tools/{t.slug}/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>"
+        for t in tools
+    )
+    sitemap_xml_content = f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://insavehub.workers.dev/</loc><priority>1.0</priority></url>
-  <url><loc>https://insavehub.workers.dev/tools/</loc><priority>0.8</priority></url>
-  <url><loc>https://insavehub.workers.dev/downloads/</loc><priority>0.8</priority></url>
-  <url><loc>https://insavehub.workers.dev/donations/</loc><priority>0.7</priority></url>
+  <url><loc>https://insavehub.workers.dev/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://insavehub.workers.dev/downloads/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://insavehub.workers.dev/tools/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+{tool_sitemap_entries}
+  <url><loc>https://insavehub.workers.dev/donations/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 </urlset>"""
     (dist_dir / "sitemap.xml").write_text(sitemap_xml_content, encoding="utf-8")
 

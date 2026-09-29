@@ -177,20 +177,64 @@
     return `${hours}:${minutes}:${seconds}`;
   }
 
+  let freeAccessIntervalId = null;
+
+  function handleFreeAccessExpired() {
+    const statusCard = document.getElementById("freeAccessStatusCard");
+    if (statusCard) {
+      statusCard.hidden = true;
+      statusCard.setAttribute("data-access-state", "STATE_4");
+    }
+    try {
+      localStorage.removeItem("instasave_24h_access");
+    } catch (_err) {
+      // Ignore storage errors
+    }
+    if (window.InstaSaveDownloader && typeof window.InstaSaveDownloader.onFreeAccessExpired === "function") {
+      window.InstaSaveDownloader.onFreeAccessExpired();
+    }
+    fetch("/ads/access-status/", { headers: { Accept: "application/json" } }).catch(() => {});
+  }
+
   function initFreeAccessTickers() {
-    const tickers = document.querySelectorAll("[data-free-access-seconds]");
+    if (freeAccessIntervalId) {
+      clearInterval(freeAccessIntervalId);
+      freeAccessIntervalId = null;
+    }
+
+    const tickers = Array.from(document.querySelectorAll("[data-free-access-seconds]"));
     if (!tickers.length) return;
 
+    let maxRemaining = 0;
     tickers.forEach((el) => {
-      let remaining = parseInt(el.getAttribute("data-free-access-seconds") || "0", 10);
-      if (isNaN(remaining) || remaining <= 0) return;
-
-      setInterval(() => {
-        remaining = Math.max(0, remaining - 1);
-        el.textContent = formatDurationHMS(remaining);
-      }, 1000);
+      const val = parseInt(el.getAttribute("data-free-access-seconds") || "0", 10);
+      if (!isNaN(val) && val > maxRemaining) {
+        maxRemaining = val;
+      }
     });
+
+    if (maxRemaining <= 0) return;
+
+    let remaining = maxRemaining;
+    freeAccessIntervalId = setInterval(() => {
+      remaining = Math.max(0, remaining - 1);
+      const formatted = formatDurationHMS(remaining);
+      tickers.forEach((el) => {
+        el.setAttribute("data-free-access-seconds", String(remaining));
+        el.textContent = formatted;
+      });
+
+      if (remaining <= 0) {
+        clearInterval(freeAccessIntervalId);
+        freeAccessIntervalId = null;
+        handleFreeAccessExpired();
+      }
+    }, 1000);
   }
+
+  window.InstaSaveAccessEngine = {
+    refreshTickers: initFreeAccessTickers,
+  };
 
   function initPwaAppInstaller() {
     if ("serviceWorker" in navigator) {

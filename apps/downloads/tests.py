@@ -23,7 +23,13 @@ class DownloadAndValidationTests(TestCase):
         payload = resp.json()
         self.assertEqual(payload["status"], "ok")
         self.assertEqual(payload["download"]["shortcode"], "C8xYz123AbC")
+        self.assertIn("?preview=1", payload["download"]["preview_url"])
         self.assertFalse(payload["access"]["ad_required"])
+
+        # Inline video preview endpoint streams with inline Content-Disposition
+        preview_resp = self.client.get(payload["download"]["preview_url"])
+        self.assertEqual(preview_resp.status_code, 200)
+        self.assertIn("inline;", preview_resp["Content-Disposition"])
 
         # History page displays the analyzed item
         hist_resp = self.client.get(reverse("downloads:history"))

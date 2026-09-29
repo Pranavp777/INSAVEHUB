@@ -1,4 +1,4 @@
-"""Database models for 30-second AdSession and 24-hour FreeAccessSession."""
+"""Database models for DownloadSession, 5s/30s AdSession, and 24-hour FreeAccessSession."""
 import math
 import secrets
 import uuid
@@ -13,12 +13,76 @@ def generate_ad_nonce() -> str:
     return secrets.token_urlsafe(32)
 
 
+class DownloadSession(models.Model):
+    """
+    Tracks per-user/session download state, first-download completion,
+    30-second advertisement completion, and 24-hour ad-free access timestamps
+    validated strictly against the server clock.
+    """
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="download_sessions",
+    )
+    session_key = models.CharField(max_length=64, db_index=True, blank=True)
+    ip_hash = models.CharField(max_length=64, db_index=True, blank=True)
+    first_download_completed = models.BooleanField(default=False, db_index=True)
+    ad_completed = models.BooleanField(default=False, db_index=True)
+    ad_completed_at = models.DateTimeField(null=True, blank=True)
+    access_started_at = models.DateTimeField(null=True, blank=True)
+    access_expires_at = models.DateTimeField(null=True, blank=True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Download Session"
+        verbose_name_plural = "Download Sessions"
+        ordering = ["-updated_at"]
+        indexes = [
+            models.Index(fields=["user", "access_expires_at"], name="dlsess_user_exp_idx"),
+            models.Index(fields=["session_key", "access_expires_at"], name="dlsess_key_exp_idx"),
+        ]
+
+    def __str__(self) -> str:
+        actor = self.user.username if self.user else f"session:{self.session_key[:8]}"
+        return f"DownloadSession({actor}, first_done={self.first_download_completed}, ad_done={self.ad_completed})"
+
+    @property
+    def has_active_24h_access(self) -> bool:
+        if not self.access_expires_at:
+            return False
+        return timezone.now() < self.access_expires_at
+
+    @property
+    def remaining_seconds(self) -> int:
+        if not self.access_expires_at:
+            return 0
+        delta = int((self.access_expires_at - timezone.now()).total_seconds())
+        return max(0, delta)
+
+    @property
+    def formatted_remaining(self) -> str:
+        total = self.remaining_seconds
+        hours = total // 3600
+        minutes = (total % 3600) // 60
+        seconds = total % 60
+        return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+
+
 class AdSession(models.Model):
     """
-    Server-anchored 30-second advertisement/interstitial session.
+    Server-anchored 5-second or 30-second advertisement/interstitial session.
     Tracks `started_at` and `eligible_at` on the server so client refreshes
     or JavaScript tampering cannot bypass the required wait time.
     """
+
+    class AdType(models.TextChoices):
+        INITIAL_5S = "initial_5s", "5-Second Initial Download Ad"
+        UNLOCK_30S = "unlock_30s", "30-Second 24-Hour Unlock Ad"
 
     class Status(models.TextChoices):
         ACTIVE = "active", "Active Countdown"
@@ -42,6 +106,12 @@ class AdSession(models.Model):
         null=True,
         blank=True,
         related_name="ad_sessions",
+    )
+    ad_type = models.CharField(
+        max_length=16,
+        choices=AdType.choices,
+        default=AdType.UNLOCK_30S,
+        db_index=True,
     )
     nonce_token = models.CharField(
         max_length=128,
@@ -72,7 +142,7 @@ class AdSession(models.Model):
 
     def __str__(self) -> str:
         actor = self.user.username if self.user else f"session:{self.session_key[:8]}"
-        return f"AdSession({actor}, {self.status}, {self.required_duration_seconds}s)"
+        return f"AdSession({actor}, {self.ad_type}, {self.status}, {self.required_duration_seconds}s)"
 
     def save(self, *args, **kwargs) -> None:
         if not self.started_at:
@@ -95,9 +165,9 @@ class AdSession(models.Model):
 
 class FreeAccessSession(models.Model):
     """
-    Server-validated 24-hour free access window unlocked after completing an AdSession.
+    Server-validated 24-hour free access window unlocked after completing a 30-second AdSession.
     During this active window, users can perform eligible downloads without
-    repeatedly encountering the 30-second interstitial.
+    repeatedly encountering advertisements.
     """
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

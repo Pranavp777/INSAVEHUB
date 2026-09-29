@@ -329,6 +329,7 @@ export async function handleAnalyzeRequest(request) {
       content_type_label: isVideo ? (contentType === "reel" ? "Instagram Reel" : "Instagram Video") : "Instagram Photo",
       media_format: isVideo ? "MP4 (H.264 / AAC Original Stream)" : "JPEG (Original Instagram CDN Asset)",
       resolution: `${extracted.width}x${extracted.height} (${orientation} HD)`,
+      duration_label: isVideo ? "00:15 (HD Stream)" : "Static Image",
       file_size_label: isVideo ? "HD Stream" : "Original HD",
       file_size_bytes: 0,
       tool_name: "Instagram Downloader",
@@ -344,12 +345,18 @@ export async function handleAnalyzeRequest(request) {
       },
       status: "ready",
       execute_url: `/downloads/execute/${token}/`,
-      ad_gate_url: `/ads/gate/`,
+      preview_url: `/downloads/execute/${token}/?preview=1`,
+      ad_gate_url: `/ads/gate/?download_id=${encodeURIComponent(shortcode)}&mode=30s`,
+      initial_ad_gate_url: `/ads/gate/?download_id=${encodeURIComponent(shortcode)}&mode=5s`,
     },
     access: {
+      state: "STATE_1",
       mode: "initial_free",
-      label: "Direct Download Ready",
+      label: "First Download (5s Quick Ad)",
+      sublabel: "Your download will begin shortly after a 5-second advertisement.",
       ad_required: false,
+      initial_5s_ad_required: false,
+      first_download_completed: false,
       has_free_24h: true,
       free_24h_formatted: "24:00:00",
       free_24h_remaining_seconds: 86400,
@@ -357,10 +364,22 @@ export async function handleAnalyzeRequest(request) {
   });
 }
 
-export async function handleExecuteDownload(token) {
+export async function handleExecuteDownload(token, request = null) {
   const decoded = decodeToken(token);
   if (!decoded || !decoded.s) {
     return new Response("Invalid download token.", { status: 400 });
+  }
+
+  let isPreview = false;
+  let rangeHeader = null;
+  if (request) {
+    try {
+      const reqUrl = new URL(request.url);
+      isPreview = reqUrl.searchParams.get("preview") === "1";
+      rangeHeader = request.headers.get("Range");
+    } catch (_e) {
+      isPreview = false;
+    }
   }
 
   let directUrl = decoded.u || "";
@@ -380,40 +399,54 @@ export async function handleExecuteDownload(token) {
     return new Response("Unable to fetch remote media stream.", { status: 404 });
   }
 
+  const upstreamHeaders = {
+    "User-Agent": USER_AGENT,
+    Referer: "https://www.instagram.com/",
+  };
+  if (rangeHeader) {
+    upstreamHeaders["Range"] = rangeHeader;
+  }
+
   let cdnResp = await fetch(directUrl, {
-    headers: {
-      "User-Agent": USER_AGENT,
-      Referer: "https://www.instagram.com/",
-    },
+    headers: upstreamHeaders,
   });
 
-  if (!cdnResp.ok) {
+  if (!cdnResp.ok && cdnResp.status !== 206) {
     const refreshed = await extractInstagramMediaEdge(shortcode);
     if (refreshed && refreshed.direct_media_url) {
       ext = refreshed.ext;
       cdnResp = await fetch(refreshed.direct_media_url, {
-        headers: {
-          "User-Agent": USER_AGENT,
-          Referer: "https://www.instagram.com/",
-        },
+        headers: upstreamHeaders,
       });
     }
   }
 
-  if (!cdnResp.ok) {
+  if (!cdnResp.ok && cdnResp.status !== 206) {
     return new Response("Instagram CDN stream expired. Please re-analyze the URL.", { status: 502 });
   }
 
   const mime = ext === "jpg" ? "image/jpeg" : "video/mp4";
   const filename = `insave-${contentType}-${shortcode}.${ext}`;
+  const disposition = isPreview ? `inline; filename="${filename}"` : `attachment; filename="${filename}"`;
+
+  const respHeaders = {
+    "Content-Type": mime,
+    "Content-Disposition": disposition,
+    "Accept-Ranges": "bytes",
+    "Cache-Control": "no-store",
+  };
+  const contentRange = cdnResp.headers.get("Content-Range");
+  if (contentRange) {
+    respHeaders["Content-Range"] = contentRange;
+  }
+  const contentLength = cdnResp.headers.get("Content-Length");
+  if (contentLength) {
+    respHeaders["Content-Length"] = contentLength;
+  }
 
   return new Response(cdnResp.body, {
-    status: 200,
-    headers: {
-      "Content-Type": mime,
-      "Content-Disposition": `attachment; filename="${filename}"`,
-      "Cache-Control": "no-store",
-    },
+    status: cdnResp.status === 206 ? 206 : 200,
+    headers: respHeaders,
   });
 }
 
@@ -425,9 +458,41 @@ export default {
       return await handleAnalyzeRequest(request);
     }
 
+    if (url.pathname === "/ads/access-status/" && request.method === "GET") {
+      return Response.json({
+        status: "ok",
+        access: {
+          state: "STATE_3",
+          mode: "free_24h",
+          label: "24-HOUR FREE ACCESS",
+          sublabel: "Ad-free downloads enabled",
+          has_free_24h: true,
+          free_24h_expires_at: new Date(Date.now() + 86400 * 1000).toISOString(),
+          free_24h_remaining_seconds: 86400,
+          free_24h_formatted: "24:00:00",
+          ad_required: false,
+          initial_5s_ad_required: false,
+          first_download_completed: true,
+        },
+      });
+    }
+
+    if (url.pathname === "/ads/complete/" && request.method === "POST") {
+      return Response.json({
+        status: "ok",
+        message: "Access unlocked",
+        ad_type: "unlock_30s",
+        free_access_granted: true,
+        free_access_expires_at: new Date(Date.now() + 86400 * 1000).toISOString(),
+        free_access_remaining_seconds: 86400,
+        free_access_formatted: "24:00:00",
+        redirect_url: "/downloads/",
+      });
+    }
+
     const execMatch = url.pathname.match(/^\/downloads\/execute\/([^/]+)\/?$/);
     if (execMatch) {
-      return await handleExecuteDownload(execMatch[1]);
+      return await handleExecuteDownload(execMatch[1], request);
     }
 
     if (url.pathname === "/auth/google/login/" || url.pathname === "/auth/google/login") {

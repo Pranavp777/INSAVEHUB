@@ -1,6 +1,10 @@
 """
 Server-side access control and advertisement countdown validation services.
-Enforces the 1st-download-free -> 30-second server-validated ad -> 24-hour free access lifecycle.
+Implements the 4-state download & advertisement lifecycle:
+- State 1 (First Download): 5-second server-validated advertisement -> Download (no 24h pass yet).
+- State 2 (Second+ Download): "Unlock 24 Hours Free" popup -> 30-second server-validated advertisement -> 24-hour free access.
+- State 3 (24-Hour Free Access Active): Immediate ad-free downloads while current_server_time < access_expires_at.
+- State 4 (24-Hour Expiration): Automatically deactivates expired pass and requires ad unlock again.
 """
 import secrets
 from datetime import timedelta
@@ -11,7 +15,7 @@ from django.db.models import Q
 from django.http import HttpRequest
 from django.utils import timezone
 
-from apps.advertisements.models import AdSession, FreeAccessSession
+from apps.advertisements.models import AdSession, DownloadSession, FreeAccessSession
 from apps.core.models import AuditLog, SiteConfiguration
 from apps.core.utils import ensure_session_key, get_ip_hash
 
@@ -24,13 +28,41 @@ def _build_actor_filter(request: HttpRequest) -> Q:
     return Q(session_key=session_key)
 
 
+def get_or_create_download_session(request: HttpRequest) -> DownloadSession:
+    """Retrieve or create the server-side DownloadSession record for the current user/session."""
+    session_key = ensure_session_key(request)
+    ip_hash = get_ip_hash(request)
+    user = request.user if (hasattr(request, "user") and request.user.is_authenticated) else None
+    actor_q = _build_actor_filter(request)
+
+    dl_session = DownloadSession.objects.filter(actor_q).order_by("-updated_at").first()
+    if dl_session is None:
+        dl_session = DownloadSession.objects.create(
+            user=user,
+            session_key=session_key,
+            ip_hash=ip_hash,
+        )
+    elif user and dl_session.user is None:
+        dl_session.user = user
+        dl_session.save(update_fields=["user", "updated_at"])
+
+    return dl_session
+
+
 def expire_stale_sessions(request: Optional[HttpRequest] = None) -> None:
-    """Deactivate any FreeAccessSession whose `expires_at` timestamp has passed."""
+    """
+    Deactivate any FreeAccessSession whose `expires_at` timestamp has passed on the server clock,
+    and reset `ad_completed` on expired DownloadSession records.
+    """
     now = timezone.now()
     qs = FreeAccessSession.objects.filter(is_active=True, expires_at__lte=now)
+    dl_qs = DownloadSession.objects.filter(ad_completed=True, access_expires_at__lte=now)
     if request is not None:
-        qs = qs.filter(_build_actor_filter(request))
+        actor_q = _build_actor_filter(request)
+        qs = qs.filter(actor_q)
+        dl_qs = dl_qs.filter(actor_q)
     qs.update(is_active=False)
+    dl_qs.update(ad_completed=False)
 
 
 def get_active_free_access_session(request: HttpRequest) -> Optional[FreeAccessSession]:
@@ -75,31 +107,35 @@ def get_completed_downloads_in_current_cycle(request: HttpRequest) -> int:
     return downloads_qs.count()
 
 
-def get_active_ad_session(request: HttpRequest) -> Optional[AdSession]:
+def get_active_ad_session(
+    request: HttpRequest,
+    ad_type: Optional[str] = None,
+) -> Optional[AdSession]:
     """Retrieve an existing active AdSession for the current user/session."""
     actor_q = _build_actor_filter(request)
     cutoff = timezone.now() - timedelta(minutes=30)
-    return (
-        AdSession.objects.filter(
-            actor_q,
-            status=AdSession.Status.ACTIVE,
-            started_at__gte=cutoff,
-        )
-        .order_by("-started_at")
-        .first()
+    qs = AdSession.objects.filter(
+        actor_q,
+        status=AdSession.Status.ACTIVE,
+        started_at__gte=cutoff,
     )
+    if ad_type:
+        qs = qs.filter(ad_type=ad_type)
+    return qs.order_by("-started_at").first()
 
 
 def get_or_create_active_ad_session(
     request: HttpRequest,
     pending_download: Any = None,
+    ad_type: str = AdSession.AdType.UNLOCK_30S,
 ) -> AdSession:
     """
-    Retrieve an existing active AdSession or initialize a new 30-second countdown.
+    Retrieve an existing active AdSession or initialize a new server-anchored countdown
+    (5 seconds for `initial_5s` or 30 seconds for `unlock_30s`).
     Refreshing the browser reuses the existing AdSession so the timer cannot be
     bypassed or manipulated from the client.
     """
-    existing = get_active_ad_session(request)
+    existing = get_active_ad_session(request, ad_type=ad_type)
     if existing is not None:
         if pending_download is not None and existing.pending_download_id != pending_download.id:
             existing.pending_download = pending_download
@@ -107,7 +143,7 @@ def get_or_create_active_ad_session(
         return existing
 
     config = SiteConfiguration.get_solo()
-    duration = config.ad_countdown_seconds
+    duration = 5 if ad_type == AdSession.AdType.INITIAL_5S else config.ad_countdown_seconds
     now = timezone.now()
     session_key = ensure_session_key(request)
     ip_hash = get_ip_hash(request)
@@ -118,6 +154,7 @@ def get_or_create_active_ad_session(
         session_key=session_key,
         ip_hash=ip_hash,
         pending_download=pending_download,
+        ad_type=ad_type,
         required_duration_seconds=duration,
         started_at=now,
         eligible_at=now + timedelta(seconds=duration),
@@ -125,7 +162,7 @@ def get_or_create_active_ad_session(
     )
     AuditLog.record(
         event_type="ad.session_started",
-        description=f"Started {duration}s advertisement countdown session.",
+        description=f"Started {duration}s ({ad_type}) advertisement countdown session.",
         request=request,
         resource_type="AdSession",
         resource_id=str(ad_session.id),
@@ -135,47 +172,86 @@ def get_or_create_active_ad_session(
 
 def get_user_access_summary(request: HttpRequest) -> Dict[str, Any]:
     """
-    Compute the complete server-side access state for the current user/session.
-    Returns whether a 24-hour free pass is active, whether the initial download is available,
-    or whether the 30-second advertisement requirement is active.
+    Compute the authoritative server-side access state for the current user/session:
+    - Validates `current_server_time < access_expires_at` via database timestamps.
+    - Returns whether a 24-hour free pass is active, whether the initial download (5s ad) is active,
+      or whether the 30-second "Unlock 24 Hours Free" advertisement requirement is active.
     """
     config = SiteConfiguration.get_solo()
     free_session = get_active_free_access_session(request)
+    dl_session = get_or_create_download_session(request)
 
     if free_session is not None:
+        if (
+            not dl_session.ad_completed
+            or dl_session.access_expires_at != free_session.expires_at
+        ):
+            dl_session.ad_completed = True
+            dl_session.access_started_at = free_session.started_at
+            dl_session.access_expires_at = free_session.expires_at
+            dl_session.save(
+                update_fields=["ad_completed", "access_started_at", "access_expires_at", "updated_at"]
+            )
+
         return {
+            "state": "STATE_3_FREE_24H_ACTIVE",
             "mode": "free_24h_pass",
-            "label": "24-Hour Free Access Active",
+            "label": "24-HOUR FREE ACCESS",
+            "sublabel": "Ad-free downloads enabled",
             "has_free_24h": True,
+            "free_24h_started_at": free_session.started_at,
             "free_24h_expires_at": free_session.expires_at,
             "free_24h_remaining_seconds": free_session.remaining_seconds,
             "free_24h_formatted": free_session.formatted_remaining,
             "ad_required": False,
+            "initial_5s_ad_required": False,
             "can_download_immediately": True,
+            "first_download_completed": dl_session.first_download_completed,
             "completed_in_cycle": get_completed_downloads_in_current_cycle(request),
             "free_allowance": config.free_downloads_before_ad,
             "active_ad_session_id": None,
+            "download_session_id": str(dl_session.id),
         }
 
     completed_in_cycle = get_completed_downloads_in_current_cycle(request)
     ad_required = bool(
         config.enable_advertisements and completed_in_cycle >= config.free_downloads_before_ad
     )
+    initial_5s_ad_required = bool(
+        config.enable_advertisements and not ad_required and not dl_session.first_download_completed
+    )
     active_ad = get_active_ad_session(request) if ad_required else None
 
+    if (completed_in_cycle >= 1 and not dl_session.first_download_completed) or dl_session.ad_completed:
+        dl_session.first_download_completed = dl_session.first_download_completed or (completed_in_cycle >= 1)
+        dl_session.ad_completed = False
+        dl_session.save(update_fields=["first_download_completed", "ad_completed", "updated_at"])
+
     return {
+        "state": "STATE_2_AD_REQUIRED" if ad_required else "STATE_1_FIRST_DOWNLOAD",
         "mode": "ad_required" if ad_required else "initial_free",
-        "label": "Advertisement Verification Required" if ad_required else "Free Access Available",
+        "label": "Unlock 24 Hours Free" if ad_required else "First Download Ready",
+        "sublabel": (
+            "Watch a 30-second advertisement to unlock 24 hours of free downloads"
+            if ad_required
+            else "5-second advertisement before first download"
+        ),
         "has_free_24h": False,
+        "free_24h_started_at": None,
         "free_24h_expires_at": None,
         "free_24h_remaining_seconds": 0,
         "free_24h_formatted": "00:00:00",
         "ad_required": ad_required,
+        "initial_5s_ad_required": initial_5s_ad_required,
         "can_download_immediately": not ad_required,
+        "first_download_completed": dl_session.first_download_completed,
         "completed_in_cycle": completed_in_cycle,
         "free_allowance": config.free_downloads_before_ad,
         "active_ad_session_id": str(active_ad.id) if active_ad else None,
-        "active_ad_remaining_seconds": active_ad.remaining_seconds if active_ad else config.ad_countdown_seconds,
+        "active_ad_remaining_seconds": (
+            active_ad.remaining_seconds if active_ad else config.ad_countdown_seconds
+        ),
+        "download_session_id": str(dl_session.id),
     }
 
 
@@ -189,8 +265,10 @@ def complete_ad_session_and_grant_free_access(
     Validate on the server that:
     1. The AdSession belongs to the current user/session
     2. The cryptographic `nonce_token` matches
-    3. The server clock `timezone.now()` is >= `ad_session.eligible_at` (full 30 seconds elapsed)
-    Upon validation, marks the AdSession completed and issues a 24-hour FreeAccessSession.
+    3. The server clock `timezone.now()` is >= `ad_session.eligible_at`
+       (full 5s for `initial_5s` or full 30s for `unlock_30s` elapsed).
+    - For `initial_5s`: marks the 5-second ad completed and authorizes the first download.
+    - For `unlock_30s`: marks the 30-second ad completed and issues a 24-hour FreeAccessSession.
     """
     actor_q = _build_actor_filter(request)
     try:
@@ -217,7 +295,7 @@ def complete_ad_session_and_grant_free_access(
 
     if ad_session.status == AdSession.Status.COMPLETED:
         existing_free = getattr(ad_session, "granted_free_session", None)
-        return True, "Advertisement requirement already completed.", existing_free, ad_session
+        return True, "Access unlocked", existing_free, ad_session
 
     if ad_session.status != AdSession.Status.ACTIVE:
         return False, "This advertisement session has expired. Please start a new session.", None, ad_session
@@ -246,22 +324,62 @@ def complete_ad_session_and_grant_free_access(
     ad_session.completed_at = now
     ad_session.save(update_fields=["status", "completed_at"])
 
+    dl_session = get_or_create_download_session(request)
+
+    # Case 1: 5-Second First Download Advertisement (does not create 24-hour pass)
+    if ad_session.ad_type == AdSession.AdType.INITIAL_5S:
+        dl_session.first_download_completed = True
+        dl_session.save(update_fields=["first_download_completed", "updated_at"])
+        AuditLog.record(
+            event_type="ad.completed_initial_5s",
+            description="Completed 5-second initial advertisement for first download.",
+            request=request,
+            resource_type="AdSession",
+            resource_id=str(ad_session.id),
+        )
+        return True, "Access unlocked", None, ad_session
+
+    # Case 2: 30-Second Advertisement -> Create 24-Hour Free Access Session
     session_key = ensure_session_key(request)
     ip_hash = get_ip_hash(request)
     user = request.user if (hasattr(request, "user") and request.user.is_authenticated) else ad_session.user
 
-    # Deactivate any prior active sessions before issuing the fresh 24-hour window
     FreeAccessSession.objects.filter(actor_q, is_active=True).update(is_active=False)
 
+    expires_at = now + timedelta(hours=config.free_access_hours)
     free_session = FreeAccessSession.objects.create(
         user=user,
         session_key=session_key,
         ip_hash=ip_hash,
         source_ad_session=ad_session,
         started_at=now,
-        expires_at=now + timedelta(hours=config.free_access_hours),
+        expires_at=expires_at,
         is_active=True,
     )
+
+    dl_session.first_download_completed = True
+    dl_session.ad_completed = True
+    dl_session.ad_completed_at = now
+    dl_session.access_started_at = now
+    dl_session.access_expires_at = expires_at
+    dl_session.save(
+        update_fields=[
+            "first_download_completed",
+            "ad_completed",
+            "ad_completed_at",
+            "access_started_at",
+            "access_expires_at",
+            "updated_at",
+        ]
+    )
+
+    if ad_session.pending_download:
+        from apps.downloads.models import Download
+
+        if ad_session.pending_download.status == Download.Status.AD_LOCKED:
+            ad_session.pending_download.status = Download.Status.READY
+            ad_session.pending_download.access_mode = Download.AccessMode.FREE_24H_PASS
+            ad_session.pending_download.save(update_fields=["status", "access_mode"])
 
     AuditLog.record(
         event_type="ad.completed_free_access_granted",
@@ -276,7 +394,7 @@ def complete_ad_session_and_grant_free_access(
 
     return (
         True,
-        f"Advertisement completed. Your {config.free_access_hours}-hour free access pass is now active.",
+        "Access unlocked",
         free_session,
         ad_session,
     )

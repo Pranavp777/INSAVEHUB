@@ -1,6 +1,24 @@
 from django.contrib import admin
 
-from apps.advertisements.models import AdSession, FreeAccessSession
+from apps.advertisements.models import AdSession, DownloadSession, FreeAccessSession
+
+
+@admin.register(DownloadSession)
+class DownloadSessionAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "user",
+        "session_key",
+        "first_download_completed",
+        "ad_completed",
+        "access_started_at",
+        "access_expires_at",
+        "updated_at",
+    )
+    list_filter = ("first_download_completed", "ad_completed", "access_expires_at")
+    search_fields = ("id", "user__username", "user__email", "session_key", "ip_hash")
+    readonly_fields = ("id", "created_at", "updated_at")
+    ordering = ("-updated_at",)
 
 
 @admin.register(AdSession)
@@ -8,13 +26,14 @@ class AdSessionAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "user",
+        "ad_type",
         "status",
         "required_duration_seconds",
         "started_at",
         "eligible_at",
         "completed_at",
     )
-    list_filter = ("status", "required_duration_seconds", "started_at")
+    list_filter = ("ad_type", "status", "required_duration_seconds", "started_at")
     search_fields = ("id", "user__username", "user__email", "session_key", "ip_hash")
     readonly_fields = ("id", "nonce_token", "created_at")
     ordering = ("-started_at",)

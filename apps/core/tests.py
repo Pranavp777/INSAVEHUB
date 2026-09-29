@@ -15,7 +15,11 @@ class CoreRateLimitAndSEOTests(TestCase):
     def test_landing_page_robots_and_sitemap(self) -> None:
         home_resp = self.client.get(reverse("core:home"))
         self.assertEqual(home_resp.status_code, 200)
-        self.assertContains(home_resp, "Your Instagram Workflow, Refined.")
+        self.assertContains(home_resp, "INSTASAVE HUB")
+        self.assertContains(home_resp, "resVideoPlayer")
+        self.assertContains(home_resp, "Preview Video")
+        self.assertContains(home_resp, "FAQPage")
+        self.assertContains(home_resp, "HowTo")
         self.assertIn("Content-Security-Policy", home_resp)
 
         robots_resp = self.client.get(reverse("core:robots_txt"))

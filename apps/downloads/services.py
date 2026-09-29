@@ -76,14 +76,10 @@ DEFAULT_TOOLS = [
         "category": Tool.Category.REEL,
         "badge_code": "MOD-01",
         "display_order": 1,
-        "short_description": "Extract public vertical Reels in original frame rate with synchronized audio tracks.",
-        "detailed_description": (
-            "Designed for creators and social media archivists managing public short-form video. "
-            "Inspects public Reel streams, verifies codec parameters, and packages MP4 containers "
-            "without watermarks or re-compression artifacts."
-        ),
+        "short_description": "Preview and download Instagram Reels in 1080p MP4 with original audio.",
+        "detailed_description": "Watch a live video preview and save public Instagram Reels in 1080p Full HD MP4 without watermarks.",
         "supported_url_hint": "https://www.instagram.com/reel/...",
-        "output_formats": "MP4 (H.264 1080x1920) / AAC Stereo",
+        "output_formats": "MP4 (1080x1920 HD) / AAC",
     },
     {
         "name": "Instagram Video Downloader",
@@ -91,11 +87,8 @@ DEFAULT_TOOLS = [
         "category": Tool.Category.VIDEO,
         "badge_code": "MOD-02",
         "display_order": 2,
-        "short_description": "Download long-form public video broadcasts and feed videos at native bitrate.",
-        "detailed_description": (
-            "Supports public feed videos and archival IGTV links. Resolves highest available "
-            "public progressive or segmented video streams with full frame-dimension telemetry."
-        ),
+        "short_description": "Stream preview and download Instagram videos and IGTV in 1080p MP4.",
+        "detailed_description": "Preview public Instagram feed videos and IGTV streams in your browser before downloading in Full HD MP4.",
         "supported_url_hint": "https://www.instagram.com/p/... or /tv/...",
         "output_formats": "MP4 (1080p / 720p) / AAC",
     },
@@ -105,13 +98,10 @@ DEFAULT_TOOLS = [
         "category": Tool.Category.IMAGE,
         "badge_code": "MOD-03",
         "display_order": 3,
-        "short_description": "Retrieve full-resolution public photography assets with original color profile.",
-        "detailed_description": (
-            "Inspects public single-image posts and extracts the highest-resolution public CDN "
-            "rendition (up to 1080x1350 portrait or 1080x1080 square) in clean sRGB JPEG format."
-        ),
+        "short_description": "Save full-resolution Instagram photos in original sRGB JPEG quality.",
+        "detailed_description": "Preview and download public Instagram photos in maximum 1080p resolution.",
         "supported_url_hint": "https://www.instagram.com/p/...",
-        "output_formats": "JPEG (Original sRGB 1080p)",
+        "output_formats": "JPEG (Original 1080p)",
     },
     {
         "name": "Public Post Downloader",
@@ -119,13 +109,10 @@ DEFAULT_TOOLS = [
         "category": Tool.Category.POST,
         "badge_code": "MOD-04",
         "display_order": 4,
-        "short_description": "Unified inspector for multi-slide carousels and mixed-media public publications.",
-        "detailed_description": (
-            "Automatically detects whether a public /p/ permalink contains a single photograph, "
-            "a video clip, or a multi-item carousel package, presenting structured format options."
-        ),
+        "short_description": "Download Instagram posts and multi-slide carousels in MP4 or JPEG.",
+        "detailed_description": "Auto-detects photos, videos, and multi-slide carousel posts for instant preview and download.",
         "supported_url_hint": "https://www.instagram.com/p/...",
-        "output_formats": "MP4 / JPEG (Original CDN Stream)",
+        "output_formats": "MP4 / JPEG (Original HD)",
     },
     {
         "name": "Profile Media Utility",
@@ -133,11 +120,8 @@ DEFAULT_TOOLS = [
         "category": Tool.Category.PROFILE,
         "badge_code": "MOD-05",
         "display_order": 5,
-        "short_description": "Inspect public profile identity headers, avatar dimensions, and public handle status.",
-        "detailed_description": (
-            "Provides a clean verification summary for public creator and brand handles, including "
-            "public HD avatar asset resolution and canonical permalink structure."
-        ),
+        "short_description": "Preview and download public Instagram HD profile pictures.",
+        "detailed_description": "View and save full-size 1080x1080 HD avatars for any public Instagram username.",
         "supported_url_hint": "https://www.instagram.com/username/",
         "output_formats": "HD Profile Avatar (JPEG)",
     },
@@ -147,11 +131,8 @@ DEFAULT_TOOLS = [
         "category": Tool.Category.METADATA,
         "badge_code": "MOD-06",
         "display_order": 6,
-        "short_description": "Generate structured technical metadata reports for public Instagram permalinks.",
-        "detailed_description": (
-            "Extracts public shortcode identifiers, canonical URLs, aspect ratio geometry, "
-            "and publication parameters into a clean JSON document for editorial workflows."
-        ),
+        "short_description": "Extract clean JSON metadata, dimensions, and shortcodes from Instagram links.",
+        "detailed_description": "Export structured JSON metadata including shortcode, resolution, and canonical URL.",
         "supported_url_hint": "https://www.instagram.com/p/...",
         "output_formats": "JSON Technical Manifest",
     },
@@ -662,7 +643,10 @@ def authorize_and_complete_download(
         )
 
     # User is authorized (either initial free download or active 24-hour free access pass)
+    from apps.advertisements.services import get_or_create_download_session
+
     free_session = get_active_free_access_session(request)
+    dl_session = get_or_create_download_session(request)
     now = timezone.now()
 
     if free_session is not None:
@@ -673,6 +657,10 @@ def authorize_and_complete_download(
         )
     else:
         download.access_mode = Download.AccessMode.INITIAL_FREE
+
+    if not dl_session.first_download_completed:
+        dl_session.first_download_completed = True
+        dl_session.save(update_fields=["first_download_completed", "updated_at"])
 
     download.status = Download.Status.COMPLETED
     download.completed_at = now

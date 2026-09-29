@@ -26,7 +26,7 @@
               <th>Format &amp; Size</th>
               <th>Date</th>
               <th>Status</th>
-              <th>Download Action</th>
+              <th>Preview &amp; Download</th>
             </tr>
           </thead>
           <tbody>
@@ -41,9 +41,14 @@
                 <td style="font-family: var(--font-mono); font-size: 0.78rem;">{{ dl.created_at|date:"Y-m-d H:i" }}</td>
                 <td><span class="mono-label">{{ dl.get_status_display }}</span></td>
                 <td>
-                  <a href="{% url 'downloads:execute' token=dl.download_token %}" class="btn-glass btn-sm">
-                    Download
-                  </a>
+                  <div style="display: flex; flex-wrap: wrap; gap: var(--space-2);">
+                    <a href="{% url 'downloads:execute' token=dl.download_token %}?preview=1" target="_blank" rel="noopener" class="btn-glass btn-secondary btn-sm">
+                      Preview
+                    </a>
+                    <a href="{% url 'downloads:execute' token=dl.download_token %}" class="btn-glass btn-sm">
+                      Download
+                    </a>
+                  </div>
                 </td>
               </tr>
             {% endfor %}
