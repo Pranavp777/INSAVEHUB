@@ -155,8 +155,8 @@ def web_manifest(request: HttpRequest) -> JsonResponse:
         "scope": "/",
         "display": "standalone",
         "orientation": "portrait-primary",
-        "background_color": "#F0F9FF",
-        "theme_color": "#0284C7",
+        "background_color": "#030712",
+        "theme_color": "#2563EB",
         "categories": ["utilities", "photo", "video", "productivity"],
         "icons": [
             {

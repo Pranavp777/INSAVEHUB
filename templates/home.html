@@ -2,16 +2,33 @@
 {% load static %}
 
 {% block content %}
-<!-- 1. HERO SECTION WITH INTERACTIVE GLASS ORBIT VISUALIZATION -->
+<!-- 1. CINEMATIC HERO SECTION WITH FUTURISTIC iOS-INSPIRED SMARTPHONE MOCKUP -->
 <section class="hero-section">
   <div class="container-shell hero-grid">
+    <!-- Left Column: Eyebrow, Headline with Blue Gradient Word, CTAs, Social Proof -->
     <div class="reveal-item">
-      <h1 class="hero-headline">Your Instagram Workflow, Refined.</h1>
+      <div class="hero-eyebrow-pill">
+        <span class="status-dot"></span>
+        <span>NEXT-GEN MEDIA WORKSPACE</span>
+      </div>
+
+      <h1 class="hero-headline">
+        Your Media Workflow, <span class="text-gradient-blue">Reimagined.</span>
+      </h1>
+
       <p class="hero-lead">
-        Download public Instagram Videos, Reels, Photos, and Carousels in original 1080p MP4 and full-resolution JPEG format instantly.
+        Capture, organize, and synchronize public Instagram Videos, Reels, Photos, and Carousels in original 1080p quality through a fluid, zero-friction glass workspace.
       </p>
+
       <div class="hero-cta-group">
-        <a href="#videoDownloader" class="btn-glass btn-primary">Download Video</a>
+        <a href="#videoDownloader" class="btn-glass btn-primary">
+          <span>Start Downloading</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+
         <button type="button" id="installAppHeroBtn" class="btn-glass" data-install-app-trigger>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M12 3v12"></path>
@@ -20,84 +37,180 @@
           </svg>
           <span>Install App</span>
         </button>
-        <a href="#featureShowcase" class="btn-glass">All Tools</a>
       </div>
 
-      <div class="hero-metrics-bar">
-        <div>
-          <div class="metric-value">1080P MP4</div>
-          <div class="metric-caption">Direct Video &amp; Reel Stream</div>
+      <!-- Small Social-Proof Element Underneath -->
+      <div class="hero-social-proof">
+        <div class="social-avatar-stack" aria-hidden="true">
+          <span class="social-avatar-dot" style="background: linear-gradient(135deg, #2563EB, #60A5FA);">AK</span>
+          <span class="social-avatar-dot" style="background: linear-gradient(135deg, #4F46E5, #818CF8);">MR</span>
+          <span class="social-avatar-dot" style="background: linear-gradient(135deg, #0284C7, #38BDF8);">SL</span>
+          <span class="social-avatar-dot" style="background: linear-gradient(135deg, #1D4ED8, #6366F1);">+</span>
         </div>
-        <div>
-          <div class="metric-value">FULL HD</div>
-          <div class="metric-caption">Original Photo &amp; Post Quality</div>
-        </div>
-        <div>
-          <div class="metric-value">FAST</div>
-          <div class="metric-caption">One-Click Direct Download</div>
+        <div style="font-size: 0.82rem; color: var(--text-secondary);">
+          <strong style="color: #FFFFFF;">Trusted by 120K+ creators</strong> for lossless 1080p MP4 &amp; cloud media sync
         </div>
       </div>
     </div>
 
-    <!-- Interactive Glass Orbit Visualization -->
-    <div class="orbit-stage reveal-item" aria-label="Interactive Glass Orbit Platform Visualization">
-      <div class="orbit-ring-system">
-        <div class="orbit-ring orbit-ring-outer"></div>
-        <div class="orbit-ring orbit-ring-middle"></div>
-        <div class="orbit-ring orbit-ring-inner"></div>
+    <!-- Right Column: Realistic Futuristic Smartphone Mockup with Floating Glass Cards -->
+    <div class="ios-phone-stage reveal-item" aria-label="Futuristic iOS-Inspired Smartphone Interface Preview">
+      <div class="ios-phone-glow" aria-hidden="true"></div>
 
-        <button type="button" class="orbit-satellite orbit-satellite-1 is-active"
-                data-orbit-tool="video"
-                data-title="Instagram Video &amp; Post Downloader"
-                data-category="FULL HD 1080P"
-                data-format="MP4 Progressive 1080p / Original JPEG"
-                data-sample-url="https://www.instagram.com/p/...">
-          VIDEO &amp; POST
-        </button>
-
-        <button type="button" class="orbit-satellite orbit-satellite-2"
-                data-orbit-tool="reel"
-                data-title="Instagram Reel Downloader"
-                data-category="VERTICAL 9:16"
-                data-format="MP4 (H.264 1080x1920) / AAC"
-                data-sample-url="https://www.instagram.com/reel/...">
-          REEL DOWNLOADER
-        </button>
-
-        <button type="button" class="orbit-satellite orbit-satellite-3"
-                data-orbit-tool="image"
-                data-title="Instagram Photo &amp; Carousel Downloader"
-                data-category="ORIGINAL QUALITY"
-                data-format="Original sRGB JPEG / 1080x1350"
-                data-sample-url="https://www.instagram.com/p/...">
-          PHOTO &amp; CAROUSEL
-        </button>
-
-        <button type="button" class="orbit-satellite orbit-satellite-4"
-                data-orbit-tool="metadata"
-                data-title="Caption &amp; Hashtag Extractor"
-                data-category="CONTENT UTILITY"
-                data-format="Clean Caption &amp; Hashtags"
-                data-sample-url="https://www.instagram.com/p/...">
-          CAPTION &amp; TAGS
-        </button>
-
-        <div class="orbit-core-console">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3); padding-bottom: var(--space-2); border-bottom: 1px solid var(--border-hairline);">
-            <span class="mono-label" id="orbitConsoleCategory">FULL HD 1080P</span>
-            <span class="status-dot status-dot-emerald"></span>
+      <!-- Floating Glass Card 1 (Top Left) -->
+      <div class="ios-floating-card ios-floating-card-left">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 32px; height: 32px; border-radius: 10px; background: linear-gradient(135deg, #2563EB, #6366F1); display: flex; align-items: center; justify-content: center; color: #FFFFFF;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
           </div>
-          <h2 style="font-size: 1.08rem; margin-bottom: var(--space-2);" id="orbitConsoleTitle">Instagram Video &amp; Post Downloader</h2>
-          <p style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--light-cyan); margin-bottom: var(--space-4); word-break: break-all;" id="orbitConsoleUrl">
-            https://www.instagram.com/p/...
-          </p>
-          <div class="glass-subpanel" style="padding: var(--space-3); margin-bottom: var(--space-4);">
-            <span class="spec-label">QUALITY</span>
-            <span class="spec-val" id="orbitConsoleFormat" style="font-size: 0.8rem;">MP4 Progressive 1080p / Original JPEG</span>
+          <div>
+            <div style="font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; color: var(--light-cyan); text-transform: uppercase;">SMART STREAM</div>
+            <div style="font-size: 0.8rem; font-weight: 600; color: #FFFFFF;">1080p 60fps MP4 Ready</div>
           </div>
-          <div style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted);">
-            <span>ACCESS: {% if access_state.has_free_24h %}24H PASS ACTIVE{% else %}READY{% endif %}</span>
-            <a href="#videoDownloader" style="color: var(--light-cyan); font-weight: 600;">OPEN DOWNLOADER</a>
+        </div>
+      </div>
+
+      <!-- Floating Glass Card 2 (Bottom Right) -->
+      <div class="ios-floating-card ios-floating-card-right">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 32px; height: 32px; border-radius: 10px; background: rgba(59, 130, 246, 0.22); border: 1px solid rgba(96, 165, 250, 0.4); display: flex; align-items: center; justify-content: center; color: var(--light-cyan);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+            </svg>
+          </div>
+          <div>
+            <div style="font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; color: var(--light-violet); text-transform: uppercase;">CLOUD SYNC</div>
+            <div style="font-size: 0.8rem; font-weight: 600; color: #FFFFFF;">Instant Edge Delivery</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rounded Titanium/Glass Phone Frame -->
+      <div class="ios-phone-frame">
+        <div class="ios-screen">
+          <div class="ios-screen-reflection" aria-hidden="true"></div>
+
+          <!-- Top Area with Dynamic-Island-Style Capsule -->
+          <div class="ios-status-bar">
+            <span>9:41</span>
+            <div class="ios-dynamic-island">
+              <span class="ios-island-dot"></span>
+              <div class="ios-island-wave" aria-hidden="true">
+                <span style="height: 6px;"></span>
+                <span style="height: 11px;"></span>
+                <span style="height: 8px;"></span>
+                <span style="height: 12px;"></span>
+                <span style="height: 5px;"></span>
+              </div>
+            </div>
+            <span style="font-size: 0.64rem; letter-spacing: 0.04em;">5G</span>
+          </div>
+
+          <!-- Floating iOS Glass Widgets Inside Phone -->
+          <div class="ios-widgets-stack">
+            <!-- Row 1: Calendar Widget + Sync Telemetry Widget -->
+            <div class="ios-widget-row">
+              <!-- Calendar Widget -->
+              <div class="ios-widget">
+                <div style="font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; color: #60A5FA; text-transform: uppercase;">TUESDAY</div>
+                <div style="font-size: 1.75rem; font-weight: 700; line-height: 1.1; color: #FFFFFF; margin: 2px 0 6px;">29</div>
+                <div style="font-size: 0.68rem; color: var(--text-secondary); padding-left: 6px; border-left: 2px solid #3B82F6;">
+                  Reel Queue Sync<br>
+                  <span style="color: var(--text-muted); font-size: 0.62rem;">10:00 AM</span>
+                </div>
+              </div>
+
+              <!-- Cloud Status Widget -->
+              <div class="ios-widget" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; color: #818CF8;">CLOUD</span>
+                  <span class="status-dot status-dot-emerald"></span>
+                </div>
+                <div>
+                  <div style="font-size: 1.15rem; font-weight: 700; color: #FFFFFF;">1080p</div>
+                  <div style="font-size: 0.66rem; color: var(--text-muted);">Original Bitrate</div>
+                </div>
+                <div style="height: 4px; border-radius: 999px; background: rgba(255,255,255,0.1); overflow: hidden;">
+                  <div style="width: 88%; height: 100%; background: linear-gradient(90deg, #3B82F6, #818CF8);"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 2: Notification / Smart Task Widget -->
+            <div class="ios-widget">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 0.64rem; font-weight: 700; letter-spacing: 0.12em; color: var(--light-cyan);">SMART TASKS // QUEUE</span>
+                <span style="font-size: 0.62rem; color: var(--text-muted);">Now</span>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 7px 9px; border-radius: 12px; background: rgba(37, 99, 235, 0.16); border: 1px solid rgba(96, 165, 250, 0.25); margin-bottom: 6px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="mini-check">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </span>
+                  <span style="font-size: 0.74rem; font-weight: 500; color: #FFFFFF;">Export Reel MP4 Stream</span>
+                </div>
+                <span style="font-size: 0.64rem; font-family: var(--font-mono); color: #60A5FA;">100%</span>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 7px 9px; border-radius: 12px; background: rgba(255, 255, 255, 0.04);">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="mini-check">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </span>
+                  <span style="font-size: 0.74rem; font-weight: 500; color: var(--text-secondary);">Sync Carousel Metadata</span>
+                </div>
+                <span style="font-size: 0.64rem; font-family: var(--font-mono); color: #34D399;">READY</span>
+              </div>
+            </div>
+
+            <!-- Row 3: Media Notification Card -->
+            <div class="ios-widget" style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.28) 0%, rgba(15, 23, 42, 0.78) 100%);">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="{% static 'images/logo.png' %}" alt="" width="34" height="34" style="border-radius: 9px; object-fit: cover;">
+                <div style="flex: 1;">
+                  <div style="font-size: 0.76rem; font-weight: 600; color: #FFFFFF;">INSTASAVE HUB</div>
+                  <div style="font-size: 0.68rem; color: var(--text-secondary);">Direct CDN stream verified &amp; ready</div>
+                </div>
+                <a href="#videoDownloader" style="padding: 5px 10px; border-radius: 999px; background: #3B82F6; color: #FFFFFF; font-size: 0.66rem; font-weight: 600;">Save</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Dock & Home Indicator -->
+          <div class="ios-bottom-dock">
+            <div class="ios-dock-bar" aria-hidden="true">
+              <div class="ios-dock-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 3v12"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <path d="M5 21h14"></path>
+                </svg>
+              </div>
+              <div class="ios-dock-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                  <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                </svg>
+              </div>
+              <div class="ios-dock-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+              </div>
+              <div class="ios-dock-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+                </svg>
+              </div>
+            </div>
+            <div class="ios-home-indicator" aria-hidden="true"></div>
           </div>
         </div>
       </div>
@@ -105,18 +218,21 @@
   </div>
 </section>
 
-<!-- 2. INSTAGRAM VIDEO & POST DOWNLOADER ON HOME PAGE -->
-<section class="section-block" id="videoDownloader" style="padding-top: var(--space-8);">
+<!-- 2. INSTANT INSTAGRAM VIDEO, REEL & POST DOWNLOADER WORKSPACE -->
+<section class="section-block" id="videoDownloader" style="padding-top: var(--space-6);">
   <div class="container-shell">
-    <div class="section-header reveal-item">
-      <span class="mono-label">INSTAGRAM VIDEO, REEL &amp; POST DOWNLOADER</span>
-      <h2 class="section-title">Instagram Video &amp; Post Downloader</h2>
-      <p class="section-subtitle">
-        Paste any public Instagram Post (<code>/p/</code>), Reel (<code>/reel/</code>), or Video (<code>/tv/</code>) link to extract and download original 1080p MP4 video streams and full-resolution JPEG publications.
-      </p>
-    </div>
-
     <div class="glass-panel reveal-item" style="padding: var(--space-8);">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: var(--space-4); margin-bottom: var(--space-5);">
+        <div>
+          <span class="mono-label">INSTANT MEDIA EXTRACTION</span>
+          <h2 style="font-size: clamp(1.45rem, 2.4vw, 2rem); margin-top: 4px;">Instagram Video, Reel &amp; Post Downloader</h2>
+        </div>
+        <span class="telemetry-pill">
+          <span class="status-dot status-dot-emerald"></span>
+          <span>1080P MP4 &amp; ORIGINAL JPEG</span>
+        </span>
+      </div>
+
       <!-- Interactive Downloader Mode Switcher Tabs -->
       <div class="downloader-mode-tabs" role="tablist" aria-label="Instagram Downloader Modes">
         <button type="button" role="tab" aria-selected="true"
@@ -125,7 +241,7 @@
                 data-placeholder="https://www.instagram.com/p/... or https://www.instagram.com/reel/..."
                 data-label="Paste Public Instagram Video or Post URL"
                 data-button-text="Analyze &amp; Download Video">
-          <span>Instagram Video Downloader</span>
+          <span>Video Downloader</span>
         </button>
 
         <button type="button" role="tab" aria-selected="false"
@@ -143,7 +259,7 @@
                 data-placeholder="https://www.instagram.com/p/..."
                 data-label="Paste Public Instagram Post or Carousel URL"
                 data-button-text="Analyze &amp; Download Post">
-          <span>Public Post Downloader</span>
+          <span>Post Downloader</span>
         </button>
 
         <button type="button" role="tab" aria-selected="false"
@@ -168,12 +284,9 @@
       <form id="instagramAnalyzerForm" action="{% url 'downloads:analyze_api' %}" method="post" novalidate>
         {% csrf_token %}
         <input type="hidden" id="instagramToolSlug" name="tool_slug" value="video-downloader">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2);">
-          <label for="instagramUrlInput" id="instagramUrlLabel" class="form-label" style="margin-bottom: 0;">
-            Paste Public Instagram Video or Post URL
-          </label>
-          <span class="mono-label">ORIGINAL CDN STREAM // MP4 &amp; JPEG</span>
-        </div>
+        <label for="instagramUrlInput" id="instagramUrlLabel" class="form-label">
+          Paste Public Instagram Video or Post URL
+        </label>
 
         <div class="analyzer-bar">
           <input type="url" id="instagramUrlInput" name="url" class="glass-input"
@@ -187,18 +300,6 @@
           </button>
         </div>
       </form>
-
-      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-3); margin-top: var(--space-4); align-items: center;">
-        <div style="display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center;">
-          <span class="mono-label">SUPPORTED ROUTES:</span>
-          <span class="tool-badge">/p/ POSTS &amp; CAROUSELS</span>
-          <span class="tool-badge">/reel/ VERTICAL REELS</span>
-          <span class="tool-badge">/tv/ BROADCAST VIDEOS</span>
-        </div>
-        <a href="{% url 'downloads:interface' %}" class="mono-label" style="color: var(--light-cyan); font-weight: 600;">
-          OPEN FULL DOWNLOAD CONTROL CENTER
-        </a>
-      </div>
 
       <div id="analyzerStatusBox" hidden role="alert" style="margin-top: var(--space-4);"></div>
 
@@ -216,10 +317,9 @@
         </div>
 
         <div class="video-preview-layout">
-          <!-- Visual Stream Preview Frame -->
           <div class="video-preview-screen" id="resPreviewContainer" aria-label="Media Stream Preview Card">
             <div style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 0.7rem; position: relative; z-index: 2;">
-              <span style="background: rgba(255,255,255,0.22); padding: 2px 8px; border-radius: 4px;" id="resPreviewAspect">1080P HD</span>
+              <span style="background: rgba(15, 23, 42, 0.65); padding: 2px 8px; border-radius: 6px;" id="resPreviewAspect">1080P HD</span>
               <span>LIVE CDN STREAM</span>
             </div>
             <div class="video-preview-play-badge" aria-hidden="true" style="position: relative; z-index: 2;">
@@ -233,7 +333,6 @@
             </div>
           </div>
 
-          <!-- Technical Specifications & Direct Download Action -->
           <div style="display: flex; flex-direction: column; justify-content: space-between;">
             <div class="result-spec-grid" style="grid-template-columns: repeat(2, 1fr); margin-top: 0;">
               <div class="spec-cell">
@@ -259,7 +358,7 @@
             </div>
 
             <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-3);">
-              <span class="mono-label">SERVER-VERIFIED DIRECT STREAM</span>
+              <span class="mono-label">DIRECT CDN STREAM</span>
               <a id="resDownloadActionBtn" href="#" class="btn-glass btn-primary" style="min-width: 240px;">
                 Download Media
               </a>
@@ -271,23 +370,207 @@
   </div>
 </section>
 
-<!-- 3. DEDICATED INSTAGRAM TOOLS SHOWCASE -->
-<section class="section-block" id="featureShowcase">
+<!-- 3. FEATURES SECTION ("Everything you need, in one place.") -->
+<section class="section-block" id="features">
   <div class="container-shell">
-    <div class="section-header reveal-item">
-      <span class="mono-label">INSTAGRAM TOOLS</span>
-      <h2 class="section-title">Instagram Content Utilities</h2>
+    <div class="section-header-center reveal-item">
+      <span class="mono-label">CAPABILITIES</span>
+      <h2 class="section-title">Everything you need, in one place.</h2>
       <p class="section-subtitle">
-        Download public Instagram videos, reels, photos, carousels, captions, and profile avatars in original quality.
+        Engineered with precision glass optics and intelligent media routing for creators and teams.
       </p>
     </div>
 
-    <div class="grid-3">
+    <div class="grid-4">
+      <!-- Card 1: Smart Tasks -->
+      <article class="glass-panel glass-panel-interactive feature-glass-card reveal-item">
+        <div>
+          <div class="feature-icon-box" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 11l3 3L22 4"></path>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+            </svg>
+          </div>
+          <h3 style="font-size: 1.2rem; margin-bottom: var(--space-2);">Smart Tasks</h3>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">
+            Automate link inspection, stream resolution selection, and one-tap MP4 extraction with zero manual configuration.
+          </p>
+        </div>
+
+        <!-- Interactive Mini UI Preview -->
+        <div class="feature-mini-ui" aria-label="Smart Tasks Interactive Preview">
+          <div class="mini-task-row" data-task-toggle data-task-done="true">
+            <span style="color: var(--text-primary); font-weight: 500;">Auto-Resolve 1080p</span>
+            <span data-task-status style="font-family: var(--font-mono); font-size: 0.68rem; color: #60A5FA;">DONE</span>
+          </div>
+          <div class="mini-task-row" data-task-toggle data-task-done="true">
+            <span style="color: var(--text-primary); font-weight: 500;">Strip Tracking Tags</span>
+            <span data-task-status style="font-family: var(--font-mono); font-size: 0.68rem; color: #60A5FA;">DONE</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2: Team Collaboration -->
+      <article class="glass-panel glass-panel-interactive feature-glass-card reveal-item">
+        <div>
+          <div class="feature-icon-box" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <h3 style="font-size: 1.2rem; margin-bottom: var(--space-2);">Team Collaboration</h3>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">
+            Share verified media streams, synchronized download history, and creative reference boards across your studio.
+          </p>
+        </div>
+
+        <!-- Interactive Mini UI Preview -->
+        <div class="feature-mini-ui" aria-label="Team Collaboration Preview">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+            <div class="social-avatar-stack">
+              <span class="social-avatar-dot" style="width: 22px; height: 22px; background: #2563EB;">JD</span>
+              <span class="social-avatar-dot" style="width: 22px; height: 22px; background: #6366F1;">EL</span>
+              <span class="social-avatar-dot" style="width: 22px; height: 22px; background: #0284C7;">+4</span>
+            </div>
+            <span style="font-family: var(--font-mono); font-size: 0.66rem; color: #34D399;">LIVE BOARD</span>
+          </div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">Shared Collection • 14 Reels</div>
+        </div>
+      </article>
+
+      <!-- Card 3: Cloud Sync -->
+      <article class="glass-panel glass-panel-interactive feature-glass-card reveal-item">
+        <div>
+          <div class="feature-icon-box" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+            </svg>
+          </div>
+          <h3 style="font-size: 1.2rem; margin-bottom: var(--space-2);">Cloud Sync</h3>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">
+            Access your download history and instant progressive streams seamlessly across desktop, tablet, and mobile devices.
+          </p>
+        </div>
+
+        <!-- Interactive Mini UI Preview -->
+        <div class="feature-mini-ui" aria-label="Cloud Sync Status Preview">
+          <div style="display: flex; justify-content: space-between; font-size: 0.72rem; margin-bottom: 6px;">
+            <span style="color: var(--text-primary); font-weight: 500;">Edge CDN Sync</span>
+            <span style="font-family: var(--font-mono); color: #60A5FA;">99.9%</span>
+          </div>
+          <div style="height: 5px; border-radius: 999px; background: rgba(255,255,255,0.08); overflow: hidden;">
+            <div style="width: 100%; height: 100%; background: linear-gradient(90deg, #2563EB, #60A5FA, #818CF8);"></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 4: Dark & Light Mode -->
+      <article class="glass-panel glass-panel-interactive feature-glass-card reveal-item">
+        <div>
+          <div class="feature-icon-box" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </div>
+          <h3 style="font-size: 1.2rem; margin-bottom: var(--space-2);">Dark &amp; Light Mode</h3>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">
+            Adaptive iOS-inspired optical glass surfaces calibrated for deep midnight focus or crisp daylight clarity.
+          </p>
+        </div>
+
+        <!-- Interactive Mini UI Preview -->
+        <div id="miniThemeSurface" class="feature-mini-ui" style="display: flex; align-items: center; justify-content: space-between; transition: all 240ms ease;">
+          <span id="miniThemeLabel" style="font-family: var(--font-mono); font-size: 0.66rem; font-weight: 600;">MIDNIGHT GLASS</span>
+          <button type="button" id="miniThemeToggleBtn" style="padding: 4px 10px; border-radius: 999px; border: 1px solid rgba(96, 165, 250, 0.4); background: rgba(37, 99, 235, 0.25); color: inherit; font-size: 0.68rem; font-weight: 600; cursor: pointer;">
+            Switch to Daylight
+          </button>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 4. PRICING SECTION (WIDE PREMIUM GLASS PANEL) -->
+<section class="section-block" id="pricing">
+  <div class="container-shell">
+    <div class="glass-panel pricing-wide-panel reveal-item">
+      <!-- Left Side: Abstract Blue Gradient / Light-Wave Visual -->
+      <div class="pricing-wave-visual" aria-hidden="true">
+        <svg viewBox="0 0 500 220" width="100%" height="180" fill="none" style="opacity: 0.92;">
+          <defs>
+            <linearGradient id="pricingRibbon1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#60A5FA" stop-opacity="0.1"/>
+              <stop offset="50%" stop-color="#3B82F6" stop-opacity="0.75"/>
+              <stop offset="100%" stop-color="#818CF8" stop-opacity="0.15"/>
+            </linearGradient>
+            <linearGradient id="pricingRibbon2" x1="100%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#6366F1" stop-opacity="0.1"/>
+              <stop offset="50%" stop-color="#60A5FA" stop-opacity="0.55"/>
+              <stop offset="100%" stop-color="#2563EB" stop-opacity="0.05"/>
+            </linearGradient>
+          </defs>
+          <path d="M-20 150 C 110 40, 240 210, 380 80 C 440 30, 490 90, 530 60" stroke="url(#pricingRibbon1)" stroke-width="4" fill="none"/>
+          <path d="M-20 180 C 130 80, 260 230, 400 110 C 450 65, 495 115, 530 95" stroke="url(#pricingRibbon2)" stroke-width="2.5" fill="none"/>
+          <path d="M-20 110 C 100 190, 260 30, 410 140 C 460 175, 500 130, 530 120" stroke="url(#pricingRibbon1)" stroke-width="1.8" stroke-opacity="0.7" fill="none"/>
+          <circle cx="250" cy="110" r="64" fill="#3B82F6" fill-opacity="0.12"/>
+        </svg>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.12);">
+          <div>
+            <div style="font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; color: var(--light-cyan); text-transform: uppercase;">24-HOUR PASS &amp; SUPPORTER TIER</div>
+            <div style="font-size: 0.9rem; font-weight: 600; color: #FFFFFF; margin-top: 2px;">Zero Subscriptions Required</div>
+          </div>
+          <span class="tool-badge">100% TRANSPARENT</span>
+        </div>
+      </div>
+
+      <!-- Right Side: Eyebrow, Heading, Supporting Text, and Rounded Glass CTA -->
+      <div>
+        <span class="mono-label">PRICING</span>
+        <h2 style="font-size: clamp(2rem, 3.4vw, 2.85rem); margin-top: var(--space-2); margin-bottom: var(--space-3);">
+          Simple, transparent pricing.
+        </h2>
+        <p style="color: var(--text-secondary); font-size: 1.08rem; margin-bottom: var(--space-6); max-width: 46ch;">
+          Start free. Upgrade when you're ready. Enjoy immediate 1080p downloads with our 24-hour free access pass or support the platform directly.
+        </p>
+
+        <div style="display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center;">
+          <a href="{% url 'donations:index' %}" class="btn-glass btn-primary">
+            <span>View Plans</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <a href="#videoDownloader" class="btn-glass">
+            Start Free Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. ABOUT & SPECIALIZED INSTAGRAM UTILITIES -->
+<section class="section-block" id="about">
+  <div class="container-shell">
+    <div class="section-header reveal-item">
+      <span class="mono-label">ABOUT &amp; UTILITIES</span>
+      <h2 class="section-title">Precision Media Utilities</h2>
+      <p class="section-subtitle">
+        Dedicated tools for public Instagram Videos, Reels, Photos, Carousels, and Profile Media.
+      </p>
+    </div>
+
+    <div class="grid-3" style="margin-bottom: var(--space-12);">
       {% for tool in tools %}
         <article class="glass-panel glass-panel-interactive tool-card reveal-item">
           <div>
             <div class="tool-card-header">
-              <span class="tool-format-tag">{{ tool.get_category_display }}</span>
+              <span class="tool-badge">{{ tool.get_category_display }}</span>
             </div>
             <h3 style="font-size: 1.2rem; margin-bottom: var(--space-2);">{{ tool.name }}</h3>
             <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: var(--space-4);">
@@ -298,73 +581,23 @@
             <div class="glass-subpanel" style="padding: var(--space-2) var(--space-3); margin-bottom: var(--space-4); font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-muted);">
               FORMAT: {{ tool.output_formats }}
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <a href="{% url 'downloads:tool_detail' slug=tool.slug %}" class="btn-glass btn-sm">Open Tool</a>
-            </div>
+            <a href="{% url 'downloads:tool_detail' slug=tool.slug %}" class="btn-glass btn-sm btn-block">
+              Launch {{ tool.name }}
+            </a>
           </div>
         </article>
       {% endfor %}
     </div>
-  </div>
-</section>
 
-<!-- BUY US COFEE SECTION -->
-<section class="section-block">
-  <div class="container-shell">
-    <div class="glass-panel reveal-item" style="padding: var(--space-10);">
-      <div class="grid-2" style="align-items: center;">
-        <div>
-          <span class="mono-label" style="color: var(--light-cyan);">APPRECIATION</span>
-          <h2 class="section-title">Buy Us Cofee</h2>
-          <p style="color: var(--text-secondary); margin-bottom: var(--space-6);">
-            Enjoying fast Instagram video and post downloads? You can buy us a coffee anytime.
-          </p>
-          <a href="{% url 'donations:index' %}" class="btn-glass btn-primary">Buy Us Cofee</a>
-        </div>
-
-        <div class="glass-subpanel" style="padding: var(--space-6);">
-          <span class="mono-label" style="display: block; margin-bottom: var(--space-3);">BUY US COFEE ({{ site_config.donation_currency }})</span>
-          <form action="{% url 'donations:create' %}" method="post">
-            {% csrf_token %}
-            <div class="donation-tier-grid">
-              {% for amt in preset_amounts %}
-                <button type="button" class="tier-btn {% if forloop.first %}is-selected{% endif %}" data-donation-amount="{{ amt }}">
-                  {{ site_config.donation_currency }} {{ amt }}
-                </button>
-              {% endfor %}
-            </div>
-            <div class="form-group">
-              <label for="donationAmountInput" class="form-label">Amount ({{ site_config.donation_currency }})</label>
-              <input type="number" id="donationAmountInput" name="amount" class="glass-input" value="{{ preset_amounts.0|default:250 }}" min="{{ site_config.minimum_donation_amount }}" max="{{ site_config.maximum_donation_amount }}" required>
-            </div>
-            <button type="submit" class="btn-glass btn-primary btn-block">Buy Us Cofee</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FREQUENTLY ASKED QUESTIONS -->
-<section class="section-block">
-  <div class="container-shell">
-    <div class="section-header reveal-item">
-      <span class="mono-label">HELP &amp; FAQ</span>
-      <h2 class="section-title">Frequently Asked Questions</h2>
-    </div>
-
+    <!-- FAQ Grid -->
     <div class="grid-2">
-      {% for item in faqs %}
+      {% for faq in faqs %}
         <div class="glass-panel reveal-item" style="padding: var(--space-6);">
-          <h3 style="font-size: 1.05rem; margin-bottom: var(--space-2);">{{ item.question }}</h3>
-          <p style="color: var(--text-secondary); font-size: 0.9rem;">{{ item.answer }}</p>
+          <h3 style="font-size: 1.05rem; margin-bottom: var(--space-2);">{{ faq.question }}</h3>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">{{ faq.answer }}</p>
         </div>
       {% endfor %}
     </div>
   </div>
 </section>
-{% endblock %}
-
-{% block extra_scripts %}
-<script src="{% static 'js/donations.js' %}" defer></script>
 {% endblock %}

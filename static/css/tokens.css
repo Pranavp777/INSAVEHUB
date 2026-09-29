@@ -1,61 +1,64 @@
 /* ==========================================================================
-   INSAVE HUB — DESIGN TOKENS & TYPOGRAPHY SYSTEM
-   Original Glass Orbit Visual Identity — Sky Blue & White Gradient Edition
+   INSTASAVE HUB — DESIGN TOKENS & TYPOGRAPHY SYSTEM
+   Futuristic iOS-Inspired Dark Cinematic Glass Design Language
    ========================================================================== */
 
 :root {
-  /* Luminous Sky Blue & White Gradient Surfaces */
-  --bg-void: #E8F5FE;
-  --bg-obsidian: #F0F9FF;
-  --bg-elevated: #FFFFFF;
-  --bg-surface-1: rgba(255, 255, 255, 0.68);
-  --bg-surface-2: rgba(240, 249, 255, 0.78);
-  --bg-surface-3: rgba(224, 242, 254, 0.65);
-  --bg-glass-strong: rgba(255, 255, 255, 0.9);
+  /* Deep Cinematic Near-Black & Midnight Navy Surfaces */
+  --bg-void: #030712;
+  --bg-obsidian: #050B1A;
+  --bg-elevated: #0A1328;
+  --bg-surface-1: rgba(10, 19, 40, 0.62);
+  --bg-surface-2: rgba(14, 25, 52, 0.72);
+  --bg-surface-3: rgba(20, 35, 70, 0.48);
+  --bg-glass-strong: rgba(7, 13, 28, 0.84);
 
-  /* Specular White & Sky-Blue Refraction Borders */
-  --border-hairline: rgba(14, 165, 233, 0.18);
-  --border-illuminated: rgba(2, 132, 199, 0.28);
-  --border-refraction-top: rgba(255, 255, 255, 0.96);
-  --border-cyan-glow: rgba(14, 165, 233, 0.58);
-  --border-violet-glow: rgba(56, 189, 248, 0.48);
+  /* Subtle 1px Specular & Electric-Blue Borders */
+  --border-hairline: rgba(148, 184, 255, 0.12);
+  --border-illuminated: rgba(96, 165, 250, 0.26);
+  --border-refraction-top: rgba(255, 255, 255, 0.15);
+  --border-cyan-glow: rgba(59, 130, 246, 0.48);
+  --border-violet-glow: rgba(99, 102, 241, 0.42);
 
-  /* Sky Blue & White Ambient Lighting Palette */
-  --light-cyan: #0284C7;
-  --light-blue: #0EA5E9;
-  --light-violet: #38BDF8;
-  --light-silver: #FFFFFF;
-  --light-emerald: #059669;
-  --light-amber: #D97706;
-  --light-rose: #E11D48;
+  /* Electric Blue & Soft Violet/Indigo Accent System */
+  --light-cyan: #60A5FA;
+  --light-blue: #3B82F6;
+  --light-violet: #818CF8;
+  --accent-electric: #2563EB;
+  --accent-indigo: #6366F1;
+  --light-silver: #F8FAFC;
+  --light-emerald: #34D399;
+  --light-amber: #FBBF24;
+  --light-rose: #FB7185;
 
-  /* High-Contrast Editorial Typography on Sky-Blue & White Glass */
-  --text-primary: #0B2545;
-  --text-secondary: #1E3F66;
-  --text-muted: #4A6FA5;
-  --text-dim: #6B8EAD;
+  /* Crisp White & Cool Gray Editorial Typography */
+  --text-primary: #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --text-muted: #94A3B8;
+  --text-dim: #64748B;
 
-  /* Multi-Layer Backdrop Blur */
-  --blur-sm: blur(12px) saturate(150%);
-  --blur-md: blur(22px) saturate(170%);
-  --blur-lg: blur(36px) saturate(185%);
+  /* Multi-Layer iOS Optical Backdrop Blur */
+  --blur-sm: blur(16px) saturate(160%);
+  --blur-md: blur(26px) saturate(175%);
+  --blur-lg: blur(42px) saturate(190%);
 
-  /* Sky-Blue & Specular White Architectural Shadows */
-  --shadow-ambient: 0 22px 54px -12px rgba(2, 132, 199, 0.18);
+  /* Layered Cinematic Depth Shadows & Soft Blue Glow */
+  --shadow-ambient: 0 28px 70px -16px rgba(0, 0, 0, 0.78);
   --shadow-panel:
-    0 14px 36px -8px rgba(14, 165, 233, 0.14),
-    0 4px 12px -2px rgba(2, 132, 199, 0.07),
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
+    0 20px 50px -12px rgba(2, 6, 23, 0.72),
+    0 0 36px -10px rgba(37, 99, 235, 0.14),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.11);
   --shadow-interactive:
-    0 20px 44px -10px rgba(14, 165, 233, 0.26),
-    inset 0 1px 2px 0 rgba(255, 255, 255, 1);
+    0 26px 60px -12px rgba(2, 6, 23, 0.85),
+    0 0 44px -6px rgba(59, 130, 246, 0.28),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
 
-  /* Typography Families */
-  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  /* Apple-Inspired Geometric Sans-Serif Typography Stack */
+  --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Space Grotesk', system-ui, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', system-ui, -moz-fixed, sans-serif;
+  --font-mono: 'SFMono-Regular', 'JetBrains Mono', Menlo, Monaco, Consolas, monospace;
 
-  /* Modular Spacing Scale */
+  /* Generous Whitespace & Modular Spacing Scale */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -65,21 +68,22 @@
   --space-8: 2rem;
   --space-10: 2.5rem;
   --space-12: 3.25rem;
-  --space-16: 4.5rem;
-  --space-20: 6rem;
+  --space-16: 4.75rem;
+  --space-20: 6.5rem;
 
-  /* Controlled Structural Radii */
-  --radius-xs: 4px;
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
+  /* Large Rounded Corners (iOS 20px–32px + Pill) */
+  --radius-xs: 12px;
+  --radius-sm: 18px;
+  --radius-md: 24px;
+  --radius-lg: 32px;
+  --radius-pill: 9999px;
 
-  /* Motion Curves */
+  /* Smooth Motion Curves */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
-  --duration-fast: 160ms;
-  --duration-normal: 280ms;
-  --duration-slow: 520ms;
+  --duration-fast: 180ms;
+  --duration-normal: 320ms;
+  --duration-slow: 560ms;
 }
 
 *,
@@ -102,10 +106,13 @@ html {
 
 body {
   min-height: 100vh;
-  background: linear-gradient(135deg, #DFF2FE 0%, #F2FAFF 35%, #FFFFFF 65%, #CBEBFE 100%);
+  background:
+    radial-gradient(ellipse 80% 55% at 50% -10%, rgba(37, 99, 235, 0.22) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 45% at 85% 22%, rgba(99, 102, 241, 0.15) 0%, transparent 60%),
+    linear-gradient(180deg, #030712 0%, #050C1E 45%, #040917 100%);
   background-attachment: fixed;
   color: var(--text-primary);
-  line-height: 1.6;
+  line-height: 1.62;
   overflow-x: hidden;
   position: relative;
   display: flex;
@@ -115,8 +122,8 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-weight: 600;
-  line-height: 1.18;
-  letter-spacing: -0.025em;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
   color: var(--text-primary);
 }
 
@@ -131,16 +138,27 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid var(--light-cyan);
+  outline: 2px solid var(--light-blue);
   outline-offset: 2px;
 }
 
-.mono-label {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.09em;
+/* Small Uppercase Eyebrow Labels with Generous Letter Spacing */
+.mono-label,
+.eyebrow-label {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--light-cyan);
+}
+
+.text-gradient-blue {
+  background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 45%, #818CF8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .sr-only {

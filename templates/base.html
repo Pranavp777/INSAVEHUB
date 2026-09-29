@@ -16,27 +16,27 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ page_title|default:"INSTASAVE HUB | Your Instagram Workflow, Refined." }}</title>
-  <meta name="description" content="{{ meta_description|default:'Practical Instagram content utilities and public media downloading through a fast, privacy-conscious Glass Orbit interface.' }}">
+  <meta name="description" content="{{ meta_description|default:'Fast Instagram Video, Reel, Photo, and Post downloader with a futuristic iOS-inspired glass interface.' }}">
   <link rel="canonical" href="{{ canonical_url }}">
 
   <!-- Open Graph Metadata -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="{{ site_config.site_name }}">
   <meta property="og:title" content="{{ page_title|default:'INSTASAVE HUB | Your Instagram Workflow, Refined.' }}">
-  <meta property="og:description" content="{{ meta_description|default:'Practical Instagram content utilities and public media downloading through a fast, privacy-conscious Glass Orbit interface.' }}">
+  <meta property="og:description" content="{{ meta_description|default:'Fast Instagram Video, Reel, Photo, and Post downloader with a futuristic iOS-inspired glass interface.' }}">
   <meta property="og:url" content="{{ canonical_url }}">
 
   <!-- Twitter / X Metadata -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ page_title|default:'INSTASAVE HUB | Your Instagram Workflow, Refined.' }}">
-  <meta name="twitter:description" content="{{ meta_description|default:'Practical Instagram content utilities and public media downloading through a fast, privacy-conscious Glass Orbit interface.' }}">
+  <meta name="twitter:description" content="{{ meta_description|default:'Fast Instagram Video, Reel, Photo, and Post downloader with a futuristic iOS-inspired glass interface.' }}">
 
   <!-- Progressive Web App (PWA) & Mobile Install Metadata -->
   <link rel="manifest" href="{% url 'core:web_manifest' %}">
-  <meta name="theme-color" content="#0284C7">
+  <meta name="theme-color" content="#030712">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="INSTASAVE HUB">
   <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
   <link rel="apple-touch-icon" href="{% static 'images/icon-192.png' %}">
@@ -44,9 +44,9 @@
   <!-- Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Glass Orbit Design System Stylesheets -->
+  <!-- Futuristic iOS-Inspired Glass Stylesheets -->
   <link rel="stylesheet" href="{% static 'css/tokens.css' %}">
   <link rel="stylesheet" href="{% static 'css/glass-orbit.css' %}">
   <link rel="stylesheet" href="{% static 'css/components.css' %}">
@@ -69,50 +69,40 @@
 <body>
   <a href="#mainContent" class="sr-only">Skip to main content</a>
 
-  <!-- Atmospheric Layers & Subtle Light Particles -->
+  <!-- Atmospheric Layers & Subtle Light Waves -->
   <div class="atmosphere-layer" aria-hidden="true"></div>
   <div class="atmosphere-grid" aria-hidden="true"></div>
   <canvas id="ambientParticleCanvas" class="ambient-particle-canvas" aria-hidden="true"></canvas>
 
-  <!-- Glass Control Navigation -->
+  <!-- Floating Pill-Shaped Glass Navigation Bar -->
   <header class="glass-header" role="banner">
-    <div class="container-shell nav-inner">
+    <div class="nav-inner">
       <a href="{% url 'core:home' %}" class="brand-identity" aria-label="INSTASAVE HUB Home">
-        <img src="{% static 'images/logo.png' %}" alt="" class="brand-mark" width="34" height="34" style="border-radius: 8px; object-fit: cover;">
-        <div>
-          <span class="brand-wordmark">INSTASAVE HUB</span>
-        </div>
+        <img src="{% static 'images/logo.png' %}" alt="" class="brand-mark" width="34" height="34" style="border-radius: 9px; object-fit: cover;">
+        <span class="brand-wordmark">INSTASAVE HUB</span>
       </a>
 
       <nav aria-label="Primary Navigation">
         <ul class="nav-links">
-          <li><a href="{% url 'core:home' %}" class="nav-link {% if request.path == '/' %}is-current{% endif %}">Home</a></li>
-          <li><a href="{% url 'downloads:tools_list' %}" class="nav-link {% if '/tools/' in request.path %}is-current{% endif %}">Instagram Tools</a></li>
-          <li><a href="{% url 'downloads:interface' %}" class="nav-link {% if request.path == '/downloads/' %}is-current{% endif %}">Downloader</a></li>
-          {% if user.is_authenticated %}
-            <li><a href="{% url 'dashboard:index' %}" class="nav-link {% if request.path == '/dashboard/' %}is-current{% endif %}">Dashboard</a></li>
-          {% endif %}
+          <li>
+            <a href="{% url 'core:home' %}" class="nav-link {% if request.path == '/' %}is-current{% endif %}">Home</a>
+          </li>
+          <li>
+            <a href="/#features" class="nav-link {% if '/tools/' in request.path %}is-current{% endif %}">Features</a>
+          </li>
+          <li>
+            <a href="/#pricing" class="nav-link {% if '/donations/' in request.path %}is-current{% endif %}">Pricing</a>
+          </li>
+          <li>
+            <a href="/#about" class="nav-link {% if '/downloads/' in request.path %}is-current{% endif %}">About</a>
+          </li>
         </ul>
       </nav>
 
       <div class="nav-actions">
-        <!-- Access Status Pill -->
-        <div class="telemetry-pill hide-tablet" title="Access Status">
-          {% if access_state.has_free_24h %}
-            <span class="status-dot status-dot-emerald"></span>
-            <span>24H PASS: <strong data-free-access-seconds="{{ access_state.free_24h_remaining_seconds }}">{{ access_state.free_24h_formatted }}</strong></span>
-          {% elif access_state.ad_required %}
-            <span class="status-dot status-dot-amber"></span>
-            <span>AD PENDING</span>
-          {% else %}
-            <span class="status-dot"></span>
-            <span>FREE ACCESS</span>
-          {% endif %}
-        </div>
-
         <!-- Install App Button (PWA / Native Install) -->
-        <button type="button" id="installAppNavBtn" class="btn-glass btn-sm nav-install-btn" title="Install INSTASAVE HUB App" aria-label="Install INSTASAVE HUB App">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <button type="button" id="installAppNavBtn" class="btn-glass btn-sm nav-install-btn hide-tablet" title="Install INSTASAVE HUB App" aria-label="Install INSTASAVE HUB App">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M12 3v12"></path>
             <polyline points="7 10 12 15 17 10"></polyline>
             <path d="M5 21h14"></path>
@@ -120,12 +110,12 @@
           <span>Install App</span>
         </button>
 
-        <!-- Small "Buy Us Cofee" Icon Option on Navigation Bar -->
+        <!-- Small "Buy Us Cofee" Icon Option -->
         <a href="{% url 'donations:index' %}"
-           class="nav-icon-btn nav-donate-icon {% if '/donations/' in request.path %}is-active{% endif %}"
+           class="nav-icon-btn nav-donate-icon hide-tablet {% if '/donations/' in request.path %}is-active{% endif %}"
            title="Buy Us Cofee"
            aria-label="Buy Us Cofee">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
             <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
             <line x1="6" y1="1" x2="6" y2="4"></line>
@@ -135,14 +125,14 @@
         </a>
 
         {% if user.is_authenticated %}
-          <a href="{% url 'accounts:profile' %}" class="btn-glass btn-sm hide-tablet">Profile</a>
+          <a href="{% url 'dashboard:index' %}" class="btn-glass btn-sm hide-tablet">Dashboard</a>
           <a href="{% url 'accounts:logout' %}" class="btn-glass btn-sm hide-tablet">Sign Out</a>
         {% else %}
-          <a href="{% url 'accounts:login' %}" class="btn-glass btn-primary btn-sm hide-tablet">Sign In</a>
+          <a href="/#videoDownloader" class="btn-glass btn-primary btn-sm">Get Started</a>
         {% endif %}
 
         <button type="button" id="mobileMenuToggle" class="mobile-menu-toggle" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobileDrawer">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
             <line x1="3" y1="6" x2="17" y2="6"></line>
             <line x1="3" y1="10" x2="17" y2="10"></line>
             <line x1="3" y1="14" x2="17" y2="14"></line>
@@ -152,23 +142,15 @@
     </div>
   </header>
 
-  <!-- Mobile Slide Drawer -->
+  <!-- Compact Mobile Glass Menu -->
   <div id="mobileDrawer" class="mobile-drawer" role="region" aria-label="Mobile Navigation Drawer">
     <div style="display: flex; flex-direction: column; gap: var(--space-3);">
-      <div class="telemetry-pill" style="justify-content: space-between; width: 100%;">
-        <span>ACCESS STATE</span>
-        {% if access_state.has_free_24h %}
-          <strong data-free-access-seconds="{{ access_state.free_24h_remaining_seconds }}">{{ access_state.free_24h_formatted }}</strong>
-        {% elif access_state.ad_required %}
-          <strong>30S AD REQUIRED</strong>
-        {% else %}
-          <strong>AVAILABLE</strong>
-        {% endif %}
-      </div>
       <a href="{% url 'core:home' %}" class="nav-link">Home</a>
+      <a href="/#features" class="nav-link">Features</a>
+      <a href="/#pricing" class="nav-link">Pricing</a>
+      <a href="/#about" class="nav-link">About</a>
       <a href="{% url 'downloads:tools_list' %}" class="nav-link">Instagram Tools</a>
       <a href="{% url 'downloads:interface' %}" class="nav-link">Downloader</a>
-      <a href="{% url 'downloads:history' %}" class="nav-link">Download History</a>
       <a href="{% url 'donations:index' %}" class="nav-link">Buy Us Cofee</a>
       <button type="button" id="installAppMobileBtn" class="btn-glass btn-sm" style="justify-content: center;">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -208,55 +190,66 @@
     <a href="{% url 'core:home' %}" class="dock-item {% if request.path == '/' %}is-active{% endif %}">
       <span>Home</span>
     </a>
-    <a href="{% url 'downloads:tools_list' %}" class="dock-item {% if '/tools/' in request.path %}is-active{% endif %}">
-      <span>Tools</span>
+    <a href="/#features" class="dock-item">
+      <span>Features</span>
     </a>
-    <a href="{% url 'downloads:interface' %}" class="dock-item {% if '/downloads/' in request.path %}is-active{% endif %}">
-      <span>Download</span>
+    <a href="/#pricing" class="dock-item">
+      <span>Pricing</span>
     </a>
-    <a href="{% url 'donations:index' %}" class="dock-item {% if '/donations/' in request.path %}is-active{% endif %}">
-      <span>Cofee</span>
+    <a href="/#about" class="dock-item">
+      <span>About</span>
     </a>
   </nav>
 
   <!-- Glass Footer -->
   <footer class="glass-footer" role="contentinfo">
     <div class="container-shell">
-      <div class="footer-grid" style="grid-template-columns: 1.5fr 1fr 1fr;">
+      <div class="footer-grid" style="grid-template-columns: 1.4fr 1fr 1fr 1fr;">
         <div>
           <div class="brand-identity" style="margin-bottom: var(--space-3);">
             <img src="{% static 'images/logo.png' %}" alt="" class="brand-mark" width="28" height="28" style="border-radius: 7px; object-fit: cover;">
             <span class="brand-wordmark">INSTASAVE HUB</span>
           </div>
-          <p style="color: var(--text-muted); font-size: 0.88rem; max-width: 38ch;">
-            Fast Instagram Video, Reel, Photo, and Post downloader.
+          <p style="color: var(--text-muted); font-size: 0.88rem; max-width: 36ch;">
+            Next-generation Instagram media workspace and instant 1080p HD stream downloader.
           </p>
         </div>
 
         <div>
-          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">INSTAGRAM TOOLS</h4>
+          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">NAVIGATION</h4>
+          <ul class="footer-links">
+            <li><a href="{% url 'core:home' %}">Home</a></li>
+            <li><a href="/#features">Features</a></li>
+            <li><a href="/#pricing">Pricing</a></li>
+            <li><a href="/#about">About</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">MEDIA TOOLS</h4>
           <ul class="footer-links">
             <li><a href="{% url 'downloads:tool_detail' slug='video-downloader' %}">Video Downloader</a></li>
             <li><a href="{% url 'downloads:tool_detail' slug='reel-downloader' %}">Reel Downloader</a></li>
-            <li><a href="{% url 'downloads:tool_detail' slug='public-post-downloader' %}">Public Post Downloader</a></li>
+            <li><a href="{% url 'downloads:tool_detail' slug='public-post-downloader' %}">Post Downloader</a></li>
             <li><a href="{% url 'downloads:tool_detail' slug='image-downloader' %}">Photo Downloader</a></li>
             <li><a href="{% url 'downloads:tool_detail' slug='profile-media-utility' %}">Profile Media</a></li>
           </ul>
         </div>
 
         <div>
-          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">QUICK LINKS</h4>
+          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">WORKSPACE</h4>
           <ul class="footer-links">
             <li><a href="{% url 'downloads:interface' %}">Downloader</a></li>
             <li><a href="{% url 'downloads:history' %}">Download History</a></li>
             <li><a href="{% url 'donations:index' %}">Buy Us Cofee</a></li>
+            <li><a href="{% url 'accounts:login' %}">Sign In</a></li>
           </ul>
         </div>
       </div>
 
       <div style="padding-top: var(--space-6); border-top: 1px solid var(--border-hairline); display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-4); font-size: 0.8rem; color: var(--text-dim);">
         <span>INSTASAVE HUB. All rights reserved.</span>
-        <span>Not affiliated with Instagram or Meta Platforms, Inc.</span>
+        <span>Independent product. Not affiliated with Instagram or Meta Platforms, Inc.</span>
       </div>
     </div>
   </footer>
@@ -266,7 +259,7 @@
     <div class="glass-panel app-install-modal">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-4); padding-bottom: var(--space-4); border-bottom: 1px solid var(--border-hairline);">
         <div style="display: flex; align-items: center; gap: var(--space-3);">
-          <img src="{% static 'images/logo.png' %}" alt="" width="38" height="38" style="border-radius: 9px; object-fit: cover;">
+          <img src="{% static 'images/logo.png' %}" alt="" width="38" height="38" style="border-radius: 10px; object-fit: cover;">
           <div>
             <span class="mono-label">INSTALL APPLICATION</span>
             <h2 id="appInstallModalTitle" style="font-size: 1.25rem; margin-top: 2px;">Install INSTASAVE HUB App</h2>
@@ -296,7 +289,7 @@
 
       <div class="grid-3" style="gap: var(--space-3);">
         <div class="glass-subpanel" style="padding: var(--space-4);">
-          <span class="tool-badge" style="margin-bottom: var(--space-2);">DESKTOP</span>
+          <span class="tool-badge" style="margin-bottom: var(--space-2); display: inline-block;">DESKTOP</span>
           <h3 style="font-size: 0.92rem; margin-bottom: var(--space-1);">Chrome / Edge / Brave</h3>
           <p style="font-size: 0.78rem; color: var(--text-muted);">
             Click <strong>Install App Now</strong> above, or click the install icon on the right side of your browser address bar.
@@ -304,7 +297,7 @@
         </div>
 
         <div class="glass-subpanel" style="padding: var(--space-4);">
-          <span class="tool-badge" style="margin-bottom: var(--space-2);">ANDROID</span>
+          <span class="tool-badge" style="margin-bottom: var(--space-2); display: inline-block;">ANDROID</span>
           <h3 style="font-size: 0.92rem; margin-bottom: var(--space-1);">Chrome / Samsung</h3>
           <p style="font-size: 0.78rem; color: var(--text-muted);">
             Tap <strong>Install App Now</strong> or open the browser menu and select <strong>Install App / Add to Home Screen</strong>.
@@ -312,7 +305,7 @@
         </div>
 
         <div class="glass-subpanel" style="padding: var(--space-4);">
-          <span class="tool-badge" style="margin-bottom: var(--space-2);">IOS &amp; IPADOS</span>
+          <span class="tool-badge" style="margin-bottom: var(--space-2); display: inline-block;">IOS &amp; IPADOS</span>
           <h3 style="font-size: 0.92rem; margin-bottom: var(--space-1);">Safari Browser</h3>
           <p style="font-size: 0.78rem; color: var(--text-muted);">
             Tap the <strong>Share</strong> button in Safari's toolbar, scroll down, and select <strong>Add to Home Screen</strong>.

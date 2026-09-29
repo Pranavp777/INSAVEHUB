@@ -1,7 +1,7 @@
 /**
- * InSave Hub — Glass Orbit Visual Engine & Interactive Sky-Blue/White Particle System
- * Features multi-layer bokeh orbs, crystalline particles, constellation filaments,
- * and interactive pointer reactivity while respecting prefers-reduced-motion.
+ * INSTASAVE HUB — Futuristic iOS-Inspired Visual Engine & Interactive UI Controller
+ * Features subtle atmospheric blue/indigo light motes, smooth scroll reveal,
+ * interactive feature card previews, and native PWA installation.
  */
 (function () {
   "use strict";
@@ -26,7 +26,7 @@
           }
         });
       },
-      { threshold: 0.12, rootMargin: "0px 0px -32px 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -24px 0px" }
     );
 
     items.forEach((el) => observer.observe(el));
@@ -42,38 +42,6 @@
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    const pointer = { x: -9999, y: -9999, active: false };
-
-    window.addEventListener(
-      "mousemove",
-      (e) => {
-        pointer.x = e.clientX;
-        pointer.y = e.clientY;
-        pointer.active = true;
-      },
-      { passive: true }
-    );
-
-    window.addEventListener(
-      "mouseleave",
-      () => {
-        pointer.active = false;
-      },
-      { passive: true }
-    );
-
-    window.addEventListener(
-      "touchmove",
-      (e) => {
-        if (e.touches && e.touches.length > 0) {
-          pointer.x = e.touches[0].clientX;
-          pointer.y = e.touches[0].clientY;
-          pointer.active = true;
-        }
-      },
-      { passive: true }
-    );
-
     window.addEventListener(
       "resize",
       () => {
@@ -83,146 +51,46 @@
       { passive: true }
     );
 
-    // Layer 1: Soft Sky-Blue & White Bokeh Light Orbs
-    const bokehCount = Math.min(12, Math.max(5, Math.floor((width * height) / 140000)));
-    const bokehOrbs = Array.from({ length: bokehCount }, (_, idx) => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      r: 45 + Math.random() * 75,
-      vx: (Math.random() - 0.5) * 0.22,
-      vy: (Math.random() - 0.5) * 0.22,
-      isWhite: idx % 2 === 0,
-    }));
-
-    // Layer 2: Crystalline Sky-Blue & White Nodes with Constellation Filaments
-    const nodeCount = Math.min(72, Math.max(28, Math.floor((width * height) / 22000)));
+    // Very subtle electric-blue and indigo atmospheric motes (non-noisy)
+    const count = Math.min(34, Math.max(16, Math.floor((width * height) / 48000)));
     const palette = [
-      { fill: "rgba(2, 132, 199, 0.55)", glow: "rgba(14, 165, 233, 0.35)" },
-      { fill: "rgba(14, 165, 233, 0.62)", glow: "rgba(56, 189, 248, 0.4)" },
-      { fill: "rgba(56, 189, 248, 0.65)", glow: "rgba(186, 230, 253, 0.5)" },
-      { fill: "rgba(255, 255, 255, 0.92)", glow: "rgba(14, 165, 233, 0.3)" },
+      "rgba(96, 165, 250, 0.32)",
+      "rgba(59, 130, 246, 0.25)",
+      "rgba(129, 140, 248, 0.24)",
+      "rgba(248, 250, 252, 0.28)",
     ];
 
-    const nodes = Array.from({ length: nodeCount }, (_, idx) => {
-      const style = palette[idx % palette.length];
-      return {
-        x: Math.random() * width,
-        y: Math.random() * height,
-        r: 1.6 + Math.random() * 2.6,
-        vx: (Math.random() - 0.5) * 0.48,
-        vy: (Math.random() - 0.5) * 0.48,
-        phase: Math.random() * Math.PI * 2,
-        fill: style.fill,
-        glow: style.glow,
-      };
-    });
+    const motes = Array.from({ length: count }, (_, idx) => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      r: 0.9 + Math.random() * 1.6,
+      vx: (Math.random() - 0.5) * 0.18,
+      vy: (Math.random() - 0.5) * 0.18,
+      phase: Math.random() * Math.PI * 2,
+      color: palette[idx % palette.length],
+    }));
 
     function drawScene() {
       ctx.clearRect(0, 0, width, height);
 
-      // 1. Render Soft Bokeh Gradient Orbs
-      for (let i = 0; i < bokehOrbs.length; i++) {
-        const orb = bokehOrbs[i];
+      for (let i = 0; i < motes.length; i++) {
+        const m = motes[i];
         if (!reducedMotionQuery.matches) {
-          orb.x += orb.vx;
-          orb.y += orb.vy;
-          if (orb.x < -orb.r) orb.x = width + orb.r;
-          if (orb.x > width + orb.r) orb.x = -orb.r;
-          if (orb.y < -orb.r) orb.y = height + orb.r;
-          if (orb.y > height + orb.r) orb.y = -orb.r;
+          m.x += m.vx;
+          m.y += m.vy;
+          m.phase += 0.015;
+
+          if (m.x < 0) m.x = width;
+          if (m.x > width) m.x = 0;
+          if (m.y < 0) m.y = height;
+          if (m.y > height) m.y = 0;
         }
 
-        const grad = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, orb.r);
-        if (orb.isWhite) {
-          grad.addColorStop(0, "rgba(255, 255, 255, 0.55)");
-          grad.addColorStop(0.5, "rgba(224, 242, 254, 0.22)");
-          grad.addColorStop(1, "rgba(255, 255, 255, 0)");
-        } else {
-          grad.addColorStop(0, "rgba(56, 189, 248, 0.24)");
-          grad.addColorStop(0.55, "rgba(14, 165, 233, 0.09)");
-          grad.addColorStop(1, "rgba(56, 189, 248, 0)");
-        }
+        const radius = Math.max(0.6, m.r + Math.sin(m.phase) * 0.35);
         ctx.beginPath();
-        ctx.arc(orb.x, orb.y, orb.r, 0, Math.PI * 2);
-        ctx.fillStyle = grad;
+        ctx.arc(m.x, m.y, radius, 0, Math.PI * 2);
+        ctx.fillStyle = m.color;
         ctx.fill();
-      }
-
-      // 2. Update & Render Crystalline Particles + Pointer Interaction
-      for (let i = 0; i < nodes.length; i++) {
-        const p = nodes[i];
-        if (!reducedMotionQuery.matches) {
-          p.x += p.vx;
-          p.y += p.vy;
-          p.phase += 0.025;
-
-          if (pointer.active) {
-            const dx = p.x - pointer.x;
-            const dy = p.y - pointer.y;
-            const distSq = dx * dx + dy * dy;
-            const maxRadius = 150;
-            if (distSq < maxRadius * maxRadius && distSq > 1) {
-              const dist = Math.sqrt(distSq);
-              const force = (maxRadius - dist) / maxRadius;
-              p.x += (dx / dist) * force * 1.35;
-              p.y += (dy / dist) * force * 1.35;
-            }
-          }
-
-          if (p.x < 0) p.x = width;
-          if (p.x > width) p.x = 0;
-          if (p.y < 0) p.y = height;
-          if (p.y > height) p.y = 0;
-        }
-
-        // Draw outer halo glow
-        const pulseRadius = p.r + Math.sin(p.phase) * 0.6;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, Math.max(1, pulseRadius * 2.4), 0, Math.PI * 2);
-        ctx.fillStyle = p.glow;
-        ctx.fill();
-
-        // Draw core particle
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, Math.max(0.8, pulseRadius), 0, Math.PI * 2);
-        ctx.fillStyle = p.fill;
-        ctx.fill();
-      }
-
-      // 3. Draw Sky-Blue & White Constellation Filaments Between Nearby Particles
-      const maxLinkDistance = 128;
-      ctx.lineWidth = 0.85;
-      for (let i = 0; i < nodes.length; i++) {
-        const a = nodes[i];
-        for (let j = i + 1; j < nodes.length; j++) {
-          const b = nodes[j];
-          const dx = a.x - b.x;
-          const dy = a.y - b.y;
-          const distSq = dx * dx + dy * dy;
-          if (distSq < maxLinkDistance * maxLinkDistance) {
-            const alpha = (1 - Math.sqrt(distSq) / maxLinkDistance) * 0.26;
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `rgba(2, 132, 199, ${alpha.toFixed(3)})`;
-            ctx.stroke();
-          }
-        }
-
-        // Connect nearby particles to active cursor
-        if (pointer.active) {
-          const pdx = a.x - pointer.x;
-          const pdy = a.y - pointer.y;
-          const pDistSq = pdx * pdx + pdy * pdy;
-          if (pDistSq < 165 * 165) {
-            const pAlpha = (1 - Math.sqrt(pDistSq) / 165) * 0.42;
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(pointer.x, pointer.y);
-            ctx.strokeStyle = `rgba(14, 165, 233, ${pAlpha.toFixed(3)})`;
-            ctx.stroke();
-          }
-        }
       }
 
       if (!reducedMotionQuery.matches) {
@@ -233,23 +101,52 @@
     drawScene();
   }
 
-  function initOrbitInteractiveConsole() {
-    const satellites = document.querySelectorAll("[data-orbit-tool]");
-    const consoleTitle = document.getElementById("orbitConsoleTitle");
-    const consoleCategory = document.getElementById("orbitConsoleCategory");
-    const consoleFormat = document.getElementById("orbitConsoleFormat");
-    const consoleUrl = document.getElementById("orbitConsoleUrl");
+  function initFeatureCardPreviews() {
+    // 1. Smart Tasks interactive toggle rows
+    const taskRows = document.querySelectorAll("[data-task-toggle]");
+    taskRows.forEach((row) => {
+      row.addEventListener("click", () => {
+        const isDone = row.getAttribute("data-task-done") === "true";
+        const nextState = !isDone;
+        row.setAttribute("data-task-done", nextState ? "true" : "false");
+        const badge = row.querySelector("[data-task-status]");
+        if (badge) {
+          badge.textContent = nextState ? "DONE" : "QUEUED";
+          badge.style.color = nextState ? "#60A5FA" : "#94A3B8";
+        }
+      });
+    });
 
-    if (!satellites.length || !consoleTitle) return;
+    // 2. Dark & Light Mode mini-preview card toggle
+    const modeToggleBtn = document.getElementById("miniThemeToggleBtn");
+    const modeSurface = document.getElementById("miniThemeSurface");
+    const modeLabel = document.getElementById("miniThemeLabel");
+    if (modeToggleBtn && modeSurface && modeLabel) {
+      let isMidnight = true;
+      modeToggleBtn.addEventListener("click", () => {
+        isMidnight = !isMidnight;
+        if (isMidnight) {
+          modeSurface.style.background = "rgba(6, 12, 26, 0.78)";
+          modeSurface.style.color = "#F8FAFC";
+          modeSurface.style.borderColor = "rgba(96, 165, 250, 0.24)";
+          modeLabel.textContent = "MIDNIGHT GLASS";
+          modeToggleBtn.textContent = "Switch to Daylight";
+        } else {
+          modeSurface.style.background = "linear-gradient(135deg, rgba(241, 245, 249, 0.94), rgba(226, 232, 240, 0.9))";
+          modeSurface.style.color = "#0F172A";
+          modeSurface.style.borderColor = "rgba(59, 130, 246, 0.45)";
+          modeLabel.textContent = "DAYLIGHT GLASS";
+          modeToggleBtn.textContent = "Switch to Midnight";
+        }
+      });
+    }
 
-    satellites.forEach((sat) => {
-      sat.addEventListener("click", () => {
-        satellites.forEach((s) => s.classList.remove("is-active"));
-        sat.classList.add("is-active");
-        if (consoleTitle) consoleTitle.textContent = sat.getAttribute("data-title") || "";
-        if (consoleCategory) consoleCategory.textContent = sat.getAttribute("data-category") || "";
-        if (consoleFormat) consoleFormat.textContent = sat.getAttribute("data-format") || "";
-        if (consoleUrl) consoleUrl.textContent = sat.getAttribute("data-sample-url") || "";
+    // 3. Smooth active pill transition on navigation links
+    const navLinks = document.querySelectorAll(".nav-links .nav-link");
+    navLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        navLinks.forEach((l) => l.classList.remove("is-current"));
+        link.classList.add("is-current");
       });
     });
   }
@@ -262,6 +159,13 @@
     toggleBtn.addEventListener("click", () => {
       const isOpen = drawer.classList.toggle("is-open");
       toggleBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+
+    drawer.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        drawer.classList.remove("is-open");
+        toggleBtn.setAttribute("aria-expanded", "false");
+      });
     });
   }
 
@@ -380,10 +284,9 @@
   document.addEventListener("DOMContentLoaded", () => {
     initScrollReveal();
     initAmbientParticles();
-    initOrbitInteractiveConsole();
+    initFeatureCardPreviews();
     initMobileDrawer();
     initFreeAccessTickers();
     initPwaAppInstaller();
   });
 })();
-

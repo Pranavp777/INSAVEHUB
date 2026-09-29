@@ -1,21 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" fill="none">
   <defs>
-    <pattern id="fineGrid" width="80" height="80" patternUnits="userSpaceOnUse">
-      <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#0284C7" stroke-opacity="0.065" stroke-width="1"/>
-    </pattern>
-    <radialGradient id="fadeMask" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/>
-      <stop offset="85%" stop-color="#FFFFFF" stop-opacity="0.35"/>
-      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    <linearGradient id="waveBlue1" x1="0%" y1="20%" x2="100%" y2="80%">
+      <stop offset="0%" stop-color="#2563EB" stop-opacity="0"/>
+      <stop offset="35%" stop-color="#3B82F6" stop-opacity="0.24"/>
+      <stop offset="65%" stop-color="#6366F1" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#60A5FA" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="waveBlue2" x1="100%" y1="10%" x2="0%" y2="90%">
+      <stop offset="0%" stop-color="#6366F1" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#3B82F6" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#2563EB" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="heroGlow" cx="65%" cy="38%" r="48%">
+      <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.22"/>
+      <stop offset="55%" stop-color="#1D4ED8" stop-opacity="0.07"/>
+      <stop offset="100%" stop-color="#030712" stop-opacity="0"/>
     </radialGradient>
-    <mask id="gridMask">
-      <rect width="800" height="800" fill="url(#fadeMask)"/>
-    </mask>
   </defs>
-  <g mask="url(#gridMask)">
-    <rect width="800" height="800" fill="url(#fineGrid)"/>
-    <circle cx="400" cy="400" r="180" stroke="#0284C7" stroke-opacity="0.14" stroke-width="1"/>
-    <circle cx="400" cy="400" r="290" stroke="#0EA5E9" stroke-opacity="0.11" stroke-width="1"/>
-    <circle cx="400" cy="400" r="380" stroke="#38BDF8" stroke-opacity="0.09" stroke-width="1"/>
-  </g>
+  <rect width="1440" height="900" fill="url(#heroGlow)"/>
+  <path d="M-120 520 C 260 320, 580 670, 980 410 C 1220 260, 1380 370, 1560 290" stroke="url(#waveBlue1)" stroke-width="2.5" fill="none"/>
+  <path d="M-100 610 C 310 410, 650 740, 1060 460 C 1270 320, 1410 430, 1580 350" stroke="url(#waveBlue2)" stroke-width="1.5" fill="none"/>
+  <path d="M-80 340 C 340 530, 760 190, 1180 420 C 1340 500, 1450 420, 1560 390" stroke="url(#waveBlue1)" stroke-width="1.2" stroke-opacity="0.65" fill="none"/>
 </svg>
