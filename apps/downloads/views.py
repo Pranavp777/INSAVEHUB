@@ -28,7 +28,7 @@ def tools_list_view(request: HttpRequest) -> HttpResponse:
         request,
         "tools/index.html",
         {
-            "page_title": "Instagram Content Utilities | InSave Hub",
+            "page_title": "Instagram Content Utilities | INSTASAVE HUB",
             "meta_description": (
                 "Explore precision glass modules for public Instagram Reels, Videos, "
                 "Photography, Posts, Profile Media, and Technical Metadata."
@@ -47,7 +47,7 @@ def tool_detail_view(request: HttpRequest, slug: str) -> HttpResponse:
         request,
         "tools/tool_detail.html",
         {
-            "page_title": f"{tool.name} | InSave Hub",
+            "page_title": f"{tool.name} | INSTASAVE HUB",
             "meta_description": tool.short_description,
             "tool": tool,
             "other_tools": other_tools,
@@ -73,7 +73,7 @@ def download_interface_view(request: HttpRequest) -> HttpResponse:
         request,
         "downloads/interface.html",
         {
-            "page_title": "Download Control Interface | InSave Hub",
+            "page_title": "Download Control Interface | INSTASAVE HUB",
             "meta_description": (
                 "Analyze public Instagram URLs, inspect media specifications, and execute "
                 "high-resolution downloads."
@@ -244,7 +244,7 @@ def download_history_view(request: HttpRequest) -> HttpResponse:
         request,
         "downloads/history.html",
         {
-            "page_title": "Download History | InSave Hub",
+            "page_title": "Download History | INSTASAVE HUB",
             "meta_description": "Review your analyzed Instagram content and completed media downloads.",
             "downloads": downloads,
         },

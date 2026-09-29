@@ -49,7 +49,7 @@ def dashboard_index_view(request: HttpRequest) -> HttpResponse:
         request,
         "dashboard/index.html",
         {
-            "page_title": "Control Center Dashboard | InSave Hub",
+            "page_title": "Control Center Dashboard | INSTASAVE HUB",
             "meta_description": "Manage your Instagram utilities, 24-hour free access pass, and download history.",
             "profile": profile,
             "tools": tools,
@@ -160,7 +160,7 @@ def admin_analytics_view(request: HttpRequest) -> HttpResponse:
         request,
         "dashboard/admin_analytics.html",
         {
-            "page_title": "Admin Telemetry & Operations | InSave Hub",
+            "page_title": "Admin Telemetry & Operations | INSTASAVE HUB",
             "total_users": total_users,
             "active_users": active_users,
             "total_downloads": total_downloads,

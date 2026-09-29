@@ -86,7 +86,7 @@ def _render_without_db(dist_dir: Path) -> None:
     tools = _build_tool_objects()
 
     site_config = SimpleNamespace(
-        platform_name="InSave Hub",
+        platform_name="INSTASAVE HUB",
         tagline="Precision Instagram Media & Content Control Center",
         support_email="support@insavehub.example.com",
         enable_advertisements=True,
@@ -158,10 +158,10 @@ def _render_without_db(dist_dir: Path) -> None:
             ),
         },
         {
-            "question": "Can I install InSave Hub as an app on my phone or computer?",
+            "question": "Can I install INSTASAVE HUB as an app on my phone or computer?",
             "answer": (
                 "Yes. Click the Install App button in the top navigation bar or hero section to add "
-                "InSave Hub to your desktop or mobile home screen."
+                "INSTASAVE HUB to your desktop or mobile home screen."
             ),
         },
     ]
@@ -172,7 +172,7 @@ def _render_without_db(dist_dir: Path) -> None:
             "index.html",
             "home.html",
             {
-                "page_title": "InSave Hub | Your Instagram Workflow, Refined.",
+                "page_title": "INSTASAVE HUB | Your Instagram Workflow, Refined.",
                 "meta_description": "Fast Instagram Video, Reel, Photo, and Post downloader.",
                 "tools": tools,
                 "preset_amounts": [100, 250, 500, 1000],
@@ -184,7 +184,7 @@ def _render_without_db(dist_dir: Path) -> None:
             "tools/index.html",
             "tools/index.html",
             {
-                "page_title": "Instagram Content Utilities | InSave Hub",
+                "page_title": "Instagram Content Utilities | INSTASAVE HUB",
                 "meta_description": "Explore Instagram utilities for Reels, Videos, Photos, and Posts.",
                 "tools": tools,
             },
@@ -194,7 +194,7 @@ def _render_without_db(dist_dir: Path) -> None:
             "downloads/index.html",
             "downloads/interface.html",
             {
-                "page_title": "Download Control Interface | InSave Hub",
+                "page_title": "Download Control Interface | INSTASAVE HUB",
                 "meta_description": "Analyze public Instagram URLs and execute high-resolution downloads.",
                 "tools": tools,
                 "selected_tool_slug": "",
@@ -207,7 +207,7 @@ def _render_without_db(dist_dir: Path) -> None:
             "downloads/history/index.html",
             "downloads/history.html",
             {
-                "page_title": "Download History | InSave Hub",
+                "page_title": "Download History | INSTASAVE HUB",
                 "meta_description": "Review your analyzed Instagram content and completed downloads.",
                 "downloads": [],
             },
@@ -217,8 +217,8 @@ def _render_without_db(dist_dir: Path) -> None:
             "donations/index.html",
             "donations/index.html",
             {
-                "page_title": "Buy Us Cofee | InSave Hub",
-                "meta_description": "Buy Us Cofee on InSave Hub.",
+                "page_title": "Buy Us Cofee | INSTASAVE HUB",
+                "meta_description": "Buy Us Cofee on INSTASAVE HUB.",
                 "preset_amounts": [100, 250, 500, 1000],
                 "currency": "INR",
                 "recent_donations": [],
@@ -229,7 +229,7 @@ def _render_without_db(dist_dir: Path) -> None:
             "auth/login/index.html",
             "auth/login.html",
             {
-                "page_title": "Sign In | InSave Hub",
+                "page_title": "Sign In | INSTASAVE HUB",
             },
         ),
         (
@@ -237,7 +237,7 @@ def _render_without_db(dist_dir: Path) -> None:
             "auth/register/index.html",
             "auth/register.html",
             {
-                "page_title": "Register | InSave Hub",
+                "page_title": "Register | INSTASAVE HUB",
             },
         ),
         (
@@ -260,7 +260,7 @@ def _render_without_db(dist_dir: Path) -> None:
                 f"tools/{tool.slug}/index.html",
                 "tools/tool_detail.html",
                 {
-                    "page_title": f"{tool.name} | InSave Hub",
+                    "page_title": f"{tool.name} | INSTASAVE HUB",
                     "meta_description": tool.short_description,
                     "tool": tool,
                     "other_tools": other_tools,
@@ -273,7 +273,7 @@ def _render_without_db(dist_dir: Path) -> None:
         out_file = dist_dir / target_rel
         out_file.parent.mkdir(parents=True, exist_ok=True)
         out_file.write_text(html_str, encoding="utf-8")
-        print(f"[InSave Hub Build] Rendered {route_path} -> dist/{target_rel}")
+        print(f"[INSTASAVE HUB Build] Rendered {route_path} -> dist/{target_rel}")
 
     req_root = rf.get("/")
     (dist_dir / "manifest.webmanifest").write_bytes(web_manifest(req_root).content)
@@ -295,7 +295,7 @@ def _render_without_db(dist_dir: Path) -> None:
 
 
 def main() -> None:
-    print(f"[InSave Hub Build] Initializing Django (HAS_SQLITE3={HAS_SQLITE3})...")
+    print(f"[INSTASAVE HUB Build] Initializing Django (HAS_SQLITE3={HAS_SQLITE3})...")
     _configure_dummy_db_if_needed()
     django.setup()
 
@@ -348,7 +348,7 @@ def main() -> None:
                 out_file = dist_dir / target_rel
                 out_file.parent.mkdir(parents=True, exist_ok=True)
                 out_file.write_bytes(resp.content)
-                print(f"[InSave Hub Build] Rendered {route_path} -> dist/{target_rel}")
+                print(f"[INSTASAVE HUB Build] Rendered {route_path} -> dist/{target_rel}")
 
         from django.test import override_settings
         with override_settings(DEBUG=False):
@@ -363,7 +363,7 @@ def main() -> None:
             shutil.rmtree(alias_dir)
         shutil.copytree(dist_dir, alias_dir)
 
-    print("[InSave Hub Build] Build completed successfully.")
+    print("[INSTASAVE HUB Build] Build completed successfully.")
 
 
 if __name__ == "__main__":

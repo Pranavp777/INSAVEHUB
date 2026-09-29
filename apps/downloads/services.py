@@ -218,7 +218,7 @@ def validate_and_parse_instagram_url(
                 "restricted_content",
                 (
                     "Private stories, direct messages, and authenticated-only routes are not supported. "
-                    "InSave Hub only processes publicly accessible posts, Reels, videos, and public profiles."
+                    "INSTASAVE HUB only processes publicly accessible posts, Reels, videos, and public profiles."
                 ),
                 is_restricted=True,
             )
@@ -721,7 +721,7 @@ def build_download_artifact_payload(download: Download) -> Tuple[bytes, str, str
 
     if download.content_type == Download.ContentType.METADATA:
         manifest = {
-            "platform": "InSave Hub Content Utility",
+            "platform": "INSTASAVE HUB Content Utility",
             "shortcode": download.shortcode,
             "source_url": download.source_url,
             "content_type": download.content_type,

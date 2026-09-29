@@ -1,6 +1,6 @@
-const CACHE_NAME = 'insave-hub-pwa-v3';
+const CACHE_NAME = 'instasave-hub-pwa-v4';
 const PRECACHE_URLS = [
-  '/static/images/logo-mark.svg',
+  '/static/images/logo.png',
   '/static/images/icon-192.png',
   '/static/images/icon-512.png'
 ];

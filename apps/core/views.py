@@ -41,16 +41,16 @@ def home(request: HttpRequest) -> HttpResponse:
             ),
         },
         {
-            "question": "Can I install InSave Hub as an app on my phone or computer?",
+            "question": "Can I install INSTASAVE HUB as an app on my phone or computer?",
             "answer": (
-                "Yes. Click the Install App button in the top navigation bar to add InSave Hub "
+                "Yes. Click the Install App button in the top navigation bar to add INSTASAVE HUB "
                 "to your desktop or mobile home screen."
             ),
         },
     ]
 
     context = {
-        "page_title": "InSave Hub | Your Instagram Workflow, Refined.",
+        "page_title": "INSTASAVE HUB | Your Instagram Workflow, Refined.",
         "meta_description": (
             "Fast Instagram Video, Reel, Photo, and Post downloader."
         ),
@@ -139,7 +139,7 @@ def health_check(request: HttpRequest) -> JsonResponse:
     return JsonResponse(
         {
             "status": "operational",
-            "service": "insave-hub",
+            "service": "instasave-hub",
             "timestamp": timezone.now().isoformat(),
         }
     )
@@ -148,8 +148,8 @@ def health_check(request: HttpRequest) -> JsonResponse:
 def web_manifest(request: HttpRequest) -> JsonResponse:
     """Serve the Progressive Web App (PWA) manifest for desktop and mobile installation."""
     manifest = {
-        "name": "InSave Hub — Instagram Video & Post Downloader",
-        "short_name": "InSave Hub",
+        "name": "INSTASAVE HUB — Instagram Video & Post Downloader",
+        "short_name": "INSTASAVE HUB",
         "description": "Download public Instagram Videos, Reels, Photos, and Carousels in 1080p MP4 and JPEG.",
         "start_url": "/?source=pwa",
         "scope": "/",
@@ -172,9 +172,9 @@ def web_manifest(request: HttpRequest) -> JsonResponse:
                 "purpose": "any maskable",
             },
             {
-                "src": "/static/images/logo-mark.svg",
-                "sizes": "any",
-                "type": "image/svg+xml",
+                "src": "/static/images/logo.png",
+                "sizes": "256x256",
+                "type": "image/png",
                 "purpose": "any",
             },
         ],
@@ -187,9 +187,9 @@ def web_manifest(request: HttpRequest) -> JsonResponse:
 
 def service_worker(request: HttpRequest) -> HttpResponse:
     """Serve the root-scoped Service Worker for PWA installability and asset caching."""
-    sw_script = """const CACHE_NAME = 'insave-hub-pwa-v3';
+    sw_script = """const CACHE_NAME = 'instasave-hub-pwa-v4';
 const PRECACHE_URLS = [
-  '/static/images/logo-mark.svg',
+  '/static/images/logo.png',
   '/static/images/icon-192.png',
   '/static/images/icon-512.png'
 ];

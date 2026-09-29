@@ -32,10 +32,10 @@ def _send_verification_email(request: HttpRequest, user, token: str) -> None:
     verify_path = reverse("accounts:verify_email", kwargs={"token": token})
     base_url = getattr(settings, "CANONICAL_BASE_URL", "http://localhost:8000").rstrip("/")
     verify_url = f"{base_url}{verify_path}"
-    subject = "Verify your InSave Hub account"
+    subject = "Verify your INSTASAVE HUB account"
     body = (
         f"Hello {user.username},\n\n"
-        f"Please confirm your email address for InSave Hub by visiting the link below:\n\n"
+        f"Please confirm your email address for INSTASAVE HUB by visiting the link below:\n\n"
         f"{verify_url}\n\n"
         f"If you did not create this account, you may safely disregard this message."
     )
@@ -91,8 +91,8 @@ def login_view(request: HttpRequest) -> HttpResponse:
         request,
         "auth/login.html",
         {
-            "page_title": "Sign In | InSave Hub",
-            "meta_description": "Sign in to your InSave Hub control center.",
+            "page_title": "Sign In | INSTASAVE HUB",
+            "meta_description": "Sign in to your INSTASAVE HUB control center.",
             "form": form,
         },
     )
@@ -146,8 +146,8 @@ def register_view(request: HttpRequest) -> HttpResponse:
         request,
         "auth/register.html",
         {
-            "page_title": "Create Account | InSave Hub",
-            "meta_description": "Create an InSave Hub account to track download history and 24-hour passes.",
+            "page_title": "Create Account | INSTASAVE HUB",
+            "meta_description": "Create an INSTASAVE HUB account to track download history and 24-hour passes.",
             "form": form,
         },
     )
@@ -241,10 +241,10 @@ def forgot_password_view(request: HttpRequest) -> HttpResponse:
                 reset_url = f"{base_url}{reset_path}"
                 try:
                     send_mail(
-                        subject="InSave Hub Password Reset Request",
+                        subject="INSTASAVE HUB Password Reset Request",
                         message=(
                             f"Hello {user.username},\n\n"
-                            f"A password reset was requested for your InSave Hub account.\n"
+                            f"A password reset was requested for your INSTASAVE HUB account.\n"
                             f"Use the secure link below to set a new password:\n\n"
                             f"{reset_url}\n\n"
                             f"If you did not initiate this request, no changes have been made."
@@ -269,8 +269,8 @@ def forgot_password_view(request: HttpRequest) -> HttpResponse:
         request,
         "auth/forgot_password.html",
         {
-            "page_title": "Reset Password | InSave Hub",
-            "meta_description": "Recover access to your InSave Hub account.",
+            "page_title": "Reset Password | INSTASAVE HUB",
+            "meta_description": "Recover access to your INSTASAVE HUB account.",
             "form": form,
             "reset_dispatched": reset_dispatched,
         },
@@ -306,7 +306,7 @@ def password_reset_confirm_view(request: HttpRequest, uidb64: str, token: str) -
         request,
         "auth/password_reset_confirm.html",
         {
-            "page_title": "Set New Password | InSave Hub",
+            "page_title": "Set New Password | INSTASAVE HUB",
             "form": form,
             "valid_link": valid_link,
         },
@@ -337,7 +337,7 @@ def verify_email_view(request: HttpRequest, token: str) -> HttpResponse:
         request,
         "auth/verify_email.html",
         {
-            "page_title": "Email Verification | InSave Hub",
+            "page_title": "Email Verification | INSTASAVE HUB",
             "verified": verified,
         },
     )
@@ -350,7 +350,7 @@ def account_confirmation_view(request: HttpRequest) -> HttpResponse:
         request,
         "auth/account_confirmation.html",
         {
-            "page_title": "Account Confirmation | InSave Hub",
+            "page_title": "Account Confirmation | INSTASAVE HUB",
             "profile": profile,
         },
     )
@@ -452,7 +452,7 @@ def profile_view(request: HttpRequest) -> HttpResponse:
         request,
         "accounts/profile.html",
         {
-            "page_title": "User Profile & Security | InSave Hub",
+            "page_title": "User Profile & Security | INSTASAVE HUB",
             "profile": profile,
             "profile_form": profile_form,
             "password_form": password_form,

@@ -19,7 +19,7 @@ class SiteConfiguration(models.Model):
     """
 
     singleton_id = models.PositiveSmallIntegerField(default=1, unique=True, editable=False)
-    site_name = models.CharField(max_length=80, default="InSave Hub")
+    site_name = models.CharField(max_length=80, default="INSTASAVE HUB")
     tagline = models.CharField(
         max_length=160,
         default="Your Instagram Workflow, Refined.",

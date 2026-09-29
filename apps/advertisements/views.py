@@ -49,7 +49,7 @@ def ad_gate_view(request: HttpRequest) -> HttpResponse:
         request,
         "downloads/ad_gate.html",
         {
-            "page_title": "Advertisement Verification | InSave Hub",
+            "page_title": "Advertisement Verification | INSTASAVE HUB",
             "meta_description": "Complete the 30-second sponsor interval to unlock 24-hour free access.",
             "ad_session": ad_session,
             "pending_download": ad_session.pending_download,

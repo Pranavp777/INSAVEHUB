@@ -315,7 +315,7 @@
     window.addEventListener("appinstalled", () => {
       deferredInstallPrompt = null;
       if (statusText) {
-        statusText.textContent = "InSave Hub App Installed on Device";
+        statusText.textContent = "INSTASAVE HUB App Installed on Device";
       }
       if (modal) modal.hidden = true;
     });

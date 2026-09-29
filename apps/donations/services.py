@@ -1,5 +1,5 @@
 """
-Payment gateway and Razorpay integration service for InSave Hub donations.
+Payment gateway and Razorpay integration service for INSTASAVE HUB donations.
 Reads credentials strictly from environment variables and enforces HMAC-SHA256
 signature verification before marking any contribution completed.
 """
@@ -95,7 +95,7 @@ def create_donation_order(
                     "currency": config.donation_currency,
                     "receipt": receipt_ref,
                     "notes": {
-                        "platform": "InSave Hub",
+                        "platform": "INSTASAVE HUB",
                         "anonymous": str(bool(is_anonymous)),
                     },
                 },

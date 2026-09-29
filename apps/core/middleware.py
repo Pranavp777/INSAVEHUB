@@ -64,7 +64,7 @@ class MaintenanceAndAuditMiddleware:
                     {
                         "error_title": "Scheduled Platform Maintenance",
                         "error_message": (
-                            "InSave Hub is currently undergoing scheduled infrastructure "
+                            "INSTASAVE HUB is currently undergoing scheduled infrastructure "
                             "calibration. Service will resume shortly."
                         ),
                     },

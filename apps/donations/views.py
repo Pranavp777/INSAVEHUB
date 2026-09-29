@@ -39,8 +39,8 @@ def donation_index_view(request: HttpRequest) -> HttpResponse:
         request,
         "donations/index.html",
         {
-            "page_title": "Buy Us Cofee | InSave Hub",
-            "meta_description": "Buy us a coffee to support InSave Hub.",
+            "page_title": "Buy Us Cofee | INSTASAVE HUB",
+            "meta_description": "Buy us a coffee to support INSTASAVE HUB.",
             "preset_amounts": preset_amounts,
             "user_donations": user_donations,
             "recent_verified": recent_verified,
@@ -167,7 +167,7 @@ def donation_receipt_view(request: HttpRequest, donation_id: str) -> HttpRespons
         request,
         "donations/receipt.html",
         {
-            "page_title": f"Donation Status [{donation.provider_order_id}] | InSave Hub",
+            "page_title": f"Donation Status [{donation.provider_order_id}] | INSTASAVE HUB",
             "donation": donation,
             "gateway_configured": is_razorpay_configured(),
             "razorpay_key_id": getattr(

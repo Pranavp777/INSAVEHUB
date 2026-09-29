@@ -26,7 +26,7 @@ function copyRecursive(src, dest) {
   }
 }
 
-console.log("[InSave Hub Build] Syncing static assets into dist/static...");
+console.log("[INSTASAVE HUB Build] Syncing static assets into dist/static...");
 fs.mkdirSync(distDir, { recursive: true });
 copyRecursive(staticDir, path.join(distDir, "static"));
 
@@ -35,4 +35,4 @@ for (const alias of ["public", "build"]) {
   copyRecursive(distDir, aliasDir);
 }
 
-console.log("[InSave Hub Build] Build completed successfully.");
+console.log("[INSTASAVE HUB Build] Build completed successfully.");
