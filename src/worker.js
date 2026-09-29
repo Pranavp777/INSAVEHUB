@@ -317,6 +317,8 @@ export async function handleAnalyzeRequest(request) {
       ? "Landscape"
       : "Square";
 
+  const access = getEdgeAccessState(request);
+
   return Response.json({
     status: "ok",
     download: {
@@ -349,19 +351,101 @@ export async function handleAnalyzeRequest(request) {
       ad_gate_url: `/ads/gate/?download_id=${encodeURIComponent(shortcode)}&mode=30s`,
       initial_ad_gate_url: `/ads/gate/?download_id=${encodeURIComponent(shortcode)}&mode=5s`,
     },
-    access: {
-      state: "STATE_1",
-      mode: "initial_free",
-      label: "First Download (5s Quick Ad)",
-      sublabel: "Your download will begin shortly after a 5-second advertisement.",
+    access,
+  });
+}
+
+function parseCookies(request) {
+  const cookies = {};
+  const raw = (request && request.headers && request.headers.get("Cookie")) || "";
+  raw.split(";").forEach((part) => {
+    const idx = part.indexOf("=");
+    if (idx > -1) {
+      const k = part.slice(0, idx).trim();
+      const v = part.slice(idx + 1).trim();
+      if (k) cookies[k] = decodeURIComponent(v);
+    }
+  });
+  return cookies;
+}
+
+function formatHMS(totalSeconds) {
+  const clamped = Math.max(0, Math.floor(totalSeconds));
+  const h = String(Math.floor(clamped / 3600)).padStart(2, "0");
+  const m = String(Math.floor((clamped % 3600) / 60)).padStart(2, "0");
+  const s = String(clamped % 60).padStart(2, "0");
+  return `${h}:${m}:${s}`;
+}
+
+export function getEdgeAccessState(request) {
+  const cookies = parseCookies(request);
+  const freeUntilMs = parseInt(cookies.insave_free_until || "0", 10);
+  const nowMs = Date.now();
+
+  if (!isNaN(freeUntilMs) && freeUntilMs > nowMs) {
+    const remainingSec = Math.max(1, Math.floor((freeUntilMs - nowMs) / 1000));
+    return {
+      state: "STATE_3_FREE_24H_ACTIVE",
+      mode: "free_24h_pass",
+      label: "24-HOUR FREE ACCESS",
+      sublabel: "Ad-free downloads enabled",
       ad_required: false,
       initial_5s_ad_required: false,
-      first_download_completed: false,
+      first_download_completed: true,
       has_free_24h: true,
-      free_24h_formatted: "24:00:00",
-      free_24h_remaining_seconds: 86400,
-    },
+      free_24h_expires_at: new Date(freeUntilMs).toISOString(),
+      free_24h_formatted: formatHMS(remainingSec),
+      free_24h_remaining_seconds: remainingSec,
+    };
+  }
+
+  const firstDlDone = cookies.insave_first_dl === "1";
+  return {
+    state: firstDlDone ? "STATE_2_AD_REQUIRED" : "STATE_1_FIRST_DOWNLOAD",
+    mode: firstDlDone ? "ad_required" : "initial_free",
+    label: firstDlDone ? "Unlock 24 Hours Free" : "First Download Ready",
+    sublabel: firstDlDone
+      ? "Watch a 30-second advertisement to unlock 24 hours of free downloads"
+      : "Free download ready",
+    ad_required: firstDlDone,
+    initial_5s_ad_required: false,
+    first_download_completed: firstDlDone,
+    has_free_24h: false,
+    free_24h_expires_at: null,
+    free_24h_formatted: "00:00:00",
+    free_24h_remaining_seconds: 0,
+  };
+}
+
+export async function handleAccessStatus(request) {
+  return Response.json({
+    status: "ok",
+    access: getEdgeAccessState(request),
   });
+}
+
+export async function handleAdComplete(request) {
+  const expiresAtMs = Date.now() + 24 * 3600 * 1000;
+  const expiresIso = new Date(expiresAtMs).toISOString();
+  return new Response(
+    JSON.stringify({
+      status: "ok",
+      message: "Access unlocked — 24-hour ad-free downloads enabled!",
+      ad_type: "unlock_30s",
+      free_access_granted: true,
+      free_access_expires_at: expiresIso,
+      free_access_remaining_seconds: 86400,
+      free_access_formatted: "24:00:00",
+      redirect_url: "/downloads/?unlocked_24h=1",
+    }),
+    {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Set-Cookie": `insave_free_until=${expiresAtMs}; Path=/; Max-Age=86400; SameSite=Lax`,
+      },
+    }
+  );
 }
 
 export async function handleExecuteDownload(token, request = null) {
@@ -429,19 +513,22 @@ export async function handleExecuteDownload(token, request = null) {
   const filename = `insave-${contentType}-${shortcode}.${ext}`;
   const disposition = isPreview ? `inline; filename="${filename}"` : `attachment; filename="${filename}"`;
 
-  const respHeaders = {
+  const respHeaders = new Headers({
     "Content-Type": mime,
     "Content-Disposition": disposition,
     "Accept-Ranges": "bytes",
     "Cache-Control": "no-store",
-  };
+  });
+  if (!isPreview) {
+    respHeaders.append("Set-Cookie", "insave_first_dl=1; Path=/; Max-Age=86400; SameSite=Lax");
+  }
   const contentRange = cdnResp.headers.get("Content-Range");
   if (contentRange) {
-    respHeaders["Content-Range"] = contentRange;
+    respHeaders.set("Content-Range", contentRange);
   }
   const contentLength = cdnResp.headers.get("Content-Length");
   if (contentLength) {
-    respHeaders["Content-Length"] = contentLength;
+    respHeaders.set("Content-Length", contentLength);
   }
 
   return new Response(cdnResp.body, {
@@ -459,35 +546,11 @@ export default {
     }
 
     if (url.pathname === "/ads/access-status/" && request.method === "GET") {
-      return Response.json({
-        status: "ok",
-        access: {
-          state: "STATE_3",
-          mode: "free_24h",
-          label: "24-HOUR FREE ACCESS",
-          sublabel: "Ad-free downloads enabled",
-          has_free_24h: true,
-          free_24h_expires_at: new Date(Date.now() + 86400 * 1000).toISOString(),
-          free_24h_remaining_seconds: 86400,
-          free_24h_formatted: "24:00:00",
-          ad_required: false,
-          initial_5s_ad_required: false,
-          first_download_completed: true,
-        },
-      });
+      return await handleAccessStatus(request);
     }
 
     if (url.pathname === "/ads/complete/" && request.method === "POST") {
-      return Response.json({
-        status: "ok",
-        message: "Access unlocked",
-        ad_type: "unlock_30s",
-        free_access_granted: true,
-        free_access_expires_at: new Date(Date.now() + 86400 * 1000).toISOString(),
-        free_access_remaining_seconds: 86400,
-        free_access_formatted: "24:00:00",
-        redirect_url: "/downloads/",
-      });
+      return await handleAdComplete(request);
     }
 
     const execMatch = url.pathname.match(/^\/downloads\/execute\/([^/]+)\/?$/);

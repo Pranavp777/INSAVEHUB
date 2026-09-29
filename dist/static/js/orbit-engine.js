@@ -1,12 +1,13 @@
 /**
  * INSTASAVE HUB — Futuristic iOS-Inspired Visual Engine & Interactive UI Controller
  * Features subtle atmospheric blue/indigo light motes, smooth scroll reveal,
- * interactive feature card previews, and native PWA installation.
+ * live 24-hour free access countdown ticker, and native PWA installation.
  */
 (function () {
   "use strict";
 
   const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const STORAGE_KEY_24H = "instasave_24h_access";
 
   function initScrollReveal() {
     const items = document.querySelectorAll(".reveal-item");
@@ -51,7 +52,6 @@
       { passive: true }
     );
 
-    // Very subtle electric-blue and indigo atmospheric motes (non-noisy)
     const count = Math.min(34, Math.max(16, Math.floor((width * height) / 48000)));
     const palette = [
       "rgba(96, 165, 250, 0.32)",
@@ -102,46 +102,6 @@
   }
 
   function initFeatureCardPreviews() {
-    // 1. Smart Tasks interactive toggle rows
-    const taskRows = document.querySelectorAll("[data-task-toggle]");
-    taskRows.forEach((row) => {
-      row.addEventListener("click", () => {
-        const isDone = row.getAttribute("data-task-done") === "true";
-        const nextState = !isDone;
-        row.setAttribute("data-task-done", nextState ? "true" : "false");
-        const badge = row.querySelector("[data-task-status]");
-        if (badge) {
-          badge.textContent = nextState ? "DONE" : "QUEUED";
-          badge.style.color = nextState ? "#60A5FA" : "#94A3B8";
-        }
-      });
-    });
-
-    // 2. Dark & Light Mode mini-preview card toggle
-    const modeToggleBtn = document.getElementById("miniThemeToggleBtn");
-    const modeSurface = document.getElementById("miniThemeSurface");
-    const modeLabel = document.getElementById("miniThemeLabel");
-    if (modeToggleBtn && modeSurface && modeLabel) {
-      let isMidnight = true;
-      modeToggleBtn.addEventListener("click", () => {
-        isMidnight = !isMidnight;
-        if (isMidnight) {
-          modeSurface.style.background = "rgba(6, 12, 26, 0.78)";
-          modeSurface.style.color = "#F8FAFC";
-          modeSurface.style.borderColor = "rgba(96, 165, 250, 0.24)";
-          modeLabel.textContent = "MIDNIGHT GLASS";
-          modeToggleBtn.textContent = "Switch to Daylight";
-        } else {
-          modeSurface.style.background = "linear-gradient(135deg, rgba(241, 245, 249, 0.94), rgba(226, 232, 240, 0.9))";
-          modeSurface.style.color = "#0F172A";
-          modeSurface.style.borderColor = "rgba(59, 130, 246, 0.45)";
-          modeLabel.textContent = "DAYLIGHT GLASS";
-          modeToggleBtn.textContent = "Switch to Midnight";
-        }
-      });
-    }
-
-    // 3. Smooth active pill transition on navigation links
     const navLinks = document.querySelectorAll(".nav-links .nav-link");
     navLinks.forEach((link) => {
       link.addEventListener("click", () => {
@@ -183,14 +143,18 @@
     const statusCard = document.getElementById("freeAccessStatusCard");
     if (statusCard) {
       statusCard.hidden = true;
-      statusCard.setAttribute("data-access-state", "STATE_4");
+      statusCard.setAttribute("data-access-state", "STATE_4_EXPIRED");
     }
     try {
-      localStorage.removeItem("instasave_24h_access");
+      localStorage.removeItem(STORAGE_KEY_24H);
+      document.cookie = "insave_free_until=0; path=/; max-age=0; SameSite=Lax";
     } catch (_err) {
       // Ignore storage errors
     }
-    if (window.InstaSaveDownloader && typeof window.InstaSaveDownloader.onFreeAccessExpired === "function") {
+    if (
+      window.InstaSaveDownloader &&
+      typeof window.InstaSaveDownloader.onFreeAccessExpired === "function"
+    ) {
       window.InstaSaveDownloader.onFreeAccessExpired();
     }
     fetch("/ads/access-status/", { headers: { Accept: "application/json" } }).catch(() => {});
@@ -201,6 +165,31 @@
       clearInterval(freeAccessIntervalId);
       freeAccessIntervalId = null;
     }
+
+    const statusCard = document.getElementById("freeAccessStatusCard");
+    const globalTimer = document.getElementById("globalFreeAccessTimer");
+
+    // Hydrate from localStorage if 24h access was unlocked on edge/client
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY_24H);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        const expiresAtMs = Number(parsed.expires_at_ms || Date.parse(parsed.expires_at || ""));
+        if (!isNaN(expiresAtMs) && expiresAtMs > Date.now()) {
+          const remSec = Math.max(1, Math.floor((expiresAtMs - Date.now()) / 1000));
+          if (statusCard) {
+            statusCard.hidden = false;
+            statusCard.setAttribute("data-access-state", "STATE_3_FREE_24H_ACTIVE");
+          }
+          if (globalTimer) {
+            globalTimer.setAttribute("data-free-access-seconds", String(remSec));
+            globalTimer.textContent = formatDurationHMS(remSec);
+          }
+        } else {
+          localStorage.removeItem(STORAGE_KEY_24H);
+        }
+      }
+    } catch (_e) {}
 
     const tickers = Array.from(document.querySelectorAll("[data-free-access-seconds]"));
     if (!tickers.length) return;

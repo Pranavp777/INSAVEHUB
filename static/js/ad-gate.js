@@ -1,15 +1,15 @@
 /**
- * INSTASAVE HUB — Server-Synchronized 5-Second & 30-Second Advertisement Countdown Controller
- * Supports:
- * - State 1: 5-second initial download advertisement -> auto-redirect & start download
- * - State 2: 30-second 24-hour unlock advertisement -> "Access unlocked" -> grant 24h pass & start download
- * Never trusts client-only manipulation: verifies remaining seconds against the server clock.
+ * INSTASAVE HUB — Server & Edge-Synchronized 30-Second Advertisement Countdown Controller
+ * Watching the 30-second advertisement until 00:00 unlocks 24 hours of ad-free downloads.
+ * Never allows skipping before the timer reaches 00:00 and persists countdown across refreshes.
  */
 (function () {
   "use strict";
 
   const RING_RADIUS = 78;
   const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
+  const STORAGE_KEY_24H = "instasave_24h_access";
+  const STORAGE_KEY_AD_TIMER = "instasave_active_ad_timer";
 
   function getCsrfToken() {
     const input = document.querySelector('input[name="csrfmiddlewaretoken"]');
@@ -25,21 +25,67 @@
     return `${mins}:${secs}`;
   }
 
+  function grantClient24HourAccess(remainingSeconds = 86400) {
+    const expiresAtMs = Date.now() + remainingSeconds * 1000;
+    const expiresIso = new Date(expiresAtMs).toISOString();
+    try {
+      localStorage.setItem(
+        STORAGE_KEY_24H,
+        JSON.stringify({
+          active: true,
+          expires_at_ms: expiresAtMs,
+          expires_at: expiresIso,
+          remaining_seconds: remainingSeconds,
+        })
+      );
+      sessionStorage.removeItem(STORAGE_KEY_AD_TIMER);
+      document.cookie = `insave_free_until=${expiresAtMs}; path=/; max-age=${remainingSeconds}; SameSite=Lax`;
+    } catch (_e) {
+      // Ignore storage quota errors
+    }
+  }
+
   function initAdCountdownGate() {
     const stage = document.getElementById("adCountdownStage");
     if (!stage) return;
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryMode = (urlParams.get("mode") || "").toLowerCase();
+    const downloadIdParam = urlParams.get("download_id") || "";
+
     const sessionId = stage.getAttribute("data-session-id") || "";
-    const adMode = stage.getAttribute("data-ad-mode") || "30s";
+    const adMode = queryMode === "5s" ? "5s" : stage.getAttribute("data-ad-mode") || "30s";
     const completeUrl = stage.getAttribute("data-complete-url") || "/ads/complete/";
-    const totalDuration = Math.max(
-      1,
-      parseInt(stage.getAttribute("data-total-seconds") || (adMode === "5s" ? "5" : "30"), 10)
-    );
-    let remaining = parseInt(
-      stage.getAttribute("data-remaining-seconds") || String(totalDuration),
-      10
-    );
+
+    const totalDuration =
+      adMode === "5s"
+        ? 5
+        : Math.max(1, parseInt(stage.getAttribute("data-total-seconds") || "30", 10));
+
+    let remaining =
+      adMode === "5s"
+        ? Math.min(5, parseInt(stage.getAttribute("data-remaining-seconds") || "5", 10))
+        : parseInt(stage.getAttribute("data-remaining-seconds") || String(totalDuration), 10);
+
+    // Persist countdown across page refreshes on static/edge builds
+    try {
+      const savedTimerRaw = sessionStorage.getItem(STORAGE_KEY_AD_TIMER);
+      if (savedTimerRaw) {
+        const savedTimer = JSON.parse(savedTimerRaw);
+        if (savedTimer && savedTimer.mode === adMode && savedTimer.targetMs > Date.now()) {
+          const calcRem = Math.ceil((savedTimer.targetMs - Date.now()) / 1000);
+          remaining = Math.min(remaining, Math.max(1, calcRem));
+        }
+      } else {
+        sessionStorage.setItem(
+          STORAGE_KEY_AD_TIMER,
+          JSON.stringify({
+            mode: adMode,
+            targetMs: Date.now() + remaining * 1000,
+          })
+        );
+      }
+    } catch (_e) {}
 
     const formattedEl = document.getElementById("adCountdownFormatted");
     const numberEl = document.getElementById("adCountdownNumber");
@@ -99,7 +145,7 @@
         }
         if (unlockBtn) {
           unlockBtn.disabled = false;
-          unlockBtn.textContent = "Access unlocked — Starting Download...";
+          unlockBtn.textContent = "Access unlocked — Continue to Download";
         }
         triggerAutoCompletion();
       } else {
@@ -118,10 +164,9 @@
       isCompleting = true;
 
       const nonceToken = nonceInput ? nonceInput.value : "";
-      if (!sessionId || !nonceToken) {
-        if (formEl) formEl.submit();
-        return;
-      }
+      const fallbackRedirect = downloadIdParam
+        ? `/downloads/?download_id=${encodeURIComponent(downloadIdParam)}&auto_download=1&unlocked_24h=1`
+        : "/downloads/?unlocked_24h=1";
 
       try {
         const resp = await fetch(completeUrl, {
@@ -138,26 +183,23 @@
           }),
         });
 
-        const data = await resp.json();
+        let data = {};
+        try {
+          data = await resp.json();
+        } catch (_jsonErr) {
+          data = {};
+        }
 
         if (resp.ok && data.status === "ok") {
           hasCompleted = true;
-          try {
-            if (data.free_access_granted && data.free_access_expires_at) {
-              localStorage.setItem(
-                "instasave_24h_access",
-                JSON.stringify({
-                  active: true,
-                  expires_at: data.free_access_expires_at,
-                  remaining_seconds: data.free_access_remaining_seconds || 86400,
-                })
-              );
-            }
-          } catch (_storageErr) {
-            // Ignore storage quota errors
+          if (adMode !== "5s" || data.free_access_granted) {
+            grantClient24HourAccess(data.free_access_remaining_seconds || 86400);
           }
 
-          const targetUrl = data.redirect_url || "/downloads/";
+          let targetUrl = data.redirect_url || fallbackRedirect;
+          if (downloadIdParam && !targetUrl.includes("download_id=")) {
+            targetUrl = fallbackRedirect;
+          }
           setTimeout(() => {
             window.location.href = targetUrl;
           }, 450);
@@ -172,14 +214,26 @@
           return;
         }
       } catch (_err) {
-        // Fallback to standard form POST if fetch fails
-        if (formEl) {
-          formEl.submit();
-          return;
-        }
+        // Network or static fallback
       }
 
-      isCompleting = false;
+      // If running on static edge without backend DB session, unlock 24h after full 30s countdown
+      hasCompleted = true;
+      if (adMode !== "5s") {
+        grantClient24HourAccess(86400);
+      }
+      setTimeout(() => {
+        window.location.href = fallbackRedirect;
+      }, 450);
+    }
+
+    if (formEl) {
+      formEl.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (remaining <= 0) {
+          triggerAutoCompletion();
+        }
+      });
     }
 
     let tickInterval = null;
@@ -201,8 +255,8 @@
       startLocalTicker();
     }
 
-    // Periodically synchronize with server clock to prevent client drift or tampering
-    if (sessionId) {
+    // Periodically synchronize with server clock when backed by Django AdSession
+    if (sessionId && sessionId !== "00000000-0000-0000-0000-000000000001") {
       const syncInterval = setInterval(async () => {
         if (hasCompleted) {
           clearInterval(syncInterval);

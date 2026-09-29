@@ -1,22 +1,117 @@
 /**
  * INSTASAVE HUB — Production Asynchronous Instagram Video, Reel & Post Downloader Controller
- * Implements:
- * - Interactive downloader mode tabs & one-click clipboard paste
- * - Live 1080p HD Video & Photo stream preview player with fullscreen
- * - 4-State Smart Advertisement & 24-Hour Ad-Free Access Lifecycle:
- *   State 1 (First Download): 5-second advertisement page -> auto-redirect & start download
- *   State 2 (Second+ Download): "Unlock 24 Hours Free" glass popup -> 30-second ad page
- *   State 3 (24h Free Access Active): Instant ad-free downloads + live 24h status card
- *   State 4 (24h Expired): Auto-reset to advertisement flow
+ * Flow:
+ * 1. User analyzes URL and clicks Download -> Download starts with progress bar.
+ * 2. Right after download completes (if 24-hour free access is not active),
+ *    displays the "Unlock 24 Hours Free" popup prompting the user to watch a 30-second ad.
+ * 3. If the user watches the 30-second ad until 00:00, grants 24 hours of unlimited ad-free access.
+ * 4. If the user dismissed the popup ("Not now") and tries a subsequent download without 24h access,
+ *    shows the "Unlock 24 Hours Free" popup before downloading.
  */
 (function () {
   "use strict";
+
+  const STORAGE_KEY_24H = "instasave_24h_access";
+  const STORAGE_KEY_FIRST_DL = "instasave_first_dl_done";
+  const STORAGE_KEY_LAST_DL = "instasave_last_download";
 
   function getCsrfToken() {
     const input = document.querySelector('input[name="csrfmiddlewaretoken"]');
     if (input && input.value) return input.value;
     const match = document.cookie.match(/(?:^|;\s*)csrftoken=([^;]+)/);
     return match ? decodeURIComponent(match[1]) : "";
+  }
+
+  function formatHMS(totalSeconds) {
+    const clamped = Math.max(0, Math.floor(totalSeconds));
+    const h = String(Math.floor(clamped / 3600)).padStart(2, "0");
+    const m = String(Math.floor((clamped % 3600) / 60)).padStart(2, "0");
+    const s = String(clamped % 60).padStart(2, "0");
+    return `${h}:${m}:${s}`;
+  }
+
+  function getClient24hState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY_24H);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        const expiresAtMs = Number(parsed.expires_at_ms || Date.parse(parsed.expires_at || ""));
+        if (!isNaN(expiresAtMs) && expiresAtMs > Date.now()) {
+          const remainingSec = Math.max(1, Math.floor((expiresAtMs - Date.now()) / 1000));
+          return {
+            active: true,
+            expiresAtMs,
+            remainingSeconds: remainingSec,
+            formatted: formatHMS(remainingSec),
+          };
+        }
+        localStorage.removeItem(STORAGE_KEY_24H);
+      }
+    } catch (_e) {
+      // Ignore storage errors
+    }
+    return { active: false, expiresAtMs: 0, remainingSeconds: 0, formatted: "00:00:00" };
+  }
+
+  function reconcileAccessWithLocalState(serverAccess) {
+    const base = Object.assign(
+      {
+        state: "STATE_1_FIRST_DOWNLOAD",
+        mode: "initial_free",
+        label: "Free Download Ready",
+        ad_required: false,
+        initial_5s_ad_required: false,
+        first_download_completed: false,
+        has_free_24h: false,
+        free_24h_remaining_seconds: 0,
+        free_24h_formatted: "00:00:00",
+      },
+      serverAccess || {}
+    );
+
+    const local24h = getClient24hState();
+    if (base.has_free_24h && base.free_24h_remaining_seconds > 0) {
+      try {
+        const expiresAtMs = Date.now() + base.free_24h_remaining_seconds * 1000;
+        localStorage.setItem(
+          STORAGE_KEY_24H,
+          JSON.stringify({
+            active: true,
+            expires_at_ms: expiresAtMs,
+            expires_at: new Date(expiresAtMs).toISOString(),
+            remaining_seconds: base.free_24h_remaining_seconds,
+          })
+        );
+      } catch (_e) {}
+      return base;
+    }
+
+    if (local24h.active) {
+      base.state = "STATE_3_FREE_24H_ACTIVE";
+      base.mode = "free_24h_pass";
+      base.label = "24-HOUR FREE ACCESS";
+      base.has_free_24h = true;
+      base.ad_required = false;
+      base.initial_5s_ad_required = false;
+      base.free_24h_remaining_seconds = local24h.remainingSeconds;
+      base.free_24h_formatted = local24h.formatted;
+      return base;
+    }
+
+    let firstDlDone = Boolean(base.first_download_completed || base.ad_required);
+    try {
+      if (localStorage.getItem(STORAGE_KEY_FIRST_DL) === "1") {
+        firstDlDone = true;
+      }
+    } catch (_e) {}
+
+    if (firstDlDone) {
+      base.first_download_completed = true;
+      base.ad_required = true;
+      base.state = "STATE_2_AD_REQUIRED";
+      base.label = "Unlock 24 Hours Free";
+    }
+    return base;
   }
 
   function syncGlobalFreeAccessBanner(access) {
@@ -27,22 +122,21 @@
 
     if (access.has_free_24h && access.free_24h_remaining_seconds > 0) {
       card.hidden = false;
-      card.setAttribute("data-access-state", "STATE_3");
+      card.setAttribute("data-access-state", "STATE_3_FREE_24H_ACTIVE");
       if (timerEl) {
         timerEl.setAttribute(
           "data-free-access-seconds",
           String(access.free_24h_remaining_seconds)
         );
-        if (access.free_24h_formatted) {
-          timerEl.textContent = access.free_24h_formatted;
-        }
+        timerEl.textContent =
+          access.free_24h_formatted || formatHMS(access.free_24h_remaining_seconds);
       }
       if (window.InstaSaveAccessEngine && window.InstaSaveAccessEngine.refreshTickers) {
         window.InstaSaveAccessEngine.refreshTickers();
       }
     } else {
       card.hidden = true;
-      card.setAttribute("data-access-state", access.state || "STATE_1");
+      card.setAttribute("data-access-state", access.state || "STATE_1_FIRST_DOWNLOAD");
     }
   }
 
@@ -125,15 +219,13 @@
       thumbnailUrl: "",
     };
 
-    // Expose a hook so orbit-engine.js can notify downloader when 24h access expires
     window.InstaSaveDownloader = {
       onFreeAccessExpired() {
         if (currentAccessData) {
           currentAccessData.has_free_24h = false;
           currentAccessData.free_24h_remaining_seconds = 0;
-          currentAccessData.ad_required = Boolean(currentAccessData.first_download_completed);
-          currentAccessData.initial_5s_ad_required = !currentAccessData.first_download_completed;
-          currentAccessData.state = "STATE_4";
+          currentAccessData.ad_required = true;
+          currentAccessData.state = "STATE_4_EXPIRED";
           currentAccessData.label = "24-Hour Access Expired — Ad Required";
           updateActionButtonsForAccess();
         }
@@ -292,28 +384,28 @@
       });
     }
 
-    // 4. Smart Download Button Click Handler (4-State Ad & 24h Access Flow)
-    function startDirectDownloadWithProgress(executeUrl) {
+    // 4. Download Execution + Post-Download "Unlock 24 Hours Free" Popup
+    function startDirectDownloadWithProgress(executeUrl, showUnlockPopupAfter = false) {
       if (!executeUrl || isDownloading) return;
       isDownloading = true;
 
       if (progressWrap) progressWrap.hidden = false;
-      if (progressBar) progressBar.style.width = "12%";
-      if (progressPct) progressPct.textContent = "12%";
+      if (progressBar) progressBar.style.width = "15%";
+      if (progressPct) progressPct.textContent = "15%";
       if (progressLabel) progressLabel.textContent = "PREPARING HIGH-SPEED STREAM...";
 
-      let pct = 12;
+      let pct = 15;
       const timer = setInterval(() => {
-        pct = Math.min(92, pct + Math.floor(Math.random() * 18) + 10);
+        pct = Math.min(92, pct + Math.floor(Math.random() * 18) + 12);
         if (progressBar) progressBar.style.width = `${pct}%`;
         if (progressPct) progressPct.textContent = `${pct}%`;
-      }, 140);
+      }, 130);
 
       setTimeout(() => {
         clearInterval(timer);
         if (progressBar) progressBar.style.width = "100%";
         if (progressPct) progressPct.textContent = "100%";
-        if (progressLabel) progressLabel.textContent = "DOWNLOAD STARTED";
+        if (progressLabel) progressLabel.textContent = "DOWNLOAD COMPLETE";
 
         // Trigger the server-validated attachment download
         const link = document.createElement("a");
@@ -325,38 +417,64 @@
           if (link.parentNode) link.parentNode.removeChild(link);
         }, 1000);
 
-        // Update local state after first download completes (if 24h pass is not active)
-        if (currentAccessData && !currentAccessData.has_free_24h) {
-          currentAccessData.first_download_completed = true;
-          currentAccessData.initial_5s_ad_required = false;
-          currentAccessData.ad_required = true;
-          currentAccessData.state = "STATE_2";
-          currentAccessData.label = "Unlock 24 Hours Free (30s Ad)";
+        // Mark first download completed and show the 30s Ad / 24h Free Access popup if not already unlocked
+        const has24hNow = Boolean(
+          (currentAccessData && currentAccessData.has_free_24h) || getClient24hState().active
+        );
+
+        if (!has24hNow) {
+          try {
+            localStorage.setItem(STORAGE_KEY_FIRST_DL, "1");
+            document.cookie = "insave_first_dl=1; path=/; max-age=86400; SameSite=Lax";
+          } catch (_e) {}
+
+          if (currentAccessData) {
+            currentAccessData.first_download_completed = true;
+            currentAccessData.initial_5s_ad_required = false;
+            currentAccessData.ad_required = true;
+            currentAccessData.state = "STATE_2_AD_REQUIRED";
+            currentAccessData.label = "Unlock 24 Hours Free (30s Ad)";
+          }
+
           setTimeout(() => {
             updateActionButtonsForAccess();
-          }, 1200);
+            if (showUnlockPopupAfter && currentDownloadData) {
+              const gate30sUrl =
+                currentDownloadData.ad_gate_url ||
+                `/ads/gate/?download_id=${encodeURIComponent(currentDownloadData.id)}&mode=30s`;
+              unlockModalCtrl.open(gate30sUrl);
+            }
+          }, 950);
         }
 
         setTimeout(() => {
           isDownloading = false;
         }, 900);
-      }, 650);
+      }, 600);
     }
 
     if (actionBtn) {
       actionBtn.addEventListener("click", (event) => {
         if (!currentDownloadData || !currentAccessData) return;
 
+        currentAccessData = reconcileAccessWithLocalState(currentAccessData);
+
         // State 3: 24-Hour Free Access Active -> Immediate download, no ads or popups
         if (currentAccessData.has_free_24h) {
           event.preventDefault();
-          startDirectDownloadWithProgress(currentDownloadData.execute_url);
+          startDirectDownloadWithProgress(currentDownloadData.execute_url, false);
           return;
         }
 
-        // State 2 / State 4: Second+ download without active 24h pass -> Show "Unlock 24 Hours Free" popup
+        // State 2 / State 4: Subsequent download without active 24h pass -> Show "Unlock 24 Hours Free" popup
         if (currentAccessData.ad_required) {
           event.preventDefault();
+          try {
+            sessionStorage.setItem(
+              STORAGE_KEY_LAST_DL,
+              JSON.stringify(currentDownloadData)
+            );
+          } catch (_e) {}
           unlockModalCtrl.open(
             currentDownloadData.ad_gate_url ||
               `/ads/gate/?download_id=${encodeURIComponent(currentDownloadData.id)}&mode=30s`
@@ -364,19 +482,16 @@
           return;
         }
 
-        // State 1: First download -> Show 5-second advertisement page before starting download
-        if (currentAccessData.initial_5s_ad_required) {
-          event.preventDefault();
-          const gate5sUrl =
-            currentDownloadData.initial_ad_gate_url ||
-            `/ads/gate/?download_id=${encodeURIComponent(currentDownloadData.id)}&mode=5s`;
-          window.location.href = gate5sUrl;
-          return;
-        }
-
-        // Fallback (e.g. returning from 5s ad): start download directly
+        // State 1: First download -> Start the download immediately, and right after download completes,
+        // show the "Unlock 24 Hours Free" popup to watch a 30-second ad for 24h free access!
         event.preventDefault();
-        startDirectDownloadWithProgress(currentDownloadData.execute_url);
+        try {
+          sessionStorage.setItem(
+            STORAGE_KEY_LAST_DL,
+            JSON.stringify(currentDownloadData)
+          );
+        } catch (_e) {}
+        startDirectDownloadWithProgress(currentDownloadData.execute_url, true);
       });
     }
 
@@ -421,7 +536,8 @@
           return;
         }
 
-        populateResultPanel(data.download, data.access);
+        const mergedAccess = reconcileAccessWithLocalState(data.access);
+        populateResultPanel(data.download, mergedAccess);
       } catch (_err) {
         renderError("Network communication error while contacting the media extraction engine.");
       } finally {
@@ -486,10 +602,6 @@
         actionBtn.href = dl.ad_gate_url || `/ads/gate/?download_id=${encodeURIComponent(dl.id)}&mode=30s`;
         actionBtn.textContent = baseDownloadLabel;
         if (adNotice) adNotice.hidden = false;
-      } else if (access.initial_5s_ad_required) {
-        actionBtn.href = dl.initial_ad_gate_url || `/ads/gate/?download_id=${encodeURIComponent(dl.id)}&mode=5s`;
-        actionBtn.textContent = baseDownloadLabel;
-        if (adNotice) adNotice.hidden = true;
       } else {
         actionBtn.href = dl.execute_url;
         actionBtn.textContent = baseDownloadLabel;
@@ -500,12 +612,11 @@
     function populateResultPanel(dl, access) {
       if (!resultPanel || !dl) return;
       currentDownloadData = dl;
-      currentAccessData = access || {
-        state: "STATE_1",
-        has_free_24h: false,
-        ad_required: false,
-        initial_5s_ad_required: true,
-      };
+      currentAccessData = reconcileAccessWithLocalState(access);
+
+      try {
+        sessionStorage.setItem(STORAGE_KEY_LAST_DL, JSON.stringify(dl));
+      } catch (_e) {}
 
       resultPanel.hidden = false;
       if (progressWrap) progressWrap.hidden = true;
@@ -626,23 +737,53 @@
       resultPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
 
-    // 6. Auto-hydrate Result Panel & Trigger Auto-Download when returning from 5s or 30s Ad Gate
+    // 6. Auto-hydrate Result Panel & Trigger Auto-Download when returning from 30s Ad Gate
     const bootstrapEl = document.getElementById("activeDownloadBootstrap");
     if (bootstrapEl && bootstrapEl.textContent) {
       try {
         const payload = JSON.parse(bootstrapEl.textContent);
         if (payload && payload.download) {
-          populateResultPanel(payload.download, payload.access);
+          const mergedAccess = reconcileAccessWithLocalState(payload.access);
+          populateResultPanel(payload.download, mergedAccess);
           if (payload.auto_download && payload.download.execute_url) {
             setTimeout(() => {
-              startDirectDownloadWithProgress(payload.download.execute_url);
+              startDirectDownloadWithProgress(
+                payload.download.execute_url,
+                !mergedAccess.has_free_24h
+              );
             }, 350);
           }
+          return;
         }
       } catch (_err) {
         // Ignore malformed bootstrap JSON
       }
     }
+
+    // Also support Cloudflare static edge return (?unlocked_24h=1 or ?auto_download=1)
+    try {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("unlocked_24h") === "1" || params.get("auto_download") === "1") {
+        const localAccess = reconcileAccessWithLocalState(null);
+        syncGlobalFreeAccessBanner(localAccess);
+
+        const savedDlRaw = sessionStorage.getItem(STORAGE_KEY_LAST_DL);
+        if (savedDlRaw) {
+          const savedDl = JSON.parse(savedDlRaw);
+          if (savedDl && savedDl.execute_url) {
+            if (urlInput && savedDl.source_url && !urlInput.value) {
+              urlInput.value = savedDl.source_url;
+            }
+            populateResultPanel(savedDl, localAccess);
+            if (params.get("auto_download") === "1") {
+              setTimeout(() => {
+                startDirectDownloadWithProgress(savedDl.execute_url, false);
+              }, 350);
+            }
+          }
+        }
+      }
+    } catch (_e) {}
   }
 
   document.addEventListener("DOMContentLoaded", initUrlAnalyzer);
