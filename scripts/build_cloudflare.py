@@ -345,8 +345,10 @@ def main() -> None:
                 out_file.write_bytes(resp.content)
                 print(f"[InSave Hub Build] Rendered {route_path} -> dist/{target_rel}")
 
-        resp_404 = client.get("/non-existent-route-404-preview/")
-        (dist_dir / "404.html").write_bytes(resp_404.content)
+        from django.test import override_settings
+        with override_settings(DEBUG=False):
+            resp_404 = client.get("/non-existent-route-404-preview/")
+            (dist_dir / "404.html").write_bytes(resp_404.content)
     else:
         _render_without_db(dist_dir)
 

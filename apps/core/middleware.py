@@ -21,12 +21,12 @@ class SecurityHeadersMiddleware:
 
         csp_directives = [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' https://checkout.razorpay.com",
+            "script-src 'self' 'unsafe-inline' https://checkout.razorpay.com https://www.googletagmanager.com https://googleads.g.doubleclick.net https://www.googleadservices.com",
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
             "font-src 'self' https://fonts.gstatic.com data:",
             "img-src 'self' data: https:",
-            "connect-src 'self' https://api.razorpay.com https://lumberjack.razorpay.com",
-            "frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com",
+            "connect-src 'self' https://api.razorpay.com https://lumberjack.razorpay.com https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://www.google.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com",
+            "frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com https://www.googletagmanager.com https://td.doubleclick.net",
             "frame-ancestors 'none'",
             "base-uri 'self'",
             "form-action 'self' https://accounts.google.com",
