@@ -79,6 +79,14 @@ def robots_txt(request: HttpRequest) -> HttpResponse:
     return HttpResponse("\n".join(lines), content_type="text/plain; charset=utf-8")
 
 
+def ads_txt(request: HttpRequest) -> HttpResponse:
+    """Serve ads.txt for Google AdSense verification."""
+    return HttpResponse(
+        "google.com, pub-7764836554568456, DIRECT, f08c47fec0942fa0\n",
+        content_type="text/plain; charset=utf-8",
+    )
+
+
 def sitemap_xml(request: HttpRequest) -> HttpResponse:
     """Serve dynamic XML sitemap for public pages and utility tools."""
     ensure_default_tools()

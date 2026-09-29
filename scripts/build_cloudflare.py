@@ -279,6 +279,10 @@ def _render_without_db(dist_dir: Path) -> None:
     (dist_dir / "manifest.webmanifest").write_bytes(web_manifest(req_root).content)
     (dist_dir / "sw.js").write_bytes(service_worker(req_root).content)
     (dist_dir / "robots.txt").write_bytes(robots_txt(req_root).content)
+    (dist_dir / "ads.txt").write_text(
+        "google.com, pub-7764836554568456, DIRECT, f08c47fec0942fa0\n",
+        encoding="utf-8",
+    )
 
     sitemap_xml_content = """<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -332,6 +336,7 @@ def main() -> None:
             ("/manifest.webmanifest", "manifest.webmanifest"),
             ("/sw.js", "sw.js"),
             ("/robots.txt", "robots.txt"),
+            ("/ads.txt", "ads.txt"),
             ("/sitemap.xml", "sitemap.xml"),
         ]
         for tool in Tool.objects.filter(is_active=True):
