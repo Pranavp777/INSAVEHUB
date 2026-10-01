@@ -545,6 +545,64 @@ export default {
       return await handleAnalyzeRequest(request);
     }
 
+    if (url.pathname === "/ads.txt") {
+      let pubId = env && env.ADSENSE_PUBLISHER_ID ? String(env.ADSENSE_PUBLISHER_ID).trim() : "";
+      pubId = pubId.replace(/^ca-/i, "").trim();
+      if (pubId && !pubId.toLowerCase().startsWith("pub-")) {
+        pubId = `pub-${pubId}`;
+      }
+      const adsTxtContent = pubId
+        ? `google.com, ${pubId}, DIRECT, f08c47fec0942fa0\n`
+        : `# Google AdSense ads.txt for INSTASAVE HUB\n# Set ADSENSE_PUBLISHER_ID environment variable to configure your publisher ID.\n`;
+      return new Response(adsTxtContent, {
+        status: 200,
+        headers: {
+          "Content-Type": "text/plain; charset=utf-8",
+          "Cache-Control": "public, max-age=3600",
+        },
+      });
+    }
+
+    if (url.pathname === "/robots.txt") {
+      const robotsContent = [
+        "User-agent: Mediapartners-Google",
+        "Allow: /",
+        "",
+        "User-agent: Googlebot",
+        "Allow: /",
+        "Disallow: /admin/",
+        "Disallow: /api/",
+        "Disallow: /dashboard/",
+        "",
+        "User-agent: Google-Display-Ads-Bot",
+        "Allow: /",
+        "",
+        "User-agent: *",
+        "Allow: /",
+        "Allow: /tools/",
+        "Allow: /downloads/",
+        "Allow: /about/",
+        "Allow: /contact/",
+        "Allow: /privacy/",
+        "Allow: /terms/",
+        "Allow: /disclaimer/",
+        "Allow: /ads.txt",
+        "Allow: /sitemap.xml",
+        "Disallow: /admin/",
+        "Disallow: /api/",
+        "Disallow: /dashboard/",
+        "",
+        `Sitemap: ${url.origin}/sitemap.xml`,
+      ].join("\n");
+      return new Response(robotsContent, {
+        status: 200,
+        headers: {
+          "Content-Type": "text/plain; charset=utf-8",
+          "Cache-Control": "public, max-age=3600",
+        },
+      });
+    }
+
     if (url.pathname === "/ads/access-status/" && request.method === "GET") {
       return await handleAccessStatus(request);
     }

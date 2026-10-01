@@ -11,8 +11,18 @@
 
     gtag('config', 'AW-18482941756');
   </script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7764836554568456"
+
+  <!-- Google AdSense Official Script & Account Verification -->
+  {% if adsense_enabled and adsense_client %}
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ adsense_client }}"
      crossorigin="anonymous"></script>
+  <meta name="google-adsense-account" content="{{ adsense_client }}">
+  {% endif %}
+
+  <!-- Google Search Console Verification -->
+  {% if google_search_console_verification %}
+  <meta name="google-site-verification" content="{{ google_search_console_verification }}">
+  {% endif %}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ page_title|default:"INSTASAVE HUB — Free Instagram Video, Reel & Photo Downloader (1080p HD)" }}</title>
@@ -177,6 +187,12 @@
             <a href="{% url 'downloads:tools_list' %}" class="nav-link {% if '/tools/' in request.path %}is-current{% endif %}">Tools</a>
           </li>
           <li>
+            <a href="{% url 'core:about' %}" class="nav-link {% if '/about/' in request.path %}is-current{% endif %}">About</a>
+          </li>
+          <li>
+            <a href="{% url 'core:contact' %}" class="nav-link {% if '/contact/' in request.path %}is-current{% endif %}">Contact</a>
+          </li>
+          <li>
             <a href="/#faq" class="nav-link">FAQ</a>
           </li>
         </ul>
@@ -193,11 +209,11 @@
           <span>Install App</span>
         </button>
 
-        <!-- Small "Buy Us Cofee" Icon Option -->
+        <!-- Small "Buy Us Coffee" Icon Option -->
         <a href="{% url 'donations:index' %}"
            class="nav-icon-btn nav-donate-icon hide-tablet {% if '/donations/' in request.path %}is-active{% endif %}"
-           title="Buy Us Cofee"
-           aria-label="Buy Us Cofee">
+           title="Buy Us Coffee"
+           aria-label="Buy Us Coffee">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
             <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
@@ -231,8 +247,13 @@
       <a href="{% url 'core:home' %}" class="nav-link">Home</a>
       <a href="{% url 'downloads:interface' %}" class="nav-link">Downloader</a>
       <a href="{% url 'downloads:tools_list' %}" class="nav-link">Instagram Tools</a>
+      <a href="{% url 'core:about' %}" class="nav-link">About Us</a>
+      <a href="{% url 'core:contact' %}" class="nav-link">Contact Us</a>
+      <a href="{% url 'core:privacy' %}" class="nav-link">Privacy Policy</a>
+      <a href="{% url 'core:terms' %}" class="nav-link">Terms &amp; Conditions</a>
+      <a href="{% url 'core:disclaimer' %}" class="nav-link">Disclaimer</a>
       <a href="/#faq" class="nav-link">FAQ</a>
-      <a href="{% url 'donations:index' %}" class="nav-link">Buy Us Cofee</a>
+      <a href="{% url 'donations:index' %}" class="nav-link">Buy Us Coffee</a>
       <button type="button" id="installAppMobileBtn" class="btn-glass btn-sm" style="justify-content: center;">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12 3v12"></path>
@@ -294,6 +315,13 @@
     </div>
 
     {% block content %}{% endblock %}
+
+    <!-- Google AdSense Safe Pre-Footer Placement -->
+    {% if adsense_enabled and adsense_client %}
+      <div class="container-shell" style="margin-top: var(--space-8); margin-bottom: var(--space-4);">
+        {% include "includes/adsense_unit.html" with extra_class="adsense-slot-footer" %}
+      </div>
+    {% endif %}
   </main>
 
   <!-- Dedicated Mobile Ergonomic Bottom Control Dock -->
@@ -307,60 +335,75 @@
     <a href="{% url 'downloads:tools_list' %}" class="dock-item {% if '/tools/' in request.path %}is-active{% endif %}">
       <span>Tools</span>
     </a>
+    <a href="{% url 'core:about' %}" class="dock-item {% if '/about/' in request.path %}is-active{% endif %}">
+      <span>About</span>
+    </a>
     <a href="/#faq" class="dock-item">
       <span>FAQ</span>
     </a>
   </nav>
 
-  <!-- Glass Footer with SEO Keyword Internal Links -->
+  <!-- Glass Footer with SEO Keyword Internal Links & Full Compliance Navigation -->
   <footer class="glass-footer" role="contentinfo">
     <div class="container-shell">
-      <div class="footer-grid" style="grid-template-columns: 1.4fr 1fr 1fr 1fr;">
+      <div class="footer-grid" style="grid-template-columns: 1.35fr 1fr 1fr 1fr;">
         <div>
           <div class="brand-identity" style="margin-bottom: var(--space-3);">
             <img src="{% static 'images/logo.png' %}" alt="INSTASAVE HUB" class="brand-mark" width="28" height="28" style="border-radius: 7px; object-fit: cover;">
             <span class="brand-wordmark">INSTASAVE HUB</span>
           </div>
-          <p style="color: var(--text-muted); font-size: 0.86rem; max-width: 34ch;">
-            Free 1080p HD Instagram Video, Reel, Photo &amp; Post Downloader with live stream preview.
+          <p style="color: var(--text-muted); font-size: 0.86rem; max-width: 34ch; line-height: 1.6;">
+            Free 1080p HD Instagram Video, Reel, Photo &amp; Post Downloader with live stream preview. Fast, private, and zero server-side media retention.
           </p>
         </div>
 
         <div>
-          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">INSTAGRAM DOWNLOADERS</h4>
+          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">INSTAGRAM UTILITIES</h4>
           <ul class="footer-links">
             <li><a href="{% url 'downloads:tool_detail' slug='video-downloader' %}">Instagram Video Downloader</a></li>
             <li><a href="{% url 'downloads:tool_detail' slug='reel-downloader' %}">Instagram Reel Downloader</a></li>
             <li><a href="{% url 'downloads:tool_detail' slug='public-post-downloader' %}">Instagram Post &amp; Carousel</a></li>
             <li><a href="{% url 'downloads:tool_detail' slug='image-downloader' %}">Instagram Photo Downloader</a></li>
             <li><a href="{% url 'downloads:tool_detail' slug='profile-media-utility' %}">IG Profile Picture Viewer</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">PLATFORM</h4>
-          <ul class="footer-links">
-            <li><a href="{% url 'core:home' %}">Home</a></li>
-            <li><a href="{% url 'downloads:interface' %}">Live Video Preview &amp; Download</a></li>
-            <li><a href="{% url 'downloads:tools_list' %}">All Instagram Tools</a></li>
             <li><a href="{% url 'downloads:tool_detail' slug='content-info-extractor' %}">Metadata Extractor</a></li>
           </ul>
         </div>
 
         <div>
-          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">QUICK LINKS</h4>
+          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">COMPANY &amp; TOOLS</h4>
           <ul class="footer-links">
+            <li><a href="{% url 'core:home' %}">Home</a></li>
+            <li><a href="{% url 'downloads:interface' %}">Live Downloader &amp; Preview</a></li>
+            <li><a href="{% url 'downloads:tools_list' %}">All Instagram Tools</a></li>
+            <li><a href="{% url 'core:about' %}">About Us</a></li>
+            <li><a href="{% url 'core:contact' %}">Contact Us</a></li>
+            <li><a href="{% url 'donations:index' %}">Buy Us Coffee</a></li>
             <li><a href="{% url 'downloads:history' %}">Download History</a></li>
-            <li><a href="{% url 'donations:index' %}">Buy Us Cofee</a></li>
-            <li><a href="{% url 'accounts:login' %}">Sign In</a></li>
-            <li><a href="/sitemap.xml">XML Sitemap</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">LEGAL &amp; COMPLIANCE</h4>
+          <ul class="footer-links">
+            <li><a href="{% url 'core:privacy' %}">Privacy Policy</a></li>
+            <li><a href="{% url 'core:terms' %}">Terms &amp; Conditions</a></li>
+            <li><a href="{% url 'core:disclaimer' %}">Disclaimer &amp; Trademarks</a></li>
+            <li><a href="{% url 'core:sitemap_xml' %}">XML Sitemap</a></li>
+            <li><a href="{% url 'core:ads_txt' %}">ads.txt Verification</a></li>
           </ul>
         </div>
       </div>
 
-      <div style="padding-top: var(--space-6); border-top: 1px solid var(--border-hairline); display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-4); font-size: 0.8rem; color: var(--text-dim);">
+      <div style="padding-top: var(--space-6); border-top: 1px solid var(--border-hairline); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4); font-size: 0.8rem; color: var(--text-dim);">
         <span>&copy; 2026 INSTASAVE HUB. All rights reserved.</span>
-        <span>Independent tool. Not affiliated with Instagram or Meta Platforms, Inc.</span>
+        <span>Independent tool. Not affiliated with, endorsed by, or sponsored by Instagram or Meta Platforms, Inc.</span>
+        <div style="display: flex; gap: var(--space-3);">
+          <a href="{% url 'core:privacy' %}" style="color: var(--text-muted);">Privacy</a>
+          <span>&bull;</span>
+          <a href="{% url 'core:terms' %}" style="color: var(--text-muted);">Terms</a>
+          <span>&bull;</span>
+          <a href="{% url 'core:disclaimer' %}" style="color: var(--text-muted);">Disclaimer</a>
+        </div>
       </div>
     </div>
   </footer>

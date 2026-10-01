@@ -255,12 +255,57 @@ def _render_without_db(dist_dir: Path) -> None:
             },
         ),
         (
+            "/about/",
+            "about/index.html",
+            "pages/about.html",
+            {
+                "page_title": "About Us | INSTASAVE HUB",
+                "meta_description": "About INSTASAVE HUB - High-speed zero-retention Instagram downloader.",
+            },
+        ),
+        (
+            "/contact/",
+            "contact/index.html",
+            "pages/contact.html",
+            {
+                "page_title": "Contact Us | INSTASAVE HUB",
+                "meta_description": "Contact INSTASAVE HUB technical support and inquiries.",
+            },
+        ),
+        (
+            "/privacy/",
+            "privacy/index.html",
+            "pages/privacy.html",
+            {
+                "page_title": "Privacy Policy | INSTASAVE HUB",
+                "meta_description": "Privacy Policy and Google AdSense compliance for INSTASAVE HUB.",
+            },
+        ),
+        (
+            "/terms/",
+            "terms/index.html",
+            "pages/terms.html",
+            {
+                "page_title": "Terms & Conditions | INSTASAVE HUB",
+                "meta_description": "Terms and conditions of use for INSTASAVE HUB.",
+            },
+        ),
+        (
+            "/disclaimer/",
+            "disclaimer/index.html",
+            "pages/disclaimer.html",
+            {
+                "page_title": "Legal Disclaimer | INSTASAVE HUB",
+                "meta_description": "Legal disclaimer and trademark notice for INSTASAVE HUB.",
+            },
+        ),
+        (
             "/donations/",
             "donations/index.html",
             "donations/index.html",
             {
-                "page_title": "Buy Us Cofee | INSTASAVE HUB",
-                "meta_description": "Buy Us Cofee on INSTASAVE HUB.",
+                "page_title": "Buy Us Coffee | INSTASAVE HUB",
+                "meta_description": "Buy Us Coffee on INSTASAVE HUB.",
                 "preset_amounts": [100, 250, 500, 1000],
                 "currency": "INR",
                 "recent_donations": [],
@@ -321,10 +366,17 @@ def _render_without_db(dist_dir: Path) -> None:
     (dist_dir / "manifest.webmanifest").write_bytes(web_manifest(req_root).content)
     (dist_dir / "sw.js").write_bytes(service_worker(req_root).content)
     (dist_dir / "robots.txt").write_bytes(robots_txt(req_root).content)
-    (dist_dir / "ads.txt").write_text(
-        "google.com, pub-7764836554568456, DIRECT, f08c47fec0942fa0\n",
-        encoding="utf-8",
-    )
+
+    pub_id = getattr(settings, "ADSENSE_PUBLISHER_ID", "").strip()
+    if pub_id:
+        import re
+        clean_pub = re.sub(r"^ca-", "", pub_id, flags=re.IGNORECASE).strip()
+        if not clean_pub.lower().startswith("pub-"):
+            clean_pub = f"pub-{clean_pub}"
+        ads_txt_body = f"google.com, {clean_pub}, DIRECT, f08c47fec0942fa0\n"
+    else:
+        ads_txt_body = "# Google AdSense ads.txt for INSTASAVE HUB\n# Set ADSENSE_PUBLISHER_ID environment variable to configure your publisher ID.\n"
+    (dist_dir / "ads.txt").write_text(ads_txt_body, encoding="utf-8")
 
     tool_sitemap_entries = "\n".join(
         f"  <url><loc>https://insavehub.workers.dev/tools/{t.slug}/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>"
@@ -336,7 +388,12 @@ def _render_without_db(dist_dir: Path) -> None:
   <url><loc>https://insavehub.workers.dev/downloads/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://insavehub.workers.dev/tools/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
 {tool_sitemap_entries}
-  <url><loc>https://insavehub.workers.dev/donations/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://insavehub.workers.dev/about/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://insavehub.workers.dev/contact/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://insavehub.workers.dev/privacy/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://insavehub.workers.dev/terms/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://insavehub.workers.dev/disclaimer/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://insavehub.workers.dev/donations/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>"""
     (dist_dir / "sitemap.xml").write_text(sitemap_xml_content, encoding="utf-8")
 
@@ -376,6 +433,11 @@ def main() -> None:
             ("/tools/", "tools/index.html"),
             ("/downloads/", "downloads/index.html"),
             ("/downloads/history/", "downloads/history/index.html"),
+            ("/about/", "about/index.html"),
+            ("/contact/", "contact/index.html"),
+            ("/privacy/", "privacy/index.html"),
+            ("/terms/", "terms/index.html"),
+            ("/disclaimer/", "disclaimer/index.html"),
             ("/donations/", "donations/index.html"),
             ("/auth/login/", "auth/login/index.html"),
             ("/auth/register/", "auth/register/index.html"),

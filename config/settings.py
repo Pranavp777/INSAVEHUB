@@ -277,6 +277,13 @@ GOOGLE_OAUTH_REDIRECT_URI = os.environ.get(
     f"{CANONICAL_BASE_URL}/auth/google/callback/",
 ).strip()
 
+# Google AdSense & Search Console Settings (Configurable via Environment)
+ADSENSE_PUBLISHER_ID = os.environ.get("ADSENSE_PUBLISHER_ID", "").strip()
+ENABLE_ADSENSE = env_bool("ENABLE_ADSENSE", default=True)
+GOOGLE_SEARCH_CONSOLE_VERIFICATION = os.environ.get(
+    "GOOGLE_SEARCH_CONSOLE_VERIFICATION", ""
+).strip()
+
 # Payment / Donation Settings (Razorpay for India / Configurable)
 PAYMENT_PROVIDER = os.environ.get("PAYMENT_PROVIDER", "razorpay").strip().lower()
 DONATION_CURRENCY = os.environ.get("DONATION_CURRENCY", "INR").strip().upper()

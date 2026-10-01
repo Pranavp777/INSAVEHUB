@@ -37,4 +37,9 @@ def site_context(request: HttpRequest) -> Dict[str, Any]:
             config.enable_google_oauth and getattr(settings, "GOOGLE_OAUTH_CLIENT_ID", "")
         ),
         "access_state": access_summary,
+        "adsense_publisher_id": config.get_adsense_publisher_id(),
+        "adsense_client": config.get_adsense_client(),
+        "adsense_enabled": config.is_adsense_active(),
+        "adsense_auto_ads": bool(config.is_adsense_active() and config.enable_adsense_auto_ads),
+        "google_search_console_verification": config.get_search_console_verification(),
     }

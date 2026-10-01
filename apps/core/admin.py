@@ -40,6 +40,22 @@ class SiteConfigurationAdmin(admin.ModelAdmin):
             },
         ),
         (
+            "Google AdSense & Search Console",
+            {
+                "fields": (
+                    "enable_adsense",
+                    "enable_adsense_auto_ads",
+                    "adsense_publisher_id",
+                    "google_search_console_verification",
+                ),
+                "description": (
+                    "Manage your official Google AdSense integration and Search Console verification. "
+                    "If adsense_publisher_id is left blank here, it will automatically fall back to "
+                    "the ADSENSE_PUBLISHER_ID environment variable."
+                ),
+            },
+        ),
+        (
             "Advertisement Sponsor Content",
             {
                 "fields": (

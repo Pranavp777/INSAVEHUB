@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-shell" style="padding-top: var(--space-6); padding-bottom: var(--space-16);">
+  <!-- Header -->
+  <div class="section-header reveal-item" style="max-width: 760px; margin-bottom: var(--space-8);">
+    <span class="hero-eyebrow-pill" style="margin-bottom: var(--space-3);">
+      <span class="status-dot status-dot-emerald"></span>
+      <span>SUPPORT &amp; INQUIRIES</span>
+    </span>
+    <h1 class="section-title">Contact Us</h1>
+    <p class="section-subtitle" style="font-size: 1.1rem; line-height: 1.7;">
+      Have a question about using INSTASAVE HUB, experiencing technical difficulty, or wish to submit a DMCA or copyright notice? Our support team is here to assist you.
+    </p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1.25fr; gap: var(--space-8); align-items: start;">
+    <!-- Left Column: Contact Methods & FAQ summary -->
+    <div style="display: flex; flex-direction: column; gap: var(--space-6);">
+      <div class="glass-panel reveal-item" style="padding: var(--space-6);">
+        <span class="mono-label">DIRECT INQUIRIES</span>
+        <h3 style="font-size: 1.25rem; margin: var(--space-2) 0 var(--space-4);">Get in Touch</h3>
+
+        <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+          <div style="display: flex; gap: var(--space-3); align-items: flex-start;">
+            <div class="feature-icon-box" style="width: 38px; height: 38px; flex-shrink: 0;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            </div>
+            <div>
+              <span class="spec-label">OFFICIAL EMAIL</span>
+              <a href="mailto:support@insavehub.com" style="color: var(--light-cyan); font-weight: 600; font-size: 0.95rem;">
+                support@insavehub.com
+              </a>
+              <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 2px;">
+                Replies typically within 24 to 48 business hours.
+              </p>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: var(--space-3); align-items: flex-start;">
+            <div class="feature-icon-box" style="width: 38px; height: 38px; flex-shrink: 0;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+            </div>
+            <div>
+              <span class="spec-label">DMCA &amp; COPYRIGHT</span>
+              <a href="mailto:dmca@insavehub.com" style="color: var(--light-blue); font-weight: 600; font-size: 0.95rem;">
+                dmca@insavehub.com
+              </a>
+              <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 2px;">
+                Formal copyright notices, URL takedown requests, and licensing claims.
+              </p>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: var(--space-3); align-items: flex-start;">
+            <div class="feature-icon-box" style="width: 38px; height: 38px; flex-shrink: 0;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <div>
+              <span class="spec-label">RESPONSE TIME</span>
+              <span style="color: var(--text-primary); font-weight: 600; font-size: 0.95rem;">Monday – Friday</span>
+              <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 2px;">
+                Global technical staff monitoring infrastructure 24/7.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-panel reveal-item" style="padding: var(--space-6);">
+        <h4 style="font-size: 1.05rem; margin-bottom: var(--space-2);">Before Submitting</h4>
+        <ul style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.7; padding-left: var(--space-4);">
+          <li>Ensure the Instagram post, Reel, or video you are attempting to download is set to <strong>Public</strong>.</li>
+          <li>Private accounts, expired stories, and age-restricted posts are not accessible via anonymous tools.</li>
+          <li>For DMCA notices, please provide the exact URL of the material on our site and proof of copyright ownership.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Right Column: Interactive Contact Form -->
+    <div class="glass-panel reveal-item" style="padding: var(--space-8);">
+      <span class="mono-label">CONTACT FORM</span>
+      <h2 style="font-size: 1.45rem; margin: var(--space-2) 0 var(--space-5);">Send Us a Message</h2>
+
+      {% if messages %}
+        <div class="alerts-stack" style="margin-bottom: var(--space-5);">
+          {% for message in messages %}
+            <div class="glass-alert glass-alert-{{ message.tags|default:'info' }}">
+              <span>{{ message }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <form method="post" action="{% url 'core:contact' %}">
+        {% csrf_token %}
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-4);">
+          <div>
+            <label for="contactName" class="form-label">Your Name <span style="color: var(--light-rose);">*</span></label>
+            <input type="text" id="contactName" name="name" class="glass-input" required placeholder="Alex Smith">
+          </div>
+          <div>
+            <label for="contactEmail" class="form-label">Your Email <span style="color: var(--light-rose);">*</span></label>
+            <input type="email" id="contactEmail" name="email" class="glass-input" required placeholder="alex@example.com">
+          </div>
+        </div>
+
+        <div style="margin-bottom: var(--space-4);">
+          <label for="contactSubject" class="form-label">Subject</label>
+          <select id="contactSubject" name="subject" class="glass-select">
+            <option value="General Inquiry">General Inquiry</option>
+            <option value="Technical Support">Technical Support / Bug Report</option>
+            <option value="Feature Request">Feature Request</option>
+            <option value="DMCA / Copyright Notice">DMCA / Copyright Notice</option>
+            <option value="Advertising &amp; Partnership">Advertising &amp; Partnership</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom: var(--space-5);">
+          <label for="contactMessage" class="form-label">Message <span style="color: var(--light-rose);">*</span></label>
+          <textarea id="contactMessage" name="message" class="glass-textarea" rows="6" required placeholder="Please describe your inquiry, question, or feedback in detail..."></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); flex-wrap: wrap;">
+          <p style="font-size: 0.78rem; color: var(--text-dim); max-width: 38ch;">
+            We respect your privacy. Your information is used strictly to respond to your inquiry and is never shared.
+          </p>
+          <button type="submit" class="btn-glass btn-primary" style="min-width: 170px;">
+            Send Message
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

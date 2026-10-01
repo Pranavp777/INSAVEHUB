@@ -1350,3 +1350,63 @@
   align-items: center;
 }
 
+/* ==========================================================================
+   GOOGLE ADSENSE COMPLIANT AD SLOTS (NON-INTRUSIVE & SAFE PLACEMENTS)
+   ========================================================================== */
+
+.adsense-slot-container {
+  width: 100%;
+  max-width: 970px;
+  margin: var(--space-8) auto;
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  border-radius: var(--radius-md);
+  background: rgba(6, 12, 28, 0.55);
+  border: 1px solid rgba(148, 184, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  transition: border-color var(--duration-fast) ease;
+}
+
+.adsense-slot-container:hover {
+  border-color: rgba(96, 165, 250, 0.22);
+}
+
+.adsense-label-bar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.adsense-disclosure-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  opacity: 0.85;
+}
+
+.adsense-ad-viewport {
+  width: 100%;
+  min-height: 90px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.adsense-slot-inline {
+  margin: var(--space-6) 0;
+}
+
+.adsense-slot-footer {
+  margin-top: var(--space-10);
+  margin-bottom: var(--space-4);
+}
+

@@ -6,6 +6,11 @@ app_name = "core"
 
 urlpatterns = [
     path("", views.home, name="home"),
+    path("about/", views.about_view, name="about"),
+    path("contact/", views.contact_view, name="contact"),
+    path("privacy/", views.privacy_view, name="privacy"),
+    path("terms/", views.terms_view, name="terms"),
+    path("disclaimer/", views.disclaimer_view, name="disclaimer"),
     path("robots.txt", views.robots_txt, name="robots_txt"),
     path("ads.txt", views.ads_txt, name="ads_txt"),
     path("sitemap.xml", views.sitemap_xml, name="sitemap_xml"),

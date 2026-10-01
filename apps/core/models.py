@@ -67,6 +67,28 @@ class SiteConfiguration(models.Model):
     minimum_donation_amount = models.PositiveIntegerField(default=50)
     maximum_donation_amount = models.PositiveIntegerField(default=100000)
 
+    # Google AdSense & Search Console Configuration
+    adsense_publisher_id = models.CharField(
+        max_length=64,
+        blank=True,
+        default="",
+        help_text="Google AdSense Publisher ID (e.g. pub-1234567890123456 or ca-pub-1234567890123456). Falls back to ADSENSE_PUBLISHER_ID environment variable if blank.",
+    )
+    enable_adsense = models.BooleanField(
+        default=True,
+        help_text="Master toggle to enable or disable Google AdSense scripts and ad slots site-wide.",
+    )
+    enable_adsense_auto_ads = models.BooleanField(
+        default=True,
+        help_text="Enable Google Auto Ads tag in the head section.",
+    )
+    google_search_console_verification = models.CharField(
+        max_length=128,
+        blank=True,
+        default="",
+        help_text="Google Search Console verification code (content attribute of google-site-verification meta tag).",
+    )
+
     # Advertisement Sponsor Slot Configuration
     ad_sponsor_title = models.CharField(
         max_length=120,
@@ -108,6 +130,42 @@ class SiteConfiguration(models.Model):
             if part.isdigit() and int(part) > 0:
                 amounts.append(int(part))
         return amounts or [100, 250, 500, 1000]
+
+    def get_adsense_publisher_id(self) -> str:
+        """
+        Return the canonical publisher ID in 'pub-XXXXXXXXXXXXXXXX' format.
+        Checks database configuration first, falls back to settings.ADSENSE_PUBLISHER_ID.
+        """
+        import re
+
+        raw = (self.adsense_publisher_id or "").strip()
+        if not raw:
+            raw = getattr(settings, "ADSENSE_PUBLISHER_ID", "").strip()
+        if not raw:
+            return ""
+
+        clean = re.sub(r"^ca-", "", raw, flags=re.IGNORECASE).strip()
+        if not clean.lower().startswith("pub-"):
+            clean = f"pub-{clean}"
+        return clean
+
+    def get_adsense_client(self) -> str:
+        """Return the official Google AdSense client ID string: ca-pub-XXXXXXXXXXXXXXXX."""
+        pub_id = self.get_adsense_publisher_id()
+        if not pub_id:
+            return ""
+        return f"ca-{pub_id}"
+
+    def is_adsense_active(self) -> bool:
+        """Return whether AdSense is enabled and a publisher ID is configured."""
+        return bool(self.enable_adsense and self.get_adsense_publisher_id())
+
+    def get_search_console_verification(self) -> str:
+        """Return Google Search Console verification code from DB or settings."""
+        val = (self.google_search_console_verification or "").strip()
+        if not val:
+            val = getattr(settings, "GOOGLE_SEARCH_CONSOLE_VERIFICATION", "").strip()
+        return val
 
     @classmethod
     def get_solo(cls) -> "SiteConfiguration":

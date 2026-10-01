@@ -2,74 +2,92 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>http://localhost:8000/</loc>
-    <lastmod>2026-09-29</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>http://localhost:8000/tools/</loc>
-    <lastmod>2026-09-29</lastmod>
+    <loc>http://localhost:8000/downloads/</loc>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/tools/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/about/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>http://localhost:8000/downloads/</loc>
-    <lastmod>2026-09-29</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>http://localhost:8000/contact/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/privacy/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/terms/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/disclaimer/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>http://localhost:8000/donations/</loc>
-    <lastmod>2026-09-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://localhost:8000/auth/login/</loc>
-    <lastmod>2026-09-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://localhost:8000/auth/register/</loc>
-    <lastmod>2026-09-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>http://localhost:8000/tools/reel-downloader/</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost:8000/tools/video-downloader/</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost:8000/tools/image-downloader/</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost:8000/tools/public-post-downloader/</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost:8000/tools/profile-media-utility/</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost:8000/tools/content-info-extractor/</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
 </urlset>

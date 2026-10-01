@@ -428,6 +428,13 @@
   </div>
 </section>
 
+<!-- Google AdSense Safe In-Between Content Slot -->
+{% if adsense_enabled and adsense_client %}
+<div class="container-shell" style="margin: var(--space-4) auto var(--space-6);">
+  {% include "includes/adsense_unit.html" with extra_class="adsense-slot-inline" %}
+</div>
+{% endif %}
+
 <!-- 4. SPECIALIZED INSTAGRAM DOWNLOADER TOOLS -->
 <section class="section-block" id="features">
   <div class="container-shell">

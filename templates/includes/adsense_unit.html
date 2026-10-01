@@ -1,0 +1,18 @@
+{% if adsense_enabled and adsense_client %}
+<div class="adsense-slot-container {{ extra_class|default:'' }}" aria-label="Sponsored Content">
+  <div class="adsense-label-bar">
+    <span class="adsense-disclosure-label">ADVERTISEMENT</span>
+  </div>
+  <div class="adsense-ad-viewport">
+    <ins class="adsbygoogle"
+         style="display:block; text-align:center; min-height: 90px; width: 100%;"
+         data-ad-client="{{ adsense_client }}"
+         {% if ad_slot %}data-ad-slot="{{ ad_slot }}"{% endif %}
+         data-ad-format="{{ ad_format|default:'auto' }}"
+         data-full-width-responsive="true"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+</div>
+{% endif %}
