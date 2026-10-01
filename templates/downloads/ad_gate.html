@@ -2,124 +2,18 @@
 {% load static %}
 
 {% block content %}
-<div class="container-shell" style="padding-top: var(--space-4);">
-  <div id="adCountdownStage"
-       class="glass-panel ad-countdown-stage reveal-item"
-       data-session-id="{{ ad_session.id }}"
-       data-ad-mode="{{ ad_mode|default:'30s' }}"
-       data-remaining-seconds="{{ remaining_seconds }}"
-       data-total-seconds="{{ total_duration_seconds }}"
-       data-complete-url="{% url 'advertisements:complete' %}">
-
-    <div class="telemetry-pill" style="margin-bottom: var(--space-4);">
-      <span id="adTelemetryDot" class="status-dot status-dot-amber"></span>
-      <span id="adStateTelemetryLabel">ADVERTISEMENT</span>
-    </div>
-
-    {% if is_initial_5s %}
-      <h1 id="adHeadlineText" style="font-size: clamp(1.35rem, 2.2vw, 1.85rem); margin-bottom: var(--space-2);">
-        Your download will begin shortly.
-      </h1>
-      <p id="adSubheadlineText" style="color: var(--text-secondary); font-size: 0.94rem; max-width: 48ch; margin: 0 auto var(--space-4);">
-        Preparing your high-definition stream. Please wait while the 5-second sponsor preview completes.
-      </p>
-      <span class="sr-only">Your next download will be available after the advertisement.</span>
-    {% else %}
-      <h1 id="adHeadlineText" style="font-size: clamp(1.35rem, 2.2vw, 1.85rem); margin-bottom: var(--space-2);">
-        Watch until the timer reaches zero to unlock 24-hour free access.
-      </h1>
-      <p id="adSubheadlineText" style="color: var(--text-secondary); font-size: 0.94rem; max-width: 52ch; margin: 0 auto var(--space-2);">
-        Your download will continue automatically.
-      </p>
-      <p style="color: var(--text-muted); font-size: 0.82rem; margin: 0 auto var(--space-4);">
-        Your next download will be available after the advertisement.
-      </p>
-    {% endif %}
-
-    <!-- Circular SVG Progress Ring + Large MM:SS Countdown Timer -->
-    <div class="countdown-dial" role="timer" aria-live="polite">
-      <svg class="countdown-ring-svg" viewBox="0 0 180 180" aria-hidden="true">
-        <defs>
-          <linearGradient id="adRingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#38BDF8" />
-            <stop offset="50%" stop-color="#3B82F6" />
-            <stop offset="100%" stop-color="#8B5CF6" />
-          </linearGradient>
-        </defs>
-        <circle class="countdown-ring-track" cx="90" cy="90" r="78"></circle>
-        <circle id="adCircularProgress" class="countdown-ring-progress" cx="90" cy="90" r="78"></circle>
-      </svg>
-      <div class="countdown-dial-inner">
-        <span id="adCountdownFormatted" class="countdown-number">00:{{ remaining_seconds|stringformat:"02d" }}</span>
-        <span id="adCountdownNumber" class="sr-only">{{ remaining_seconds|stringformat:"02d" }}</span>
-        <span id="adCountdownUnit" class="countdown-unit">ADVERTISEMENT</span>
-      </div>
-    </div>
-
-    <div class="progress-track" aria-hidden="true">
-      <div id="adProgressBar" class="progress-fill"></div>
-    </div>
-
-    <!-- Clean Ad Container (Ready for Video / Banner Ad Network Integration) -->
-    <div id="adProviderSlot" class="ad-provider-slot" role="region" aria-label="Sponsored Advertisement Unit">
-      <div class="ad-provider-header">
-        <span class="mono-label">SPONSORED STREAM // AD SLOT</span>
-        <span id="adSlotStatusBadge" class="tool-badge">
-          {% if is_initial_5s %}5S QUICK AD{% else %}30S 24H PASS UNLOCK{% endif %}
-        </span>
-      </div>
-      <div class="ad-provider-canvas">
-        <div class="ad-provider-visual">
-          <div class="ad-provider-orb" aria-hidden="true">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-              <polygon points="8,5 19,12 8,19"></polygon>
-            </svg>
-          </div>
-          <div>
-            <div style="font-size: 0.96rem; font-weight: 600; color: #FFFFFF;">
-              INSTASAVE HUB — 1080p Full HD Media Engine
-            </div>
-            <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">
-              {% if is_initial_5s %}
-                Your download will begin shortly after this 5-second sponsor message.
-              {% else %}
-                Keep this window open until 00:00 to activate 24 hours of unlimited ad-free downloads.
-              {% endif %}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    {% if pending_download %}
-      <div class="ad-pending-media-pill">
-        <span class="status-dot status-dot-emerald"></span>
-        <span>QUEUED DOWNLOAD: <strong>{{ pending_download.media_title }}</strong> ({{ pending_download.media_format }} • {{ pending_download.resolution }})</span>
-      </div>
-    {% endif %}
-
-    <!-- Server-Validated Completion Form -->
-    <form method="post" action="{% url 'advertisements:complete' %}" id="adCompleteForm">
-      {% csrf_token %}
-      <input type="hidden" id="adSessionIdInput" name="ad_session_id" value="{{ ad_session.id }}">
-      <input type="hidden" id="adNonceTokenInput" name="nonce_token" value="{{ ad_session.nonce_token }}">
-      <button type="submit" id="adUnlockSubmitBtn" class="btn-glass btn-primary btn-block"
-              {% if remaining_seconds > 0 %}disabled{% endif %}>
-        {% if remaining_seconds > 0 %}
-          {% if is_initial_5s %}
-            Your download will begin shortly (00:{{ remaining_seconds|stringformat:"02d" }})...
-          {% else %}
-            Watch until 00:00 to unlock 24-hour free access (00:{{ remaining_seconds|stringformat:"02d" }})...
-          {% endif %}
-        {% else %}
-          Access unlocked — Continue to Download
-        {% endif %}
-      </button>
-    </form>
+<div class="container-shell" style="padding-top: var(--space-4); text-align: center;">
+  <div class="glass-panel" style="max-width: 580px; margin: 0 auto; padding: var(--space-6);">
+    <h1 style="font-size: 1.5rem; margin-bottom: var(--space-2);">Redirecting to Download Center</h1>
+    <p style="color: var(--text-secondary); margin-bottom: var(--space-4);">
+      All downloads on INSTASAVE HUB are direct and free.
+    </p>
+    <a href="{% url 'downloads:interface' %}" class="btn-glass btn-primary">
+      Continue to Downloader
+    </a>
   </div>
 </div>
-{% endblock %}
-
-{% block extra_scripts %}
-<script src="{% static 'js/ad-gate.js' %}" defer></script>
+<script>
+  window.location.replace("{% url 'downloads:interface' %}");
+</script>
 {% endblock %}

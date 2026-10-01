@@ -56,8 +56,8 @@ def _serialize_download_dict(download: Download) -> dict:
         "status": download.status,
         "execute_url": execute_url,
         "preview_url": preview_url,
-        "ad_gate_url": ad_gate_url,
-        "initial_ad_gate_url": initial_ad_gate_url,
+        "ad_gate_url": "",
+        "initial_ad_gate_url": "",
     }
 
 
@@ -238,8 +238,8 @@ def analyze_url_api(request: HttpRequest) -> HttpResponse:
 def execute_download_view(request: HttpRequest, token: str) -> HttpResponse:
     """
     Server-validated media download endpoint.
-    Supports inline preview streaming when ?preview=1 is passed, and enforces the
-    30-second advertisement requirement for full downloads after the first completed download.
+    Supports inline preview streaming when ?preview=1 is passed, and serves direct
+    unhindered media file downloads without deceptive ad gates or countdown delays.
     """
     if request.GET.get("preview") == "1":
         actor_q = _build_actor_filter(request)
@@ -251,35 +251,26 @@ def execute_download_view(request: HttpRequest, token: str) -> HttpResponse:
         )
         if preview_download is None:
             return HttpResponse("Preview token not found.", status=404)
-        payload_bytes, mime_type, filename = build_download_artifact_payload(preview_download)
+        try:
+            payload_bytes, mime_type, filename = build_download_artifact_payload(preview_download)
+        except Exception as exc:
+            return HttpResponse(
+                f"Preview stream is currently unavailable: {exc}",
+                status=502,
+                content_type="text/plain; charset=utf-8",
+            )
         response = HttpResponse(payload_bytes, content_type=mime_type)
         response["Content-Disposition"] = f'inline; filename="{filename}"'
         response["Content-Length"] = str(len(payload_bytes))
         response["Accept-Ranges"] = "bytes"
         return response
 
-    authorized, download, ad_session, message = authorize_and_complete_download(
+    authorized, download, _ad_session, message = authorize_and_complete_download(
         request=request,
         download_token=token,
     )
 
     if not authorized:
-        if download is not None and ad_session is not None:
-            ad_gate_url = f"{reverse('advertisements:gate')}?download_id={download.id}"
-            if is_json_request(request):
-                return JsonResponse(
-                    {
-                        "status": "ad_required",
-                        "code": "advertisement_required",
-                        "message": "Your next download will be available after the advertisement.",
-                        "ad_gate_url": ad_gate_url,
-                        "ad_session_id": str(ad_session.id),
-                        "remaining_seconds": ad_session.remaining_seconds,
-                    },
-                    status=403,
-                )
-            return redirect(ad_gate_url)
-
         if is_json_request(request):
             return JsonResponse(
                 {
@@ -312,7 +303,24 @@ def execute_download_view(request: HttpRequest, token: str) -> HttpResponse:
             }
         )
 
-    payload_bytes, mime_type, filename = build_download_artifact_payload(download)
+    try:
+        payload_bytes, mime_type, filename = build_download_artifact_payload(download)
+    except Exception as exc:
+        if is_json_request(request):
+            return JsonResponse(
+                {
+                    "status": "error",
+                    "code": "media_unavailable",
+                    "message": str(exc),
+                },
+                status=502,
+            )
+        return HttpResponse(
+            f"Unable to retrieve the media stream from Instagram: {exc}. Please return to the homepage and re-analyze the link.",
+            status=502,
+            content_type="text/plain; charset=utf-8",
+        )
+
     response = HttpResponse(payload_bytes, content_type=mime_type)
     response["Content-Disposition"] = f'attachment; filename="{filename}"'
     response["Content-Length"] = str(len(payload_bytes))

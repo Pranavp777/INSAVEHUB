@@ -214,13 +214,9 @@ def get_user_access_summary(request: HttpRequest) -> Dict[str, Any]:
         }
 
     completed_in_cycle = get_completed_downloads_in_current_cycle(request)
-    ad_required = bool(
-        config.enable_advertisements and completed_in_cycle >= config.free_downloads_before_ad
-    )
-    initial_5s_ad_required = bool(
-        config.enable_advertisements and not ad_required and not dl_session.first_download_completed
-    )
-    active_ad = get_active_ad_session(request) if ad_required else None
+    ad_required = False
+    initial_5s_ad_required = False
+    active_ad = None
 
     if (completed_in_cycle >= 1 and not dl_session.first_download_completed) or dl_session.ad_completed:
         dl_session.first_download_completed = dl_session.first_download_completed or (completed_in_cycle >= 1)
@@ -228,29 +224,23 @@ def get_user_access_summary(request: HttpRequest) -> Dict[str, Any]:
         dl_session.save(update_fields=["first_download_completed", "ad_completed", "updated_at"])
 
     return {
-        "state": "STATE_2_AD_REQUIRED" if ad_required else "STATE_1_FIRST_DOWNLOAD",
-        "mode": "ad_required" if ad_required else "initial_free",
-        "label": "Unlock 24 Hours Free" if ad_required else "First Download Ready",
-        "sublabel": (
-            "Watch a 30-second advertisement to unlock 24 hours of free downloads"
-            if ad_required
-            else "5-second advertisement before first download"
-        ),
+        "state": "STATE_1_FIRST_DOWNLOAD",
+        "mode": "initial_free",
+        "label": "Free Download Ready",
+        "sublabel": "Direct 1080p high-speed download ready",
         "has_free_24h": False,
         "free_24h_started_at": None,
         "free_24h_expires_at": None,
         "free_24h_remaining_seconds": 0,
         "free_24h_formatted": "00:00:00",
-        "ad_required": ad_required,
-        "initial_5s_ad_required": initial_5s_ad_required,
-        "can_download_immediately": not ad_required,
+        "ad_required": False,
+        "initial_5s_ad_required": False,
+        "can_download_immediately": True,
         "first_download_completed": dl_session.first_download_completed,
         "completed_in_cycle": completed_in_cycle,
         "free_allowance": config.free_downloads_before_ad,
-        "active_ad_session_id": str(active_ad.id) if active_ad else None,
-        "active_ad_remaining_seconds": (
-            active_ad.remaining_seconds if active_ad else config.ad_countdown_seconds
-        ),
+        "active_ad_session_id": None,
+        "active_ad_remaining_seconds": 0,
         "download_session_id": str(dl_session.id),
     }
 

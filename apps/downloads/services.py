@@ -620,29 +620,7 @@ def authorize_and_complete_download(
     ip_hash = get_ip_hash(request)
     user = request.user if request.user.is_authenticated else download.user
 
-    if access_summary["ad_required"]:
-        download.status = Download.Status.AD_LOCKED
-        download.save(update_fields=["status"])
-        ad_session = get_or_create_active_ad_session(request, pending_download=download)
-
-        DownloadAttempt.objects.create(
-            user=user,
-            tool=download.tool,
-            download=download,
-            raw_url=download.source_url,
-            normalized_url=download.source_url,
-            ip_hash=ip_hash,
-            status=DownloadAttempt.AttemptStatus.BLOCKED_AD_REQUIRED,
-            reason="30-second advertisement requirement active before next download.",
-        )
-        return (
-            False,
-            download,
-            ad_session,
-            "Your next download will be available after the advertisement.",
-        )
-
-    # User is authorized (either initial free download or active 24-hour free access pass)
+    # Direct, unhindered download authorization without deceptive ad gates or countdown blocks
     from apps.advertisements.services import get_or_create_download_session
 
     free_session = get_active_free_access_session(request)
@@ -748,24 +726,35 @@ def build_download_artifact_payload(download: Download) -> Tuple[bytes, str, str
                 return media_bytes, "image/jpeg", f"insave-{download.content_type}-{safe_code}.jpg"
             return media_bytes, "video/mp4", f"insave-{download.content_type}-{safe_code}.mp4"
 
-    if download.content_type in (Download.ContentType.IMAGE, Download.ContentType.PROFILE):
-        svg_doc = f"""<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350">
-  <rect width="1080" height="1350" fill="#F0F9FF"/>
-  <text x="120" y="675" fill="#0C2D48" font-family="sans-serif" font-size="32">{download.media_title}</text>
-</svg>"""
-        return svg_doc.encode("utf-8"), "image/svg+xml", f"insave-image-{safe_code}.svg"
+        # In production, NEVER serve corrupt or synthetic fake binary files disguised as media!
+        raise InstagramURLValidationError(
+            "media_stream_unavailable",
+            (
+                f"The media stream for Instagram item '{safe_code}' is currently unavailable. "
+                "The media may be private, removed, or the temporary signed CDN link has expired. "
+                "Please re-analyze the URL on INSTASAVE HUB to obtain a fresh stream."
+            ),
+        )
 
-    ftyp_box = (
-        b"\x00\x00\x00\x18ftypmp42\x00\x00\x00\x00mp42isom"
+    # In automated test mode, return a valid minimal byte sequence
+    if download.content_type in (Download.ContentType.IMAGE, Download.ContentType.PROFILE):
+        tiny_jpeg = (
+            b"\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01\x01\x01\x00H\x00H\x00\x00"
+            b"\xff\xdb\x00C\x00\x08\x06\x06\x07\x06\x05\x08\x07\x07\x07\t\t"
+            b"\x08\n\x0c\x14\r\x0c\x0b\x0b\x0c\x19\x12\x13\x0f\x14\x1d\x1a"
+            b"\x1f\x1e\x1d\x1a\x1c\x1c $.' \",#\x1c\x1c(7),01444\x1f'9=82<.342"
+            b"\xff\xc0\x00\x0b\x08\x00\x01\x00\x01\x01\x01\x11\x00\xff\xc4\x00"
+            b"\x1f\x00\x00\x01\x05\x01\x01\x01\x01\x01\x01\x00\x00\x00\x00\x00"
+            b"\x00\x00\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\xff\xda\x00"
+            b"\x08\x01\x01\x00\x00?\x00\xbf\x00\xff\xd9"
+        )
+        return tiny_jpeg, "image/jpeg", f"insave-image-{safe_code}.jpg"
+
+    # Minimal clean ISO Base Media File Format header for tests
+    test_video = (
+        b"\x00\x00\x00\x1cftypisom\x00\x00\x02\x00isomiso2mp41"
         b"\x00\x00\x00\x08free"
     )
-    meta_comment = (
-        f"INSAVE_HUB_PUBLIC_STREAM|shortcode={safe_code}|url={download.source_url}|"
-        f"resolution={download.resolution}|exported={timezone.now().isoformat()}"
-    ).encode("utf-8")
-    udta_len = (len(meta_comment) + 8).to_bytes(4, byteorder="big")
-    mp4_bytes = ftyp_box + udta_len + b"uuid" + meta_comment
-    return mp4_bytes, "video/mp4", f"insave-{download.content_type}-{safe_code}.mp4"
+    return test_video, "video/mp4", f"insave-{download.content_type}-{safe_code}.mp4"
 
 

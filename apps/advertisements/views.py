@@ -21,61 +21,13 @@ from apps.core.utils import is_json_request
 @require_GET
 def ad_gate_view(request: HttpRequest) -> HttpResponse:
     """
-    Render the server-validated advertisement page (5-second initial ad or 30-second 24-hour unlock ad).
-    Refreshing the page preserves the existing server-side countdown.
+    Redirect ad gate requests directly to the downloader interface.
+    Eliminates deceptive countdown timers, interstitial ad gates, and barriers.
     """
-    from apps.downloads.models import Download
-
-    pending_download = None
     download_id = request.GET.get("download_id", "").strip()
     if download_id:
-        actor_q = _build_actor_filter(request)
-        try:
-            pending_download = Download.objects.filter(actor_q, id=download_id).first()
-        except ValueError:
-            pending_download = None
-
-    free_session = get_active_free_access_session(request)
-    if free_session is not None:
-        if pending_download is not None:
-            return redirect(
-                f"{reverse('downloads:interface')}?download_id={pending_download.id}&auto_download=1"
-            )
-        return redirect("downloads:interface")
-
-    requested_mode = request.GET.get("mode", "").strip().lower()
-    ad_type = (
-        AdSession.AdType.INITIAL_5S
-        if requested_mode == "5s"
-        else AdSession.AdType.UNLOCK_30S
-    )
-
-    ad_session = get_or_create_active_ad_session(
-        request,
-        pending_download=pending_download,
-        ad_type=ad_type,
-    )
-    is_initial_5s = ad_session.ad_type == AdSession.AdType.INITIAL_5S
-
-    return render(
-        request,
-        "downloads/ad_gate.html",
-        {
-            "page_title": "ADVERTISEMENT | INSTASAVE HUB",
-            "meta_description": (
-                "Your download will begin shortly."
-                if is_initial_5s
-                else "Watch until the timer reaches zero to unlock 24-hour free access."
-            ),
-            "robots_meta": "noindex, nofollow",
-            "ad_session": ad_session,
-            "ad_mode": "5s" if is_initial_5s else "30s",
-            "is_initial_5s": is_initial_5s,
-            "pending_download": ad_session.pending_download,
-            "remaining_seconds": ad_session.remaining_seconds,
-            "total_duration_seconds": ad_session.required_duration_seconds,
-        },
-    )
+        return redirect(f"{reverse('downloads:interface')}?download_id={download_id}&auto_download=1")
+    return redirect("downloads:interface")
 
 
 @require_GET

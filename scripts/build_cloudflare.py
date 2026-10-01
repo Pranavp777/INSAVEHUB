@@ -105,20 +105,20 @@ def _render_without_db(dist_dir: Path) -> None:
     access_state = {
         "state": "STATE_1",
         "mode": "initial_free",
-        "label": "First Download (5s Quick Ad)",
-        "sublabel": "Your download will begin shortly after a 5-second advertisement.",
+        "label": "Free Download Ready",
+        "sublabel": "Direct 1080p high-speed download ready",
         "has_free_24h": False,
         "free_24h_expires_at": None,
         "free_24h_remaining_seconds": 0,
         "free_24h_formatted": "00:00:00",
         "ad_required": False,
-        "initial_5s_ad_required": True,
+        "initial_5s_ad_required": False,
         "first_download_completed": False,
         "can_download_immediately": True,
         "completed_in_cycle": 0,
         "free_allowance": 1,
         "active_ad_session_id": None,
-        "active_ad_remaining_seconds": 30,
+        "active_ad_remaining_seconds": 0,
     }
     anon_user = SimpleNamespace(is_authenticated=False, is_staff=False, is_superuser=False, username="")
 
@@ -236,22 +236,6 @@ def _render_without_db(dist_dir: Path) -> None:
                 "page_title": "Download History | INSTASAVE HUB",
                 "meta_description": "Review your analyzed Instagram content and completed downloads.",
                 "downloads": [],
-            },
-        ),
-        (
-            "/ads/gate/",
-            "ads/gate/index.html",
-            "downloads/ad_gate.html",
-            {
-                "page_title": "ADVERTISEMENT | INSTASAVE HUB",
-                "meta_description": "Watch until the timer reaches zero to unlock 24-hour free access.",
-                "robots_meta": "noindex, nofollow",
-                "ad_session": dummy_ad_session,
-                "ad_mode": "30s",
-                "is_initial_5s": False,
-                "pending_download": None,
-                "remaining_seconds": 30,
-                "total_duration_seconds": 30,
             },
         ),
         (
@@ -413,8 +397,21 @@ def main() -> None:
     staticfiles_dir = BASE_DIR / "staticfiles"
     if staticfiles_dir.exists():
         shutil.rmtree(staticfiles_dir)
-    shutil.copytree(static_src, staticfiles_dir, dirs_exist_ok=True)
-    shutil.copytree(static_src, dist_dir / "static", dirs_exist_ok=True)
+    def _copy_safe(src: Path, dst: Path) -> None:
+        for root, _dirs, files in os.walk(src):
+            rel = Path(root).relative_to(src)
+            t_dir = dst / rel
+            t_dir.mkdir(parents=True, exist_ok=True)
+            for f in files:
+                s_file = Path(root) / f
+                d_file = t_dir / f
+                try:
+                    d_file.write_bytes(s_file.read_bytes())
+                except Exception:
+                    pass
+
+    _copy_safe(static_src, staticfiles_dir)
+    _copy_safe(static_src, dist_dir / "static")
 
     if HAS_SQLITE3:
         from django.core.management import call_command
@@ -424,7 +421,7 @@ def main() -> None:
 
         call_command("migrate", interactive=False, verbosity=0)
         call_command("collectstatic", interactive=False, clear=True, verbosity=0)
-        shutil.copytree(staticfiles_dir, dist_dir / "static", dirs_exist_ok=True)
+        _copy_safe(staticfiles_dir, dist_dir / "static")
         ensure_default_tools()
 
         client = Client(HTTP_HOST="localhost")
@@ -441,7 +438,6 @@ def main() -> None:
             ("/donations/", "donations/index.html"),
             ("/auth/login/", "auth/login/index.html"),
             ("/auth/register/", "auth/register/index.html"),
-            ("/ads/gate/", "ads/gate/index.html"),
             ("/manifest.webmanifest", "manifest.webmanifest"),
             ("/sw.js", "sw.js"),
             ("/robots.txt", "robots.txt"),

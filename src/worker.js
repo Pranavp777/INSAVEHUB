@@ -348,8 +348,8 @@ export async function handleAnalyzeRequest(request) {
       status: "ready",
       execute_url: `/downloads/execute/${token}/`,
       preview_url: `/downloads/execute/${token}/?preview=1`,
-      ad_gate_url: `/ads/gate/?download_id=${encodeURIComponent(shortcode)}&mode=30s`,
-      initial_ad_gate_url: `/ads/gate/?download_id=${encodeURIComponent(shortcode)}&mode=5s`,
+      ad_gate_url: "",
+      initial_ad_gate_url: "",
     },
     access,
   });
@@ -378,38 +378,14 @@ function formatHMS(totalSeconds) {
 }
 
 export function getEdgeAccessState(request) {
-  const cookies = parseCookies(request);
-  const freeUntilMs = parseInt(cookies.insave_free_until || "0", 10);
-  const nowMs = Date.now();
-
-  if (!isNaN(freeUntilMs) && freeUntilMs > nowMs) {
-    const remainingSec = Math.max(1, Math.floor((freeUntilMs - nowMs) / 1000));
-    return {
-      state: "STATE_3_FREE_24H_ACTIVE",
-      mode: "free_24h_pass",
-      label: "24-HOUR FREE ACCESS",
-      sublabel: "Ad-free downloads enabled",
-      ad_required: false,
-      initial_5s_ad_required: false,
-      first_download_completed: true,
-      has_free_24h: true,
-      free_24h_expires_at: new Date(freeUntilMs).toISOString(),
-      free_24h_formatted: formatHMS(remainingSec),
-      free_24h_remaining_seconds: remainingSec,
-    };
-  }
-
-  const firstDlDone = cookies.insave_first_dl === "1";
   return {
-    state: firstDlDone ? "STATE_2_AD_REQUIRED" : "STATE_1_FIRST_DOWNLOAD",
-    mode: firstDlDone ? "ad_required" : "initial_free",
-    label: firstDlDone ? "Unlock 24 Hours Free" : "First Download Ready",
-    sublabel: firstDlDone
-      ? "Watch a 30-second advertisement to unlock 24 hours of free downloads"
-      : "Free download ready",
-    ad_required: firstDlDone,
+    state: "STATE_1_FIRST_DOWNLOAD",
+    mode: "initial_free",
+    label: "Free Download Ready",
+    sublabel: "Direct 1080p high-speed download ready",
+    ad_required: false,
     initial_5s_ad_required: false,
-    first_download_completed: firstDlDone,
+    first_download_completed: false,
     has_free_24h: false,
     free_24h_expires_at: null,
     free_24h_formatted: "00:00:00",
