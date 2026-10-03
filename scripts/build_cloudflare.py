@@ -81,6 +81,7 @@ def _render_without_db(dist_dir: Path) -> None:
     from django.template.loader import render_to_string
     from django.test import RequestFactory
     from apps.core.views import robots_txt, service_worker, web_manifest
+    from apps.accounts.forms import LoginForm, RegistrationForm
 
     rf = RequestFactory()
     tools = _build_tool_objects()
@@ -301,6 +302,7 @@ def _render_without_db(dist_dir: Path) -> None:
             "auth/login.html",
             {
                 "page_title": "Sign In | INSTASAVE HUB",
+                "form": LoginForm(),
             },
         ),
         (
@@ -308,7 +310,8 @@ def _render_without_db(dist_dir: Path) -> None:
             "auth/register/index.html",
             "auth/register.html",
             {
-                "page_title": "Register | INSTASAVE HUB",
+                "page_title": "Create Account | INSTASAVE HUB",
+                "form": RegistrationForm(),
             },
         ),
         (

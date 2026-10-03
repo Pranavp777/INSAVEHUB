@@ -335,7 +335,7 @@
     </div>
 
     <form id="instagramAnalyzerForm" action="/api/downloads/analyze/" method="post" novalidate>
-      <input type="hidden" name="csrfmiddlewaretoken" value="2jAOUeZS34M8HsQwKalAvvSOzA3IImkmAOPc0tEgVGslADZLYCyGrWBoRt8VAfDt">
+      <input type="hidden" name="csrfmiddlewaretoken" value="WAJCpg2OQV6SZyxbjj1hJstIMVO5QuXLkO38oQaO6yRHR6Gd2HKk14k7F01BlfbY">
       <input type="hidden" id="instagramToolSlug" name="tool_slug" value="video-downloader">
       <label for="instagramUrlInput" class="form-label">Paste Public Instagram URL</label>
       <div class="analyzer-bar">
@@ -421,8 +421,8 @@
             </div>
           </div>
 
-          <div id="resAdRequirementNotice" class="glass-alert glass-alert-warning" hidden style="margin-bottom: var(--space-4);">
-            <span>Watch a 30-second advertisement and enjoy ad-free downloads for the next 24 hours.</span>
+          <div id="resAdRequirementNotice" class="glass-alert glass-alert-info" hidden style="margin-bottom: var(--space-4);">
+            <span>High-speed download link generated. Click download below to save your media.</span>
           </div>
 
           <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-3);">
@@ -525,19 +525,44 @@
 
   <!-- Dedicated Mobile Ergonomic Bottom Control Dock -->
   <nav class="mobile-bottom-dock" aria-label="Mobile Quick Access Dock">
-    <a href="/" class="dock-item ">
+    <a href="/" class="dock-item " aria-label="Home">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
       <span>Home</span>
     </a>
-    <a href="/downloads/" class="dock-item ">
+    <a href="/downloads/" class="dock-item " aria-label="Download">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" y1="15" x2="12" y2="3"></line>
+      </svg>
       <span>Download</span>
     </a>
-    <a href="/tools/" class="dock-item is-active">
+    <a href="/tools/" class="dock-item is-active" aria-label="Tools">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
       <span>Tools</span>
     </a>
-    <a href="/about/" class="dock-item ">
+    <a href="/about/" class="dock-item " aria-label="About">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
       <span>About</span>
     </a>
-    <a href="/#faq" class="dock-item">
+    <a href="/#faq" class="dock-item" aria-label="FAQ">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+      </svg>
       <span>FAQ</span>
     </a>
   </nav>

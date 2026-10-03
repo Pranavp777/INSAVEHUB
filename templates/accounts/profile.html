@@ -54,13 +54,11 @@
         <!-- Free-Access Status Box -->
         <div class="glass-subpanel" style="padding: var(--space-4); margin-top: var(--space-5);">
           <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span class="mono-label">FREE-ACCESS STATUS</span>
+            <span class="mono-label">ACCESS STATUS</span>
             {% if access_state.has_free_24h %}
               <span class="mono-label" style="color: var(--light-emerald);">24-HOUR PASS ACTIVE</span>
-            {% elif access_state.ad_required %}
-              <span class="mono-label" style="color: var(--light-amber);">30S AD REQUIRED</span>
             {% else %}
-              <span class="mono-label" style="color: var(--light-cyan);">AVAILABLE</span>
+              <span class="mono-label" style="color: var(--light-cyan);">DIRECT ACCESS ACTIVE</span>
             {% endif %}
           </div>
           {% if access_state.has_free_24h %}

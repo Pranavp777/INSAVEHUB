@@ -1,47 +1,95 @@
 /* ==========================================================================
    INSTASAVE HUB — RESPONSIVE DESKTOP, TABLET & MOBILE ADAPTATIONS
    Futuristic iOS-Inspired Dark Glass Edition
+   Tested Breakpoints: 320px, 375px, 390px, 414px, 480px, 768px, 1024px, 1280px, 1440px, 1920px
    ========================================================================== */
 
-/* Mobile Navigation Toggle & Bottom Dock (Hidden on Desktop) */
+/* Universal Overflow & Media Containment Guards */
+html,
+body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.glass-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile Navigation Toggle & Drawer (Hidden on Desktop) */
 .mobile-menu-toggle {
   display: none;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 50%;
   color: var(--text-primary);
   cursor: pointer;
+  touch-action: manipulation;
+  transition: all var(--duration-fast) ease;
+}
+
+.mobile-menu-toggle:hover,
+.mobile-menu-toggle:active {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(96, 165, 250, 0.4);
 }
 
 .mobile-drawer {
   display: none;
   position: fixed;
-  top: 90px;
+  top: 86px;
   left: var(--space-4);
   right: var(--space-4);
   z-index: 99;
-  background: rgba(8, 15, 34, 0.92);
+  background: rgba(8, 15, 34, 0.94);
   backdrop-filter: var(--blur-lg);
   -webkit-backdrop-filter: var(--blur-lg);
-  border: 1px solid rgba(96, 165, 250, 0.24);
+  border: 1px solid rgba(96, 165, 250, 0.28);
   border-radius: 26px;
   padding: var(--space-6);
   box-shadow: var(--shadow-ambient);
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .mobile-drawer.is-open {
   display: block;
+  animation: drawerSlideDown 260ms var(--ease-out-expo);
+}
+
+@keyframes drawerSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .mobile-bottom-dock {
   display: none;
 }
 
-/* Laptop & Compact Desktop (<= 1120px) */
+/* ==========================================================================
+   BREAKPOINT 1: Laptop & Compact Desktop (<= 1120px)
+   ========================================================================== */
 @media (max-width: 1120px) {
   .hero-grid {
     grid-template-columns: 1.05fr 0.95fr;
@@ -62,7 +110,9 @@
   }
 }
 
-/* Tablet & Large Mobile (<= 880px) */
+/* ==========================================================================
+   BREAKPOINT 2: Tablet & Small Laptop (<= 880px)
+   ========================================================================== */
 @media (max-width: 880px) {
   .nav-links,
   .nav-actions .hide-tablet {
@@ -75,11 +125,11 @@
 
   .hero-grid {
     grid-template-columns: 1fr;
-    gap: var(--space-10);
+    gap: var(--space-8);
   }
 
   .ios-phone-stage {
-    min-height: 540px;
+    min-height: 520px;
   }
 
   .grid-3,
@@ -94,26 +144,27 @@
   }
 
   .main-viewport {
-    padding-bottom: 6.5rem;
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 16px));
   }
 
-  /* Dedicated Mobile Bottom Control Dock */
+  /* Dedicated Mobile Bottom Control Dock (5 Items) */
   .mobile-bottom-dock {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     position: fixed;
-    bottom: 12px;
+    bottom: max(10px, env(safe-area-inset-bottom));
     left: 12px;
     right: 12px;
     z-index: 98;
-    height: 62px;
+    height: 64px;
     border-radius: var(--radius-pill);
-    background: rgba(8, 14, 30, 0.86);
+    background: rgba(8, 14, 30, 0.90);
     backdrop-filter: var(--blur-md);
     -webkit-backdrop-filter: var(--blur-md);
-    border: 1px solid rgba(148, 184, 255, 0.18);
-    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.75);
-    padding: 0 var(--space-2);
+    border: 1px solid rgba(148, 184, 255, 0.22);
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.82);
+    padding: 0 var(--space-1);
+    align-items: center;
   }
 
   .dock-item {
@@ -121,30 +172,57 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2px;
+    gap: 3px;
     font-family: var(--font-sans);
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
     color: var(--text-muted);
     min-height: 48px;
     border-radius: var(--radius-pill);
+    transition: all var(--duration-fast) ease;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  .dock-item.is-active,
+  .dock-item svg {
+    width: 19px;
+    height: 19px;
+    transition: transform var(--duration-fast) ease;
+  }
+
+  .dock-item.is-active {
+    color: #FFFFFF;
+    background: rgba(59, 130, 246, 0.16);
+  }
+
+  .dock-item.is-active svg {
+    color: var(--light-cyan);
+    transform: translateY(-1px);
+  }
+
   .dock-item:hover {
     color: #FFFFFF;
   }
+
+  /* Prevent automatic iOS Safari zoom by enforcing 16px on form inputs */
+  .glass-input,
+  .glass-select,
+  .glass-textarea {
+    font-size: 16px !important;
+  }
 }
 
-/* Mobile Handsets — iOS & Android (<= 600px) */
+/* ==========================================================================
+   BREAKPOINT 3: Phablets & Large Handsets (<= 600px)
+   ========================================================================== */
 @media (max-width: 600px) {
   .container-shell {
     padding: 0 var(--space-4);
   }
 
   .glass-header {
-    top: 12px;
+    top: 10px;
     padding: 0 10px;
   }
 
@@ -154,11 +232,12 @@
   }
 
   .hero-section {
-    padding: var(--space-4) 0 var(--space-10);
+    padding: var(--space-3) 0 var(--space-8);
   }
 
   .hero-headline {
     font-size: 2.15rem;
+    line-height: 1.1;
   }
 
   .hero-cta-group {
@@ -168,21 +247,6 @@
   .hero-cta-group .btn-glass {
     width: 100%;
     min-height: 48px;
-  }
-
-  .ios-phone-frame {
-    width: 288px;
-    height: 572px;
-  }
-
-  .ios-floating-card-left {
-    left: -6px;
-    top: 42px;
-  }
-
-  .ios-floating-card-right {
-    right: -6px;
-    bottom: 64px;
   }
 
   .analyzer-bar {
@@ -217,5 +281,210 @@
 
   .ad-countdown-stage {
     padding: var(--space-5) var(--space-4);
+  }
+}
+
+/* ==========================================================================
+   BREAKPOINT 4: Standard Mobile Screens (<= 480px)
+   Covering: 480px, 414px (iPhone Plus/Max), 390px (iPhone 12-15), 375px (iPhone X/11)
+   ========================================================================== */
+@media (max-width: 480px) {
+  .container-shell {
+    padding: 0 14px;
+  }
+
+  .hero-section {
+    padding: var(--space-2) 0 var(--space-6);
+  }
+
+  .hero-headline {
+    font-size: 1.85rem;
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+    word-break: break-word;
+  }
+
+  .hero-lead {
+    font-size: 0.95rem;
+    margin-bottom: var(--space-4);
+  }
+
+  .hero-eyebrow-pill {
+    font-size: 0.68rem;
+    padding: 5px 10px;
+    letter-spacing: 0.08em;
+  }
+
+  .hero-social-proof {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 12px;
+  }
+
+  /* Phone Stage & Mockup Responsive Clamping */
+  .ios-phone-stage {
+    min-height: auto;
+    padding: var(--space-3) 0;
+    overflow: hidden;
+    width: 100%;
+    perspective: none;
+  }
+
+  .ios-phone-glow {
+    width: 260px;
+    height: 320px;
+    filter: blur(36px);
+  }
+
+  .ios-phone-frame {
+    width: 100%;
+    max-width: 290px;
+    height: 530px;
+    margin: 0 auto;
+    border-radius: 40px;
+    padding: 9px;
+  }
+
+  .ios-phone-frame:hover {
+    transform: none;
+  }
+
+  .ios-screen {
+    border-radius: 32px;
+    padding: 12px 10px 14px;
+  }
+
+  /* Conceal floating cards on small screens to eliminate horizontal overflow */
+  .ios-floating-card {
+    display: none !important;
+  }
+
+  /* Video Preview Layout Responsive Adaptations */
+  .video-preview-layout {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .video-preview-screen {
+    width: 100%;
+    max-width: 100%;
+    min-height: 240px;
+    border-radius: 18px;
+  }
+
+  .video-preview-overlay-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 8px 10px;
+  }
+
+  .result-spec-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+
+  .spec-cell {
+    padding: 8px 12px;
+  }
+
+  .glass-panel {
+    padding: var(--space-5) var(--space-4);
+    border-radius: 20px;
+  }
+
+  .section-title {
+    font-size: 1.65rem;
+  }
+
+  .section-subtitle {
+    font-size: 0.92rem;
+  }
+
+  .downloader-mode-tabs {
+    gap: 6px;
+  }
+
+  .downloader-tab-btn {
+    padding: 0.42rem 0.8rem;
+    font-size: 0.78rem;
+  }
+}
+
+/* ==========================================================================
+   BREAKPOINT 5: Ultra-Compact Mobile Screens (<= 360px & 320px)
+   Covering: iPhone SE (320px), Galaxy Fold closed (320-340px), etc.
+   ========================================================================== */
+@media (max-width: 360px) {
+  .container-shell {
+    padding: 0 10px;
+  }
+
+  .brand-wordmark {
+    font-size: 0.86rem;
+  }
+
+  .brand-mark {
+    width: 28px;
+    height: 28px;
+  }
+
+  .hero-headline {
+    font-size: 1.55rem;
+    line-height: 1.14;
+  }
+
+  .hero-eyebrow-pill {
+    font-size: 0.62rem;
+    padding: 4px 8px;
+  }
+
+  .ios-phone-frame {
+    max-width: 256px;
+    height: 480px;
+    border-radius: 34px;
+    padding: 8px;
+  }
+
+  .ios-screen {
+    border-radius: 26px;
+    padding: 10px 8px 12px;
+  }
+
+  .ios-dynamic-island {
+    width: 84px;
+    height: 22px;
+    padding: 0 6px;
+  }
+
+  .mobile-bottom-dock {
+    left: 6px;
+    right: 6px;
+    bottom: max(6px, env(safe-area-inset-bottom));
+    height: 58px;
+    padding: 0 2px;
+  }
+
+  .dock-item {
+    font-size: 0.6rem;
+    min-height: 44px;
+    gap: 2px;
+  }
+
+  .dock-item svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .btn-glass {
+    padding: 0.6rem 0.95rem;
+    font-size: 0.84rem;
+  }
+
+  .section-title {
+    font-size: 1.45rem;
   }
 }

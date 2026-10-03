@@ -49,13 +49,13 @@
           Next access reset: {{ access_summary.free_24h_expires_at|date:"Y-m-d H:i" }} UTC
         </div>
       {% elif access_summary.ad_required %}
-        <div style="font-size: 0.9rem; color: var(--light-amber); font-family: var(--font-mono); margin-bottom: var(--space-2);">
-          Awaiting 30-Second Advertisement
+        <div style="font-size: 0.9rem; color: var(--light-cyan); font-family: var(--font-mono); margin-bottom: var(--space-2);">
+          Direct Fast Access
         </div>
         <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: var(--space-4);">
-          Complete the 30-second sponsor verification to unlock your next download and activate a 24-hour free access window.
+          All features are unlocked. Analyze and download public Instagram media directly with 1080p stream preview.
         </p>
-        <a href="{% url 'advertisements:gate' %}" class="btn-glass btn-primary btn-sm">Complete 30s Verification</a>
+        <a href="{% url 'downloads:interface' %}" class="btn-glass btn-primary btn-sm">Open Downloader</a>
       {% else %}
         <div style="font-size: 0.9rem; color: var(--light-cyan); font-family: var(--font-mono); margin-bottom: var(--space-1);">
           Available
@@ -64,28 +64,26 @@
           IMMEDIATE ACCESS
         </div>
         <p style="font-size: 0.82rem; color: var(--text-muted);">
-          Next access reset triggers after your initial completed download.
+          Ready for high-speed URL analysis and media downloading.
         </p>
       {% endif %}
     </div>
 
-    <!-- Advertisement Status Panel -->
+    <!-- Download System Status Panel -->
     <div class="glass-panel reveal-item" style="padding: var(--space-6);">
-      <span class="mono-label">ADVERTISEMENT STATUS</span>
+      <span class="mono-label">DOWNLOAD STATUS</span>
       <h2 style="font-size: 1.25rem; margin: var(--space-2) 0;">
         {% if access_summary.has_free_24h %}
-          Interstitial Exempt (24h Window)
-        {% elif access_summary.ad_required %}
-          30-Second Gate Required
+          Premium 24h Window Active
         {% else %}
-          Standby Mode
+          Direct High-Speed Access Active
         {% endif %}
       </h2>
       <p style="font-size: 0.86rem; color: var(--text-secondary); margin-bottom: var(--space-4);">
-        Completed Sponsor Sessions: <strong>{{ ad_completed_count }}</strong>
+        Completed Downloads: <strong>{{ total_downloads }}</strong>
       </p>
       <div class="glass-subpanel" style="padding: var(--space-3); font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);">
-        RULE: {{ site_config.ad_countdown_seconds }}S AD GRANTS {{ site_config.free_access_hours }}H UNINTERRUPTED ACCESS
+        FAST, PRIVATE &amp; ENCRYPTED MEDIA RETRIEVAL
       </div>
     </div>
 

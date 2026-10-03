@@ -4,7 +4,7 @@
 <div class="container-shell" style="max-width: 640px; padding-top: var(--space-6);">
   <div class="glass-panel reveal-item" style="padding: var(--space-8);">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
-      <span class="mono-label">BUY US COFEE RECEIPT</span>
+      <span class="mono-label">BUY US COFFEE RECEIPT</span>
       <div class="telemetry-pill">
         <span class="status-dot {% if donation.status == 'completed' %}status-dot-emerald{% elif donation.status == 'failed' %}status-dot-rose{% else %}status-dot-amber{% endif %}"></span>
         <span>{{ donation.get_status_display|upper }}</span>
@@ -65,7 +65,7 @@
     {% endif %}
 
     <div style="display: flex; gap: var(--space-3);">
-      <a href="{% url 'donations:index' %}" class="btn-glass btn-block">Back to Buy Us Cofee</a>
+      <a href="{% url 'donations:index' %}" class="btn-glass btn-block">Back to Buy Us Coffee</a>
       <a href="{% url 'core:home' %}" class="btn-glass btn-block">Back to Home</a>
     </div>
   </div>
@@ -85,7 +85,7 @@
         amount: "{{ donation.amount }}",
         currency: "{{ donation.currency }}",
         name: "INSTASAVE HUB",
-        description: "Buy Us Cofee",
+        description: "Buy Us Coffee",
         order_id: "{{ donation.provider_order_id }}",
         handler: function (response) {
           document.getElementById("rzpPaymentId").value = response.razorpay_payment_id;

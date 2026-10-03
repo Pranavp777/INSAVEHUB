@@ -4,8 +4,8 @@
 {% block content %}
 <div class="container-shell" style="padding-top: var(--space-4);">
   <div class="section-header reveal-item">
-    <span class="mono-label">BUY US COFEE</span>
-    <h1 class="section-title">Buy Us Cofee</h1>
+    <span class="mono-label">BUY US COFFEE</span>
+    <h1 class="section-title">Buy Us Coffee</h1>
     <p class="section-subtitle">
       Select an amount below to buy us a coffee.
     </p>
@@ -15,7 +15,7 @@
     <!-- One-Time Contribution Form -->
     <div class="glass-panel reveal-item" style="padding: var(--space-8);">
       <span class="mono-label" style="color: var(--light-cyan);">SELECT AMOUNT</span>
-      <h2 style="font-size: 1.35rem; margin: var(--space-1) 0 var(--space-4);">Buy Us Cofee</h2>
+      <h2 style="font-size: 1.35rem; margin: var(--space-1) 0 var(--space-4);">Buy Us Coffee</h2>
 
       <form method="post" action="{% url 'donations:create' %}" id="donationOrderForm">
         {% csrf_token %}
@@ -70,7 +70,7 @@
         </div>
 
         <button type="submit" class="btn-glass btn-primary btn-block">
-          Buy Us Cofee
+          Buy Us Coffee
         </button>
       </form>
     </div>
@@ -115,7 +115,7 @@
 
       <div class="glass-panel reveal-item" style="padding: var(--space-6);">
         <span class="mono-label">RECENT SUPPORTERS</span>
-        <h2 style="font-size: 1.2rem; margin: var(--space-1) 0 var(--space-4);">Recent Cofee Supporters</h2>
+        <h2 style="font-size: 1.2rem; margin: var(--space-1) 0 var(--space-4);">Recent Coffee Supporters</h2>
 
         {% if recent_verified %}
           <div style="display: flex; flex-direction: column; gap: var(--space-3);">

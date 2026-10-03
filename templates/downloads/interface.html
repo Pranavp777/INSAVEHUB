@@ -14,12 +14,9 @@
         {% if access_state.has_free_24h %}
           <span class="status-dot status-dot-emerald"></span>
           <span>24h Pass Active (<strong data-free-access-seconds="{{ access_state.free_24h_remaining_seconds }}">{{ access_state.free_24h_formatted }}</strong>)</span>
-        {% elif access_state.ad_required %}
-          <span class="status-dot status-dot-amber"></span>
-          <span>30s Sponsor Verification Required</span>
         {% else %}
           <span class="status-dot status-dot-emerald"></span>
-          <span>Free Download Ready</span>
+          <span>Fast Download Ready</span>
         {% endif %}
       </div>
       <a href="{% url 'downloads:history' %}" class="btn-glass btn-sm">Download History</a>
@@ -135,8 +132,8 @@
             </div>
           </div>
 
-          <div id="resAdRequirementNotice" class="glass-alert glass-alert-warning" hidden style="margin-bottom: var(--space-4);">
-            <span>Watch a 30-second advertisement and enjoy ad-free downloads for the next 24 hours.</span>
+          <div id="resAdRequirementNotice" class="glass-alert glass-alert-info" hidden style="margin-bottom: var(--space-4);">
+            <span>High-speed download link generated. Click download below to save your media.</span>
           </div>
 
           <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-3);">

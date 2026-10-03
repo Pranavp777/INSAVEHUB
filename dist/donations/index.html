@@ -300,8 +300,8 @@
     
 <div class="container-shell" style="padding-top: var(--space-4);">
   <div class="section-header reveal-item">
-    <span class="mono-label">BUY US COFEE</span>
-    <h1 class="section-title">Buy Us Cofee</h1>
+    <span class="mono-label">BUY US COFFEE</span>
+    <h1 class="section-title">Buy Us Coffee</h1>
     <p class="section-subtitle">
       Select an amount below to buy us a coffee.
     </p>
@@ -311,10 +311,10 @@
     <!-- One-Time Contribution Form -->
     <div class="glass-panel reveal-item" style="padding: var(--space-8);">
       <span class="mono-label" style="color: var(--light-cyan);">SELECT AMOUNT</span>
-      <h2 style="font-size: 1.35rem; margin: var(--space-1) 0 var(--space-4);">Buy Us Cofee</h2>
+      <h2 style="font-size: 1.35rem; margin: var(--space-1) 0 var(--space-4);">Buy Us Coffee</h2>
 
       <form method="post" action="/donations/create/" id="donationOrderForm">
-        <input type="hidden" name="csrfmiddlewaretoken" value="Dzx4QpzdsSLfacEgvR7V64BgLUwFeRxEb4MsWEeBkurs3nNvJjk12vkQ3NBS6KQL">
+        <input type="hidden" name="csrfmiddlewaretoken" value="vC90bsVi74kForO990ODqF4V6qfykqBCTQtwa23inH5ugZXbSoxGIhVkZvs4PbPP">
 
         <label class="form-label">Select Preset Amount (INR)</label>
         <div class="donation-tier-grid">
@@ -384,7 +384,7 @@
         </div>
 
         <button type="submit" class="btn-glass btn-primary btn-block">
-          Buy Us Cofee
+          Buy Us Coffee
         </button>
       </form>
     </div>
@@ -395,7 +395,7 @@
 
       <div class="glass-panel reveal-item" style="padding: var(--space-6);">
         <span class="mono-label">RECENT SUPPORTERS</span>
-        <h2 style="font-size: 1.2rem; margin: var(--space-1) 0 var(--space-4);">Recent Cofee Supporters</h2>
+        <h2 style="font-size: 1.2rem; margin: var(--space-1) 0 var(--space-4);">Recent Coffee Supporters</h2>
 
         
           <p style="font-size: 0.88rem; color: var(--text-muted);">
@@ -436,19 +436,44 @@
 
   <!-- Dedicated Mobile Ergonomic Bottom Control Dock -->
   <nav class="mobile-bottom-dock" aria-label="Mobile Quick Access Dock">
-    <a href="/" class="dock-item ">
+    <a href="/" class="dock-item " aria-label="Home">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
       <span>Home</span>
     </a>
-    <a href="/downloads/" class="dock-item ">
+    <a href="/downloads/" class="dock-item " aria-label="Download">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" y1="15" x2="12" y2="3"></line>
+      </svg>
       <span>Download</span>
     </a>
-    <a href="/tools/" class="dock-item ">
+    <a href="/tools/" class="dock-item " aria-label="Tools">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
       <span>Tools</span>
     </a>
-    <a href="/about/" class="dock-item ">
+    <a href="/about/" class="dock-item " aria-label="About">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
       <span>About</span>
     </a>
-    <a href="/#faq" class="dock-item">
+    <a href="/#faq" class="dock-item" aria-label="FAQ">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+      </svg>
       <span>FAQ</span>
     </a>
   </nav>
