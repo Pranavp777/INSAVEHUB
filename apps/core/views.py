@@ -300,28 +300,41 @@ def health_check(request: HttpRequest) -> JsonResponse:
 def web_manifest(request: HttpRequest) -> JsonResponse:
     """Serve the Progressive Web App (PWA) manifest for desktop and mobile installation."""
     manifest = {
+        "id": "/",
         "name": "INSTASAVE HUB — Instagram Video & Post Downloader",
         "short_name": "INSTASAVE HUB",
         "description": "Download public Instagram Videos, Reels, Photos, and Carousels in 1080p MP4 and JPEG.",
         "start_url": "/?source=pwa",
         "scope": "/",
         "display": "standalone",
-        "orientation": "portrait-primary",
+        "orientation": "any",
         "background_color": "#030712",
-        "theme_color": "#2563EB",
+        "theme_color": "#030712",
         "categories": ["utilities", "photo", "video", "productivity"],
         "icons": [
             {
                 "src": "/static/images/icon-192.png",
                 "sizes": "192x192",
                 "type": "image/png",
-                "purpose": "any maskable",
+                "purpose": "any",
+            },
+            {
+                "src": "/static/images/icon-192.png",
+                "sizes": "192x192",
+                "type": "image/png",
+                "purpose": "maskable",
             },
             {
                 "src": "/static/images/icon-512.png",
                 "sizes": "512x512",
                 "type": "image/png",
-                "purpose": "any maskable",
+                "purpose": "any",
+            },
+            {
+                "src": "/static/images/icon-512.png",
+                "sizes": "512x512",
+                "type": "image/png",
+                "purpose": "maskable",
             },
             {
                 "src": "/static/images/logo.png",

@@ -9,6 +9,15 @@
   const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
   const STORAGE_KEY_24H = "instasave_24h_access";
 
+  let globalDeferredInstallPrompt = null;
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    globalDeferredInstallPrompt = event;
+    if (typeof window.syncInstallPromptState === "function") {
+      window.syncInstallPromptState();
+    }
+  });
+
   function initScrollReveal() {
     const items = document.querySelectorAll(".reveal-item");
     if (!items.length) return;
@@ -227,12 +236,15 @@
 
   function initPwaAppInstaller() {
     if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
+      if (document.readyState === "complete" || document.readyState === "interactive") {
         navigator.serviceWorker.register("/sw.js").catch(() => {});
-      });
+      } else {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/sw.js").catch(() => {});
+        });
+      }
     }
 
-    let deferredInstallPrompt = null;
     const installTriggers = document.querySelectorAll(
       "#installAppNavBtn, #installAppMobileBtn, #installAppHeroBtn, [data-install-app-trigger]"
     );
@@ -240,55 +252,155 @@
     const closeBtn = document.getElementById("closeAppInstallModal");
     const nativeBtn = document.getElementById("triggerNativeInstallBtn");
     const statusText = document.getElementById("nativeInstallStatusText");
+    const nativeWrap = document.getElementById("nativeInstallPromptWrap");
+    const alreadyInstalledNotice = document.getElementById("alreadyInstalledNotice");
+    const inAppAlert = document.getElementById("inAppBrowserAlert");
+    const tabBtns = document.querySelectorAll("#installPlatformTabs .install-tab-btn");
+    const panes = {
+      ios: document.getElementById("installStepIos"),
+      android: document.getElementById("installStepAndroid"),
+      desktop: document.getElementById("installStepDesktop"),
+      mac: document.getElementById("installStepMac"),
+    };
 
-    window.addEventListener("beforeinstallprompt", (event) => {
-      event.preventDefault();
-      deferredInstallPrompt = event;
-      if (statusText) {
-        statusText.textContent = "One-Click Native App Installation Ready";
-      }
+    const isStandalone =
+      window.matchMedia("(display-mode: standalone)").matches ||
+      window.navigator.standalone === true ||
+      document.referrer.includes("android-app://");
+
+    const ua = navigator.userAgent || "";
+    const isIos = /iphone|ipad|ipod/i.test(ua);
+    const isAndroid = /android/i.test(ua);
+    const isMac = /macintosh|mac os x/i.test(ua) && !isIos;
+    const isInApp = /instagram|fbav|fban|line|micromessenger|tiktok|bytedance/i.test(ua);
+
+    if (isInApp && inAppAlert) {
+      inAppAlert.hidden = false;
+    }
+
+    function switchInstallTab(targetKey) {
+      tabBtns.forEach((btn) => {
+        const matches = btn.getAttribute("data-install-target") === targetKey;
+        btn.classList.toggle("is-active", matches);
+        btn.setAttribute("aria-selected", matches ? "true" : "false");
+      });
+      Object.entries(panes).forEach(([key, el]) => {
+        if (el) el.hidden = key !== targetKey;
+      });
+    }
+
+    tabBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.getAttribute("data-install-target");
+        if (target) switchInstallTab(target);
+      });
     });
 
-    window.addEventListener("appinstalled", () => {
-      deferredInstallPrompt = null;
-      if (statusText) {
-        statusText.textContent = "INSTASAVE HUB App Installed on Device";
+    let defaultPlatform = "desktop";
+    if (isIos) defaultPlatform = "ios";
+    else if (isAndroid) defaultPlatform = "android";
+    else if (isMac) defaultPlatform = "mac";
+    switchInstallTab(defaultPlatform);
+
+    function updateInstallState() {
+      if (isStandalone) {
+        installTriggers.forEach((btn) => {
+          const span = btn.querySelector("span");
+          if (span) span.textContent = "App Installed";
+          btn.classList.add("is-installed");
+          btn.setAttribute("title", "INSTASAVE HUB is installed on this device");
+        });
+        if (statusText) statusText.textContent = "INSTASAVE HUB is running as an installed standalone app.";
+        if (alreadyInstalledNotice) alreadyInstalledNotice.hidden = false;
+        if (nativeWrap) nativeWrap.hidden = true;
+        return;
       }
+
+      if (globalDeferredInstallPrompt) {
+        if (statusText) {
+          statusText.textContent = "One-Click Native App Installation Ready";
+        }
+        if (nativeBtn) {
+          nativeBtn.hidden = false;
+          nativeBtn.removeAttribute("disabled");
+        }
+      } else {
+        if (isIos) {
+          if (statusText) {
+            statusText.textContent = "iOS Setup: Tap Share then Add to Home Screen";
+          }
+          if (nativeBtn) nativeBtn.hidden = true;
+        } else if (isAndroid) {
+          if (statusText) {
+            statusText.textContent = "Tap below or use browser menu (⋮) to install";
+          }
+        } else {
+          if (statusText) {
+            statusText.textContent = "Install via address bar icon or browser menu";
+          }
+        }
+      }
+    }
+
+    window.syncInstallPromptState = updateInstallState;
+    updateInstallState();
+
+    window.addEventListener("appinstalled", () => {
+      globalDeferredInstallPrompt = null;
+      updateInstallState();
       if (modal) modal.hidden = true;
     });
 
-    async function handleInstallAction() {
-      if (deferredInstallPrompt) {
+    async function handleInstallTriggerClick(event) {
+      if (event) event.preventDefault();
+
+      if (isStandalone) {
+        if (modal) {
+          switchInstallTab(defaultPlatform);
+          modal.hidden = false;
+        }
+        return;
+      }
+
+      if (globalDeferredInstallPrompt) {
         try {
-          deferredInstallPrompt.prompt();
-          const choice = await deferredInstallPrompt.userChoice;
+          globalDeferredInstallPrompt.prompt();
+          const choice = await globalDeferredInstallPrompt.userChoice;
           if (choice && choice.outcome === "accepted") {
-            deferredInstallPrompt = null;
+            globalDeferredInstallPrompt = null;
             if (modal) modal.hidden = true;
+            updateInstallState();
             return;
           }
         } catch (_err) {
-          // Fall through to modal instructions
+          // Fall through to modal
         }
       }
+
       if (modal) {
+        switchInstallTab(defaultPlatform);
         modal.hidden = false;
       }
     }
 
     installTriggers.forEach((btn) => {
-      btn.addEventListener("click", handleInstallAction);
+      btn.addEventListener("click", handleInstallTriggerClick);
     });
+
     if (nativeBtn) {
       nativeBtn.addEventListener("click", async () => {
-        if (deferredInstallPrompt) {
-          deferredInstallPrompt.prompt();
-          await deferredInstallPrompt.userChoice;
-          deferredInstallPrompt = null;
-          if (modal) modal.hidden = true;
-        } else if (statusText) {
-          statusText.textContent =
-            "Use your browser address bar install icon or mobile menu below.";
+        if (globalDeferredInstallPrompt) {
+          try {
+            globalDeferredInstallPrompt.prompt();
+            const choice = await globalDeferredInstallPrompt.userChoice;
+            if (choice && choice.outcome === "accepted") {
+              globalDeferredInstallPrompt = null;
+              if (modal) modal.hidden = true;
+              updateInstallState();
+            }
+          } catch (_err) {}
+        } else {
+          switchInstallTab(defaultPlatform);
         }
       });
     }
