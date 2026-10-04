@@ -1,7 +1,8 @@
 /**
  * INSTASAVE HUB — Progressive Web App (PWA) Engine & Installation Controller
  * Handles native beforeinstallprompt, multi-platform installation guidance,
- * service worker registration, and strict standalone state hiding.
+ * direct web shortcut launcher downloads, service worker registration,
+ * and strict standalone mode hiding.
  */
 (function () {
   "use strict";
@@ -21,7 +22,8 @@
       if (window.navigator && window.navigator.standalone === true) {
         return true;
       }
-      if (document.referrer && document.referrer.includes("android-app://")) {
+      const search = window.location.search || "";
+      if (search.includes("source=pwa") && window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) {
         return true;
       }
     } catch (_e) {}
@@ -91,21 +93,24 @@
 
   // Native beforeinstallprompt capture (Chromium, Edge, Android)
   window.addEventListener("beforeinstallprompt", (event) => {
-    // If already in standalone mode, suppress prompt
-    if (syncInstallState()) return;
+    if (detectStandalone()) return;
 
     event.preventDefault();
     deferredPrompt = event;
 
-    // Notify any active buttons or modal elements
-    const statusText = document.getElementById("nativeInstallStatusText");
-    if (statusText) {
-      statusText.textContent = "One-click native app installation ready for your browser.";
+    // Reveal the 1-click install banner inside the modal
+    const nativeWrap = document.getElementById("nativeInstallPromptWrap");
+    if (nativeWrap) {
+      nativeWrap.hidden = false;
+      nativeWrap.style.removeProperty("display");
     }
     const nativeBtn = document.getElementById("triggerNativeInstallBtn");
     if (nativeBtn) {
-      nativeBtn.hidden = false;
       nativeBtn.removeAttribute("disabled");
+    }
+    const statusText = document.getElementById("nativeInstallStatusText");
+    if (statusText) {
+      statusText.textContent = "Direct 1-click installation is ready for your browser.";
     }
   });
 
@@ -126,7 +131,6 @@
       navigator.serviceWorker
         .register(swUrl)
         .then((registration) => {
-          // Check for service worker updates
           registration.addEventListener("updatefound", () => {
             const installingWorker = registration.installing;
             if (installingWorker) {
@@ -135,14 +139,13 @@
                   installingWorker.state === "installed" &&
                   navigator.serviceWorker.controller
                 ) {
-                  // New version available
+                  // Active service worker updated
                 }
               });
             }
           });
         })
         .catch(() => {
-          // Fallback to /sw.js route
           navigator.serviceWorker.register("/sw.js").catch(() => {});
         });
     };
@@ -151,6 +154,66 @@
       register();
     } else {
       window.addEventListener("load", register);
+    }
+  }
+
+  /**
+   * Generate and trigger a direct file download for an Internet Shortcut (.url).
+   * Works on Windows, macOS, and desktop environments so users can download
+   * an app launcher file directly to their device.
+   */
+  function downloadAppShortcut() {
+    const origin = window.location.origin || (window.location.protocol + "//" + window.location.host);
+    const targetUrl = origin + "/?source=pwa";
+    const iconUrl = origin + "/static/images/icon-512.png";
+
+    const shortcutContent =
+      "[InternetShortcut]\r\n" +
+      "URL=" + targetUrl + "\r\n" +
+      "IconFile=" + iconUrl + "\r\n" +
+      "IconIndex=0\r\n" +
+      "[{000214A0-0000-0000-C000-000000000046}]\r\n" +
+      "Prop3=19,0\r\n";
+
+    const blob = new Blob([shortcutContent], { type: "application/octet-stream" });
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = blobUrl;
+    link.download = "INSTASAVE-HUB.url";
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+
+    setTimeout(() => {
+      if (link.parentNode) link.parentNode.removeChild(link);
+      URL.revokeObjectURL(blobUrl);
+    }, 1500);
+  }
+
+  /**
+   * Launch native iOS Safari share sheet where 'Add to Home Screen' is located.
+   */
+  async function triggerIosShare() {
+    const origin = window.location.origin || (window.location.protocol + "//" + window.location.host);
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "INSTASAVE HUB — 1080p Instagram Downloader",
+          text: "Download Instagram Videos, Reels, and Photos in original 1080p HD",
+          url: origin + "/?source=pwa",
+        });
+      } catch (_e) {
+        // User dismissed share sheet
+      }
+    } else {
+      // Fallback instruction highlight
+      const shareIcon = document.querySelector("#installStepIos .install-step-icon");
+      if (shareIcon) {
+        shareIcon.style.outline = "2px solid #3B82F6";
+        setTimeout(() => {
+          shareIcon.style.outline = "none";
+        }, 2000);
+      }
     }
   }
 
@@ -226,6 +289,24 @@
       if (e.key === "Escape" && modal && !modal.hidden) closeModal();
     });
 
+    // Bind iOS share button
+    const iosShareBtn = document.getElementById("triggerIosShareBtn");
+    if (iosShareBtn) {
+      iosShareBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        triggerIosShare();
+      });
+    }
+
+    // Bind shortcut download buttons
+    const shortcutBtns = document.querySelectorAll(".download-shortcut-btn");
+    shortcutBtns.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        downloadAppShortcut();
+      });
+    });
+
     return { openModal, closeModal, defaultPlatform, switchTab };
   }
 
@@ -242,29 +323,28 @@
       const originalText = span ? span.textContent : buttonEl.textContent;
 
       try {
-        // Set loading state
         buttonEl.classList.add("btn-install-loading");
         if (span) span.textContent = "Installing...";
 
-        deferredPrompt.prompt();
-        const choiceResult = await deferredPrompt.userChoice;
+        const promptEvent = deferredPrompt;
+        deferredPrompt = null; // Clear immediately so it cannot be double-called
+
+        promptEvent.prompt();
+        const choiceResult = await promptEvent.userChoice;
 
         if (choiceResult && choiceResult.outcome === "accepted") {
-          // User accepted prompt; appinstalled event will hide buttons
-          deferredPrompt = null;
           if (modalController) modalController.closeModal();
           applyInstalledState();
           return;
         } else {
-          // User cancelled / dismissed the prompt
-          // Requirement: Keep the button available; do NOT permanently hide it
+          // User dismissed prompt; keep button available
           buttonEl.classList.remove("btn-install-loading");
           if (span) span.textContent = originalText;
           else buttonEl.innerHTML = originalHtml;
           return;
         }
-      } catch (_err) {
-        // Prompt error; restore button and fallback to modal
+      } catch (err) {
+        console.warn("[PWA Install] Prompt error:", err);
         buttonEl.classList.remove("btn-install-loading");
         if (span) span.textContent = originalText;
         else buttonEl.innerHTML = originalHtml;
@@ -289,7 +369,6 @@
     );
 
     triggers.forEach((btn) => {
-      // Remove any previously bound listeners
       btn.onclick = null;
       btn.addEventListener("click", (e) => {
         e.preventDefault();
@@ -325,6 +404,8 @@
     detectStandalone,
     syncInstallState,
     applyInstalledState,
+    downloadAppShortcut,
+    triggerIosShare,
     getDeferredPrompt: () => deferredPrompt,
   };
 })();

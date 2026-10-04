@@ -28,8 +28,7 @@
       try {
         if (
           (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
-          (window.navigator && window.navigator.standalone === true) ||
-          (document.referrer && document.referrer.includes('android-app://'))
+          (window.navigator && window.navigator.standalone === true)
         ) {
           document.documentElement.classList.add('pwa-installed');
         }
@@ -350,7 +349,7 @@
     </div>
 
     <form id="instagramAnalyzerForm" action="/api/downloads/analyze/" method="post" novalidate>
-      <input type="hidden" name="csrfmiddlewaretoken" value="ZWONXx1UUQvmofCRpsITa9tJEGKVmbHVUpouSvM8S3ZjMnzZbmgDUcZICSfjt1Ky">
+      <input type="hidden" name="csrfmiddlewaretoken" value="m3shHZnYB4M8mHVDb4v5BYK2btbuoovHApLKQoQgmh7yTE0vfZSmrXMTlpj9VyNS">
       <input type="hidden" id="instagramToolSlug" name="tool_slug" value="reel-downloader">
       <label for="instagramUrlInput" class="form-label">Paste Public Instagram URL</label>
       <div class="analyzer-bar">
@@ -665,8 +664,8 @@
         </button>
       </div>
 
-      <!-- 1-Click Native Install Banner -->
-      <div id="nativeInstallPromptWrap" class="glass-subpanel" style="padding: var(--space-4); margin-top: var(--space-4); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-3);">
+      <!-- 1-Click Native Install Banner (Only shown when browser fires beforeinstallprompt) -->
+      <div id="nativeInstallPromptWrap" class="glass-subpanel" hidden style="padding: var(--space-4); margin-top: var(--space-4); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-3);">
         <div>
           <span class="spec-label" style="color: var(--light-cyan);">ONE-CLICK INSTALLATION</span>
           <span class="spec-val" id="nativeInstallStatusText" style="font-size: 0.86rem; display: block; margin-top: 2px;">Direct installation available for your browser</span>
@@ -707,7 +706,7 @@
         <div class="install-step-card">
           <div class="install-step-num">1</div>
           <div class="install-step-content">
-            Open INSTASAVE HUB in <strong>Safari</strong> on your iPhone or iPad, then tap the <strong>Share</strong> button
+            In <strong>Safari</strong> on your iPhone or iPad, tap the <strong>Share</strong> button
             <span class="install-step-icon" aria-label="Share button">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                 <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
@@ -715,7 +714,7 @@
                 <line x1="12" y1="2" x2="12" y2="15"></line>
               </svg>
             </span>
-            in the bottom toolbar.
+            in the bottom navigation bar.
           </div>
         </div>
         <div class="install-step-card">
@@ -734,9 +733,17 @@
         <div class="install-step-card">
           <div class="install-step-num">3</div>
           <div class="install-step-content">
-            Tap <strong>Add</strong> in the top-right corner. The INSTASAVE HUB icon will appear on your Home Screen and run as a standalone app with full screen view.
+            Tap <strong>Add</strong> in the top-right corner. The INSTASAVE HUB icon will appear on your Home Screen as a standalone full-screen app.
           </div>
         </div>
+        <button type="button" id="triggerIosShareBtn" class="btn-glass btn-primary btn-sm" style="margin-top: var(--space-3); width: 100%; justify-content: center; gap: var(--space-2);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+            <polyline points="16 6 12 2 8 6"></polyline>
+            <line x1="12" y1="2" x2="12" y2="15"></line>
+          </svg>
+          <span>Open iOS Share Sheet</span>
+        </button>
       </div>
 
       <!-- Tab 2: Android Guide -->
@@ -744,21 +751,29 @@
         <div class="install-step-card">
           <div class="install-step-num">1</div>
           <div class="install-step-content">
-            Tap the <strong>Install App Now</strong> button above to launch the direct Android installation prompt.
+            In Chrome, Edge, or Samsung Internet, tap the <strong>three dots menu (⋮)</strong> in the top-right corner.
           </div>
         </div>
         <div class="install-step-card">
           <div class="install-step-num">2</div>
           <div class="install-step-content">
-            If the prompt did not appear automatically, tap the <strong>three dots menu (⋮)</strong> in Chrome, Samsung Internet, or Edge.
+            Tap <strong>Install app</strong> or <strong>Add to Home screen</strong> from the dropdown list.
           </div>
         </div>
         <div class="install-step-card">
           <div class="install-step-num">3</div>
           <div class="install-step-content">
-            Tap <strong>Install app</strong> or <strong>Add to Home screen</strong> to finish installation.
+            Tap <strong>Install</strong> to add INSTASAVE HUB directly to your app drawer and home screen.
           </div>
         </div>
+        <button type="button" class="btn-glass btn-sm download-shortcut-btn" style="margin-top: var(--space-3); width: 100%; justify-content: center; gap: var(--space-2);">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Download App Launcher File (.url)</span>
+        </button>
       </div>
 
       <!-- Tab 3: Desktop Chrome / Edge Guide -->
@@ -766,21 +781,13 @@
         <div class="install-step-card">
           <div class="install-step-num">1</div>
           <div class="install-step-content">
-            Click the <strong>Install App Now</strong> button above or click the <strong>Install icon</strong>
-            <span class="install-step-icon" aria-label="Install icon">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 3v12"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <path d="M5 21h14"></path>
-              </svg>
-            </span>
-            located on the right side of your browser's address bar.
+            In your browser address bar at the top, look for the <strong>Install icon (⊕)</strong> on the right side.
           </div>
         </div>
         <div class="install-step-card">
           <div class="install-step-num">2</div>
           <div class="install-step-content">
-            Alternatively, click the browser menu <strong>(⋮)</strong> &rarr; <strong>Save and Share</strong> &rarr; <strong>Install INSTASAVE HUB</strong>.
+            Alternatively, click browser menu <strong>(⋮)</strong> &rarr; <strong>Save and Share</strong> &rarr; <strong>Install INSTASAVE HUB</strong>.
           </div>
         </div>
         <div class="install-step-card">
@@ -789,6 +796,14 @@
             Click <strong>Install</strong> to add INSTASAVE HUB to your desktop and taskbar.
           </div>
         </div>
+        <button type="button" class="btn-glass btn-primary btn-sm download-shortcut-btn" style="margin-top: var(--space-3); width: 100%; justify-content: center; gap: var(--space-2);">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Download Desktop Shortcut (.url)</span>
+        </button>
       </div>
 
       <!-- Tab 4: Safari macOS Guide -->
@@ -811,7 +826,16 @@
             Click <strong>Add</strong> to launch INSTASAVE HUB directly from your Mac Dock as an independent native window.
           </div>
         </div>
+        <button type="button" class="btn-glass btn-sm download-shortcut-btn" style="margin-top: var(--space-3); width: 100%; justify-content: center; gap: var(--space-2);">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Download Mac Shortcut (.url)</span>
+        </button>
       </div>
+
 
       <!-- In-app Browser Notice -->
       <div id="inAppBrowserAlert" class="glass-alert glass-alert-info" hidden style="margin-top: var(--space-4); font-size: 0.82rem;">
