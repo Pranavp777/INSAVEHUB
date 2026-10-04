@@ -97,8 +97,8 @@
           </div>
         </div>
 
-        <div style="display: flex; flex-direction: column; justify-content: space-between;">
-          <div class="result-spec-grid" style="grid-template-columns: repeat(3, 1fr); margin-top: 0;">
+        <div style="display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-4);">
+          <div class="result-spec-grid" style="grid-template-columns: repeat(3, 1fr); margin-top: 0; margin-bottom: 0;">
             <div class="spec-cell">
               <span class="spec-label">FORMAT</span>
               <span class="spec-val" id="resMediaFormat">-</span>
@@ -121,14 +121,131 @@
             </div>
           </div>
 
-          <!-- Live Download Progress Bar -->
-          <div id="resDownloadProgressWrap" class="download-progress-wrap" hidden>
-            <div class="download-progress-header">
-              <span id="resDownloadProgressLabel" class="mono-label">DOWNLOADING MEDIA STREAM...</span>
-              <span id="resDownloadProgressPct" class="mono-label" style="color: var(--light-cyan);">0%</span>
+          <!-- iOS Format Selection Cards (1080p, 720p, 360p, Audio) -->
+          <div class="ios-format-selector" id="resFormatSelector">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span class="mono-label">SELECT FORMAT &amp; QUALITY</span>
+              <span class="tool-format-tag" id="resActiveFormatBadge">MP4 • 1080p Full HD</span>
             </div>
-            <div class="progress-track" style="margin: 6px 0 0;">
-              <div id="resDownloadProgressBar" class="progress-fill"></div>
+            <div class="ios-format-grid" role="radiogroup" aria-label="Format and Quality Options">
+              <div class="ios-format-card is-active" data-format-val="1080p" role="radio" aria-checked="true" tabindex="0">
+                <div class="ios-format-top">
+                  <span class="ios-format-badge">BEST</span>
+                  <span class="ios-format-check">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </span>
+                </div>
+                <div>
+                  <div class="ios-format-title">1080p</div>
+                  <div class="ios-format-sub">Full HD MP4</div>
+                </div>
+              </div>
+
+              <div class="ios-format-card" data-format-val="720p" role="radio" aria-checked="false" tabindex="0">
+                <div class="ios-format-top">
+                  <span class="ios-format-badge">FAST</span>
+                  <span class="ios-format-check">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </span>
+                </div>
+                <div>
+                  <div class="ios-format-title">720p</div>
+                  <div class="ios-format-sub">HD MP4</div>
+                </div>
+              </div>
+
+              <div class="ios-format-card" data-format-val="360p" role="radio" aria-checked="false" tabindex="0">
+                <div class="ios-format-top">
+                  <span class="ios-format-badge">COMPACT</span>
+                  <span class="ios-format-check">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </span>
+                </div>
+                <div>
+                  <div class="ios-format-title">360p</div>
+                  <div class="ios-format-sub">SD MP4</div>
+                </div>
+              </div>
+
+              <div class="ios-format-card" data-format-val="audio" role="radio" aria-checked="false" tabindex="0">
+                <div class="ios-format-top">
+                  <span class="ios-format-badge">AUDIO</span>
+                  <span class="ios-format-check">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </span>
+                </div>
+                <div>
+                  <div class="ios-format-title">Audio</div>
+                  <div class="ios-format-sub">Clean MP3/AAC</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Elegant iOS Circular Download Progress UI -->
+          <div id="resDownloadProgressWrap" class="ios-progress-stage" hidden>
+            <div class="ios-circular-progress-wrap">
+              <svg class="ios-progress-ring-svg" viewBox="0 0 80 80">
+                <circle class="ios-progress-ring-bg" cx="40" cy="40" r="36"></circle>
+                <circle id="resProgressCircleBar" class="ios-progress-ring-bar" cx="40" cy="40" r="36"></circle>
+              </svg>
+              <span id="resDownloadProgressPct" class="ios-progress-pct">0%</span>
+            </div>
+
+            <img id="resProgressThumb" class="ios-progress-thumb" src="" alt="Downloading media preview" hidden>
+
+            <div class="ios-progress-details">
+              <span id="resDownloadProgressLabel" class="ios-progress-status-label">PREPARING STREAM...</span>
+              <div id="resProgressFilename" class="ios-progress-filename">instagram_media.mp4</div>
+              <div id="resProgressSubinfo" class="ios-progress-subinfo">1080p HD • H.264 MP4</div>
+            </div>
+
+            <button type="button" id="resProgressCancelBtn" class="ios-progress-cancel-btn" title="Cancel download">Cancel</button>
+          </div>
+
+          <!-- iOS Completed Success Card -->
+          <div id="resCompletedCard" class="ios-completed-card" hidden>
+            <div class="ios-completed-header">
+              <div class="ios-checkmark-wrapper">
+                <svg class="ios-checkmark-svg" viewBox="0 0 56 56">
+                  <circle class="ios-checkmark-circle" cx="28" cy="28" r="25"></circle>
+                  <polyline class="ios-checkmark-check" points="17 28 24 35 39 20"></polyline>
+                </svg>
+              </div>
+              <div>
+                <h4 class="ios-completed-title">Download Complete</h4>
+                <p class="ios-completed-subtitle">File saved successfully in original high-definition quality.</p>
+              </div>
+            </div>
+
+            <div class="ios-completed-meta">
+              <img id="resCompletedThumb" class="ios-completed-thumb" src="" alt="Completed media preview">
+              <div style="flex: 1; min-width: 0;">
+                <div id="resCompletedFilename" style="font-weight: 600; color: #FFFFFF; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">instagram_video.mp4</div>
+                <div id="resCompletedSubinfo" style="font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">1080p 60fps • No Watermark</div>
+              </div>
+            </div>
+
+            <div class="ios-completed-actions">
+              <button type="button" id="resCompletedViewBtn" class="btn-glass btn-secondary btn-sm">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                <span>View Preview</span>
+              </button>
+
+              <button type="button" id="resCompletedDownloadAgainBtn" class="btn-glass btn-primary btn-sm btn-glow-ios">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>Download Again</span>
+              </button>
+
+              <button type="button" id="resCompletedNewBtn" class="btn-glass btn-sm">
+                <span>Analyze New Link</span>
+              </button>
             </div>
           </div>
 
@@ -145,7 +262,7 @@
               <button type="button" id="resFullscreenPreviewBtn" class="btn-glass btn-sm" title="Expand Preview to Fullscreen">
                 Fullscreen
               </button>
-              <a id="resDownloadActionBtn" href="#" class="btn-glass btn-primary">Download</a>
+              <a id="resDownloadActionBtn" href="#" class="btn-glass btn-primary btn-glow-ios" style="min-width: 220px;">Download</a>
             </div>
           </div>
         </div>

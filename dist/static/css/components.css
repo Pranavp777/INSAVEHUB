@@ -197,7 +197,21 @@
 }
 
 .btn-glass:active:not(:disabled) {
-  transform: translateY(0);
+  transform: scale(0.975);
+}
+
+.btn-glow-ios {
+  background: var(--gradient-ios-primary) !important;
+  border-color: rgba(168, 85, 247, 0.6) !important;
+  border-top-color: rgba(255, 255, 255, 0.45) !important;
+  box-shadow: var(--glow-button) !important;
+  color: #FFFFFF !important;
+}
+
+.btn-glow-ios:hover:not(:disabled) {
+  background: var(--gradient-ios-hover) !important;
+  box-shadow: 0 14px 38px -4px rgba(139, 92, 246, 0.65), 0 0 32px rgba(236, 72, 153, 0.5) !important;
+  transform: translateY(-2px);
 }
 
 .btn-glass:disabled {
@@ -1538,4 +1552,600 @@ body.pwa-installed #appInstallModal {
   margin-top: var(--space-10);
   margin-bottom: var(--space-4);
 }
+
+/* ==========================================================================
+   iOS-INSPIRED PREMIUM DARK THEME EXTENSIONS
+   ========================================================================== */
+
+/* 1. Hero Feature Cards (HD Quality, No Watermark, All Devices) */
+.hero-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.hero-feature-card {
+  padding: 16px 18px;
+  border-radius: 20px;
+  background: rgba(8, 15, 34, 0.58);
+  backdrop-filter: var(--blur-sm);
+  -webkit-backdrop-filter: var(--blur-sm);
+  border: 1px solid rgba(148, 184, 255, 0.14);
+  border-top-color: rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+
+.hero-feature-card:hover {
+  transform: translateY(-3px);
+  background: rgba(12, 22, 48, 0.72);
+  border-color: rgba(139, 92, 246, 0.38);
+  box-shadow: 0 12px 28px -6px rgba(124, 58, 237, 0.25);
+}
+
+.hero-feature-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.22) 0%, rgba(139, 92, 246, 0.22) 100%);
+  border: 1px solid rgba(148, 184, 255, 0.24);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--light-cyan);
+}
+
+.hero-feature-title {
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.2;
+}
+
+.hero-feature-desc {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* 2. iOS Format Selection Cards (1080p, 720p, 360p, Audio) */
+.ios-format-selector {
+  margin: var(--space-4) 0;
+}
+
+.ios-format-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+}
+
+.ios-format-card {
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(8, 15, 34, 0.62);
+  backdrop-filter: var(--blur-sm);
+  -webkit-backdrop-filter: var(--blur-sm);
+  border: 1.5px solid rgba(148, 184, 255, 0.14);
+  border-top-color: rgba(255, 255, 255, 0.16);
+  cursor: pointer;
+  text-align: left;
+  position: relative;
+  transition: all var(--duration-fast) var(--ease-standard);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 88px;
+  user-select: none;
+}
+
+.ios-format-card:hover {
+  transform: translateY(-2px);
+  background: rgba(14, 26, 56, 0.75);
+  border-color: rgba(139, 92, 246, 0.45);
+}
+
+.ios-format-card:active {
+  transform: scale(0.97);
+}
+
+.ios-format-card.is-active {
+  background: linear-gradient(145deg, rgba(37, 99, 235, 0.24) 0%, rgba(124, 58, 237, 0.28) 100%);
+  border-color: rgba(168, 85, 247, 0.75);
+  border-top-color: rgba(255, 255, 255, 0.35);
+  box-shadow:
+    0 8px 24px -4px rgba(124, 58, 237, 0.38),
+    0 0 20px -2px rgba(236, 72, 153, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.ios-format-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+}
+
+.ios-format-badge {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  background: rgba(59, 130, 246, 0.18);
+  border: 1px solid rgba(96, 165, 250, 0.28);
+  color: var(--light-cyan);
+}
+
+.ios-format-card.is-active .ios-format-badge {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.45), rgba(236, 72, 153, 0.4));
+  border-color: rgba(236, 72, 153, 0.6);
+  color: #FFFFFF;
+}
+
+.ios-format-check {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(148, 184, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  transition: all var(--duration-fast) ease;
+}
+
+.ios-format-card.is-active .ios-format-check {
+  border-color: #EC4899;
+  background: linear-gradient(135deg, #8B5CF6, #EC4899);
+  color: #FFFFFF;
+  box-shadow: 0 0 12px rgba(236, 72, 153, 0.65);
+}
+
+.ios-format-title {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-top: 6px;
+}
+
+.ios-format-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.ios-format-card.is-active .ios-format-sub {
+  color: var(--text-secondary);
+}
+
+/* 3. iOS Circular Progress UI */
+.ios-progress-stage {
+  padding: 22px;
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgba(8, 15, 34, 0.88) 0%, rgba(16, 28, 62, 0.92) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.65), 0 0 32px rgba(124, 58, 237, 0.22);
+  margin: var(--space-4) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  animation: fadeIn 220ms ease-out;
+}
+
+.ios-circular-progress-wrap {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ios-progress-ring-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.ios-progress-ring-bg {
+  fill: none;
+  stroke: rgba(148, 184, 255, 0.12);
+  stroke-width: 6;
+}
+
+.ios-progress-ring-bar {
+  fill: none;
+  stroke: url(#iosProgressGradient);
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-dasharray: 226.19;
+  stroke-dashoffset: 226.19;
+  transition: stroke-dashoffset 220ms linear;
+  filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.7));
+}
+
+.ios-progress-pct {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
+}
+
+.ios-progress-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.ios-progress-status-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--light-cyan);
+}
+
+.ios-progress-filename {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ios-progress-subinfo {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+.ios-progress-thumb {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid rgba(148, 184, 255, 0.2);
+}
+
+.ios-progress-cancel-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-pill);
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--duration-fast) ease;
+}
+
+.ios-progress-cancel-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.45);
+  color: #FFFFFF;
+}
+
+/* 4. iOS Completed State Card with Animated Checkmark */
+.ios-completed-card {
+  padding: 24px;
+  border-radius: 24px;
+  background: linear-gradient(145deg, rgba(8, 16, 38, 0.9) 0%, rgba(18, 30, 68, 0.92) 100%);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  border-top-color: rgba(255, 255, 255, 0.24);
+  box-shadow:
+    0 20px 50px -10px rgba(0, 0, 0, 0.75),
+    0 0 32px -4px rgba(52, 211, 153, 0.25);
+  margin-top: var(--space-4);
+  animation: scaleUpIn 280ms var(--ease-out-expo);
+}
+
+.ios-completed-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.ios-checkmark-wrapper {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ios-checkmark-svg {
+  width: 52px;
+  height: 52px;
+}
+
+.ios-checkmark-circle {
+  stroke: #34D399;
+  stroke-width: 2.5;
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  fill: rgba(52, 211, 153, 0.12);
+  animation: checkmarkStroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.ios-checkmark-check {
+  stroke: #FFFFFF;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: checkmarkCheck 0.4s cubic-bezier(0.65, 0, 0.45, 1) 0.4s forwards;
+}
+
+@keyframes checkmarkStroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes checkmarkCheck {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes scaleUpIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.ios-completed-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.ios-completed-subtitle {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.ios-completed-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(6, 12, 28, 0.65);
+  border: 1px solid rgba(148, 184, 255, 0.12);
+  margin-bottom: 18px;
+}
+
+.ios-completed-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.ios-completed-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+/* 5. iOS Mobile Floating Bottom Navigation */
+.ios-bottom-nav {
+  position: fixed;
+  bottom: max(14px, env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 28px);
+  max-width: 420px;
+  height: 64px;
+  z-index: 95;
+  background: rgba(8, 14, 30, 0.88);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+  border: 1px solid rgba(148, 184, 255, 0.2);
+  border-top-color: rgba(255, 255, 255, 0.22);
+  border-radius: var(--radius-pill);
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.8),
+    0 0 24px -4px rgba(59, 130, 246, 0.25);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: center;
+  padding: 0 8px;
+}
+
+.ios-bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-height: 50px;
+  border-radius: var(--radius-pill);
+  color: var(--text-muted);
+  text-decoration: none;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 500;
+  position: relative;
+  transition: all var(--duration-fast) ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ios-bottom-nav-item svg {
+  transition: transform var(--duration-fast) ease, color var(--duration-fast) ease;
+}
+
+.ios-bottom-nav-item:active {
+  transform: scale(0.92);
+}
+
+.ios-bottom-nav-item:hover {
+  color: #FFFFFF;
+}
+
+.ios-bottom-nav-item.is-active {
+  color: #FFFFFF;
+}
+
+.ios-bottom-nav-item.is-active svg {
+  color: var(--light-cyan);
+  transform: translateY(-1px);
+}
+
+.ios-active-dot {
+  position: absolute;
+  bottom: 4px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3B82F6, #EC4899);
+  opacity: 0;
+  transform: scale(0);
+  transition: all var(--duration-fast) ease;
+}
+
+.ios-bottom-nav-item.is-active .ios-active-dot {
+  opacity: 1;
+  transform: scale(1);
+  box-shadow: 0 0 8px #EC4899;
+}
+
+@media (min-width: 769px) {
+  .ios-bottom-nav {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-bottom: 96px;
+  }
+}
+
+/* 6. iOS Glassmorphism History Card List */
+.history-card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+.history-card {
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: rgba(8, 15, 34, 0.64);
+  backdrop-filter: var(--blur-sm);
+  -webkit-backdrop-filter: var(--blur-sm);
+  border: 1px solid rgba(148, 184, 255, 0.13);
+  border-top-color: rgba(255, 255, 255, 0.16);
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  align-items: center;
+  gap: var(--space-4);
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+
+.history-card:hover {
+  transform: translateY(-2px);
+  background: rgba(14, 25, 54, 0.76);
+  border-color: rgba(96, 165, 250, 0.35);
+  box-shadow: 0 10px 28px -6px rgba(0, 0, 0, 0.6);
+}
+
+.history-card-thumb-wrap {
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(124, 58, 237, 0.25));
+  border: 1px solid rgba(148, 184, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: var(--light-cyan);
+}
+
+.history-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.history-card-title {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+.history-card-meta span {
+  display: inline-flex;
+  align-items: center;
+}
+
+.history-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 640px) {
+  .history-card {
+    grid-template-columns: 52px 1fr;
+    gap: 12px;
+  }
+  .history-card-actions {
+    grid-column: span 2;
+    margin-top: 6px;
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .ios-format-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .hero-feature-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 

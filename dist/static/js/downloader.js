@@ -169,6 +169,25 @@
     const progressBar = document.getElementById("resDownloadProgressBar");
     const progressPct = document.getElementById("resDownloadProgressPct");
     const progressLabel = document.getElementById("resDownloadProgressLabel");
+    const progressCircleBar = document.getElementById("resProgressCircleBar");
+    const progressThumb = document.getElementById("resProgressThumb");
+    const progressFilename = document.getElementById("resProgressFilename");
+    const progressSubinfo = document.getElementById("resProgressSubinfo");
+    const progressCancelBtn = document.getElementById("resProgressCancelBtn");
+
+    const completedCard = document.getElementById("resCompletedCard");
+    const completedThumb = document.getElementById("resCompletedThumb");
+    const completedFilename = document.getElementById("resCompletedFilename");
+    const completedSubinfo = document.getElementById("resCompletedSubinfo");
+    const completedViewBtn = document.getElementById("resCompletedViewBtn");
+    const completedDownloadAgainBtn = document.getElementById("resCompletedDownloadAgainBtn");
+    const completedNewBtn = document.getElementById("resCompletedNewBtn");
+
+    const formatCards = document.querySelectorAll(".ios-format-card");
+    const activeFormatBadge = document.getElementById("resActiveFormatBadge");
+    const formatSelector = document.getElementById("resFormatSelector");
+    let selectedFormat = "1080p";
+    let downloadTimer = null;
 
     let activeButtonLabel = submitBtn ? submitBtn.textContent.trim() : "Preview & Download";
     let currentDownloadData = null;
@@ -237,6 +256,76 @@
         } else {
           urlInput.focus();
         }
+      });
+    }
+
+    // 2b. iOS Format Selector & Completed Card Controls
+    if (formatCards && formatCards.length) {
+      formatCards.forEach((card) => {
+        card.addEventListener("click", () => {
+          formatCards.forEach((c) => {
+            c.classList.remove("is-active");
+            c.setAttribute("aria-checked", "false");
+          });
+          card.classList.add("is-active");
+          card.setAttribute("aria-checked", "true");
+
+          selectedFormat = card.getAttribute("data-format-val") || "1080p";
+          if (activeFormatBadge) {
+            switch (selectedFormat) {
+              case "1080p":
+                activeFormatBadge.textContent = "MP4 • 1080p Full HD";
+                break;
+              case "720p":
+                activeFormatBadge.textContent = "MP4 • 720p HD";
+                break;
+              case "360p":
+                activeFormatBadge.textContent = "MP4 • 360p SD";
+                break;
+              case "audio":
+                activeFormatBadge.textContent = "AAC/MP3 • Clean Audio";
+                break;
+            }
+          }
+          updateActionButtonsForAccess();
+        });
+      });
+    }
+
+    if (progressCancelBtn) {
+      progressCancelBtn.addEventListener("click", () => {
+        if (downloadTimer) clearInterval(downloadTimer);
+        isDownloading = false;
+        if (progressWrap) progressWrap.hidden = true;
+      });
+    }
+
+    if (completedViewBtn) {
+      completedViewBtn.addEventListener("click", () => {
+        toggleVideoPlayback();
+        if (previewContainer) {
+          previewContainer.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      });
+    }
+
+    if (completedDownloadAgainBtn) {
+      completedDownloadAgainBtn.addEventListener("click", () => {
+        if (currentDownloadData && currentDownloadData.execute_url) {
+          startDirectDownloadWithProgress(currentDownloadData.execute_url);
+        }
+      });
+    }
+
+    if (completedNewBtn) {
+      completedNewBtn.addEventListener("click", () => {
+        if (urlInput) {
+          urlInput.value = "";
+          urlInput.focus();
+          urlInput.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+        if (resultPanel) resultPanel.hidden = true;
+        if (completedCard) completedCard.hidden = true;
       });
     }
 
@@ -348,32 +437,70 @@
       });
     }
 
-    // 4. Clean Direct Download Execution
+    // 4. Clean Direct Download Execution with Circular Progress & Success State
+    function setCircleProgress(pct) {
+      if (progressPct) progressPct.textContent = `${pct}%`;
+      if (progressBar) progressBar.style.width = `${pct}%`;
+      if (progressCircleBar) {
+        const circumference = 226.19;
+        const offset = Math.max(0, circumference - (pct / 100) * circumference);
+        progressCircleBar.style.strokeDashoffset = offset;
+      }
+    }
+
     function startDirectDownloadWithProgress(executeUrl) {
       if (!executeUrl || isDownloading) return;
       isDownloading = true;
 
+      if (completedCard) completedCard.hidden = true;
       if (progressWrap) progressWrap.hidden = false;
-      if (progressBar) progressBar.style.width = "15%";
-      if (progressPct) progressPct.textContent = "15%";
       if (progressLabel) progressLabel.textContent = "CONNECTING TO STREAM...";
 
+      const cleanFilename = (currentDownloadData && (currentDownloadData.media_title || currentDownloadData.shortcode)) || "instagram_media";
+      const fileExt = selectedFormat === "audio" ? ".mp3" : (currentPreviewState.isImage ? ".jpg" : ".mp4");
+      const fullFilename = cleanFilename.replace(/[^\w.-]/g, "_") + fileExt;
+
+      if (progressFilename) progressFilename.textContent = fullFilename;
+      if (progressSubinfo) {
+        const qualityLabel = selectedFormat === "audio" ? "Audio (320kbps)" : (currentDownloadData && currentDownloadData.resolution ? currentDownloadData.resolution : "1080p Full HD");
+        progressSubinfo.textContent = `${qualityLabel} • No Watermark`;
+      }
+      if (progressThumb) {
+        if (currentPreviewState.thumbnailUrl) {
+          progressThumb.src = currentPreviewState.thumbnailUrl;
+          progressThumb.hidden = false;
+        } else {
+          progressThumb.hidden = true;
+        }
+      }
+
+      setCircleProgress(15);
+
       let pct = 15;
-      const timer = setInterval(() => {
-        pct = Math.min(92, pct + Math.floor(Math.random() * 18) + 12);
-        if (progressBar) progressBar.style.width = `${pct}%`;
-        if (progressPct) progressPct.textContent = `${pct}%`;
-      }, 120);
+      if (downloadTimer) clearInterval(downloadTimer);
+      downloadTimer = setInterval(() => {
+        pct = Math.min(94, pct + Math.floor(Math.random() * 16) + 10);
+        setCircleProgress(pct);
+        if (progressLabel) {
+          progressLabel.textContent = pct < 50 ? "STREAMING DATA..." : "VERIFYING SIGNATURE...";
+        }
+      }, 110);
 
       setTimeout(() => {
-        clearInterval(timer);
-        if (progressBar) progressBar.style.width = "100%";
-        if (progressPct) progressPct.textContent = "100%";
+        clearInterval(downloadTimer);
+        setCircleProgress(100);
         if (progressLabel) progressLabel.textContent = "DOWNLOAD COMPLETE";
 
         // Trigger the direct media attachment download
+        let finalUrl = executeUrl;
+        if (selectedFormat === "audio") {
+          finalUrl += (finalUrl.includes("?") ? "&" : "?") + "format=audio";
+        } else if (selectedFormat !== "1080p") {
+          finalUrl += (finalUrl.includes("?") ? "&" : "?") + "quality=" + selectedFormat;
+        }
+
         const link = document.createElement("a");
-        link.href = executeUrl;
+        link.href = finalUrl;
         link.style.display = "none";
         document.body.appendChild(link);
         link.click();
@@ -383,8 +510,26 @@
 
         setTimeout(() => {
           isDownloading = false;
-        }, 900);
-      }, 600);
+          if (progressWrap) progressWrap.hidden = true;
+          if (completedCard) {
+            completedCard.hidden = false;
+            if (completedFilename) completedFilename.textContent = fullFilename;
+            if (completedSubinfo) {
+              const qualityLabel = selectedFormat === "audio" ? "Audio Track" : (currentDownloadData && currentDownloadData.resolution ? currentDownloadData.resolution : "1080p Full HD");
+              completedSubinfo.textContent = `${qualityLabel} • Saved to Downloads`;
+            }
+            if (completedThumb) {
+              if (currentPreviewState.thumbnailUrl) {
+                completedThumb.src = currentPreviewState.thumbnailUrl;
+                completedThumb.hidden = false;
+              } else {
+                completedThumb.hidden = true;
+              }
+            }
+            completedCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          }
+        }, 650);
+      }, 700);
     }
 
     if (actionBtn) {
@@ -494,8 +639,10 @@
       let baseDownloadLabel = "Download";
       if (isMetadata) {
         baseDownloadLabel = "Download JSON";
+      } else if (selectedFormat === "audio") {
+        baseDownloadLabel = "Download Audio (MP3)";
       } else if (isVideo) {
-        baseDownloadLabel = "Download Video (MP4)";
+        baseDownloadLabel = `Download Video (${selectedFormat.toUpperCase()} MP4)`;
       } else if (isImage) {
         baseDownloadLabel = "Download Photo (JPG)";
       }
@@ -516,6 +663,19 @@
 
       resultPanel.hidden = false;
       if (progressWrap) progressWrap.hidden = true;
+      if (completedCard) completedCard.hidden = true;
+
+      // Reset format selector cards to 1080p active default
+      selectedFormat = "1080p";
+      if (activeFormatBadge) activeFormatBadge.textContent = "MP4 • 1080p Full HD";
+      if (formatCards && formatCards.length) {
+        formatCards.forEach((c) => {
+          const val = c.getAttribute("data-format-val");
+          const is1080 = val === "1080p";
+          c.classList.toggle("is-active", is1080);
+          c.setAttribute("aria-checked", is1080 ? "true" : "false");
+        });
+      }
 
       const setText = (id, val) => {
         const el = document.getElementById(id);
@@ -592,6 +752,7 @@
           previewToggleBtn.textContent = "Preview Video";
         }
         if (fullscreenBtn) fullscreenBtn.hidden = false;
+        if (formatSelector) formatSelector.hidden = false;
         setText("resPreviewStatusBadge", "LIVE PREVIEW");
       } else if (isImage) {
         if (videoPlayer) {
@@ -609,6 +770,7 @@
           previewToggleBtn.textContent = "Preview Photo";
         }
         if (fullscreenBtn) fullscreenBtn.hidden = false;
+        if (formatSelector) formatSelector.hidden = true;
         setText("resPreviewStatusBadge", "HD PHOTO");
       } else {
         if (videoPlayer) {
@@ -626,6 +788,7 @@
           previewToggleBtn.textContent = "Preview JSON";
         }
         if (fullscreenBtn) fullscreenBtn.hidden = true;
+        if (formatSelector) formatSelector.hidden = true;
         setText("resPreviewStatusBadge", "JSON MANIFEST");
       }
 

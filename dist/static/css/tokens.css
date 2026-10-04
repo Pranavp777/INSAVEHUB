@@ -20,16 +20,29 @@
   --border-cyan-glow: rgba(59, 130, 246, 0.48);
   --border-violet-glow: rgba(99, 102, 241, 0.42);
 
-  /* Electric Blue & Soft Violet/Indigo Accent System */
+  /* Electric Blue, Neon Purple & Vibrant Pink Accent System */
   --light-cyan: #60A5FA;
   --light-blue: #3B82F6;
-  --light-violet: #818CF8;
+  --light-violet: #A78BFA;
+  --neon-purple: #8B5CF6;
+  --neon-pink: #EC4899;
   --accent-electric: #2563EB;
-  --accent-indigo: #6366F1;
+  --accent-indigo: #7C3AED;
+  --accent-pink: #DB2777;
   --light-silver: #F8FAFC;
   --light-emerald: #34D399;
   --light-amber: #FBBF24;
   --light-rose: #FB7185;
+
+  /* Premium iOS-Inspired Tri-Color Neon Gradients */
+  --gradient-ios-primary: linear-gradient(135deg, #2563EB 0%, #7C3AED 50%, #EC4899 100%);
+  --gradient-ios-hover: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #F43F5E 100%);
+  --gradient-ios-subtle: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(139, 92, 246, 0.14) 50%, rgba(236, 72, 153, 0.12) 100%);
+  --gradient-text-hero: linear-gradient(135deg, #60A5FA 0%, #C084FC 50%, #F472B6 100%);
+  --gradient-card-border: linear-gradient(135deg, rgba(96, 165, 250, 0.32) 0%, rgba(168, 85, 247, 0.32) 50%, rgba(244, 114, 182, 0.32) 100%);
+  --glow-button: 0 10px 32px -4px rgba(124, 58, 237, 0.52), 0 0 24px -2px rgba(236, 72, 153, 0.38);
+  --glow-subtle: 0 0 32px -4px rgba(139, 92, 246, 0.25);
+  --glow-pink: 0 0 28px rgba(236, 72, 153, 0.32);
 
   /* Crisp White & Cool Gray Editorial Typography */
   --text-primary: #F8FAFC;
@@ -159,6 +172,24 @@ textarea:focus-visible {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
+}
+
+.text-gradient-ios {
+  background: linear-gradient(135deg, #60A5FA 0%, #A855F7 50%, #EC4899 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  display: inline;
+}
+
+.text-gradient-purple {
+  background: linear-gradient(135deg, #A855F7 0%, #EC4899 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  display: inline;
 }
 
 .sr-only {
