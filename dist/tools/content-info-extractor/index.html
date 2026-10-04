@@ -23,6 +23,19 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      try {
+        if (
+          (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+          (window.navigator && window.navigator.standalone === true) ||
+          (document.referrer && document.referrer.includes('android-app://'))
+        ) {
+          document.documentElement.classList.add('pwa-installed');
+        }
+      } catch (e) {}
+    })();
+  </script>
   <title>Content Information Extractor — Free 1080p HD Preview &amp; Download | INSTASAVE HUB</title>
   <meta name="description" content="Extract clean JSON metadata, dimensions, and shortcodes from Instagram links. Live video preview and fast 1080p download on INSTASAVE HUB.">
   <meta name="keywords" content="content information extractor, content info extractor, instagram downloader, save instagram 1080p, instasave hub">
@@ -54,7 +67,7 @@
   <meta name="twitter:image:alt" content="INSTASAVE HUB — 1080p Instagram Video, Reel & Photo Downloader">
 
   <!-- Progressive Web App (PWA) & Mobile Install Metadata -->
-  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#030712">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -62,6 +75,7 @@
   <meta name="apple-mobile-web-app-title" content="INSTASAVE HUB">
   <link rel="icon" type="image/png" href="/static/images/logo.png">
   <link rel="apple-touch-icon" href="/static/images/icon-192.png">
+
 
   <!-- Typography & Preconnect Hints -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -215,7 +229,7 @@
 
       <div class="nav-actions">
         <!-- Install App Button (PWA / Native Install) -->
-        <button type="button" id="installAppNavBtn" class="btn-glass btn-sm nav-install-btn hide-tablet" title="Install INSTASAVE HUB App" aria-label="Install INSTASAVE HUB App">
+        <button type="button" id="installAppNavBtn" class="btn-glass btn-sm nav-install-btn hide-tablet pwa-install-trigger" title="Install INSTASAVE HUB App" aria-label="Install INSTASAVE HUB App">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M12 3v12"></path>
             <polyline points="7 10 12 15 17 10"></polyline>
@@ -266,14 +280,15 @@
       <a href="/disclaimer/" class="nav-link">Disclaimer</a>
       <a href="/#faq" class="nav-link">FAQ</a>
       <a href="/donations/" class="nav-link">Buy Us Coffee</a>
-      <button type="button" id="installAppMobileBtn" class="btn-glass btn-sm" style="justify-content: center;">
+      <button type="button" id="installAppMobileBtn" class="btn-glass btn-sm pwa-install-trigger" style="justify-content: center;">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12 3v12"></path>
           <polyline points="7 10 12 15 17 10"></polyline>
           <path d="M5 21h14"></path>
         </svg>
-        <span>Install INSTASAVE HUB App</span>
+        <span>Install App</span>
       </button>
+
       
         <a href="/auth/login/" class="btn-glass btn-primary btn-sm" style="margin-top: var(--space-2); justify-content: center;">Sign In</a>
       
@@ -335,7 +350,7 @@
     </div>
 
     <form id="instagramAnalyzerForm" action="/api/downloads/analyze/" method="post" novalidate>
-      <input type="hidden" name="csrfmiddlewaretoken" value="dcPpstma2xQwZA9X6BTbdiM0h2VDGrokzLzSvHn1zsyMp6QofFGOTk3ZgKGIscJx">
+      <input type="hidden" name="csrfmiddlewaretoken" value="0y7ivn44EYliPV16U7mLhDGVW9CwlX67V1HZqlPiCbPfd3YeG1Uv1GcUUl7UsN9K">
       <input type="hidden" id="instagramToolSlug" name="tool_slug" value="content-info-extractor">
       <label for="instagramUrlInput" class="form-label">Paste Public Instagram URL</label>
       <div class="analyzer-bar">
@@ -806,6 +821,7 @@
   </div>
 
   <!-- Core Scripts -->
+  <script src="/static/js/pwa-install.js" defer></script>
   <script src="/static/js/orbit-engine.js" defer></script>
   <script src="/static/js/downloader.js" defer></script>
   

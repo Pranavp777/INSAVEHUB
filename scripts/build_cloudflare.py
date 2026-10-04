@@ -324,6 +324,15 @@ def _render_without_db(dist_dir: Path) -> None:
                 "error_message": "The page you requested does not exist at this address.",
             },
         ),
+        (
+            "/offline/",
+            "offline/index.html",
+            "offline.html",
+            {
+                "page_title": "Offline Mode | INSTASAVE HUB",
+                "meta_description": "You are currently offline. Check your network connection to access INSTASAVE HUB.",
+            },
+        ),
     ]
 
     for tool in tools:
@@ -350,8 +359,12 @@ def _render_without_db(dist_dir: Path) -> None:
         print(f"[INSTASAVE HUB Build] Rendered {route_path} -> dist/{target_rel}")
 
     req_root = rf.get("/")
-    (dist_dir / "manifest.webmanifest").write_bytes(web_manifest(req_root).content)
-    (dist_dir / "sw.js").write_bytes(service_worker(req_root).content)
+    manifest_bytes = web_manifest(req_root).content
+    sw_bytes = service_worker(req_root).content
+    (dist_dir / "manifest.json").write_bytes(manifest_bytes)
+    (dist_dir / "manifest.webmanifest").write_bytes(manifest_bytes)
+    (dist_dir / "service-worker.js").write_bytes(sw_bytes)
+    (dist_dir / "sw.js").write_bytes(sw_bytes)
     (dist_dir / "robots.txt").write_bytes(robots_txt(req_root).content)
 
     pub_id = getattr(settings, "ADSENSE_PUBLISHER_ID", "").strip()
@@ -441,7 +454,10 @@ def main() -> None:
             ("/donations/", "donations/index.html"),
             ("/auth/login/", "auth/login/index.html"),
             ("/auth/register/", "auth/register/index.html"),
+            ("/offline/", "offline/index.html"),
+            ("/manifest.json", "manifest.json"),
             ("/manifest.webmanifest", "manifest.webmanifest"),
+            ("/service-worker.js", "service-worker.js"),
             ("/sw.js", "sw.js"),
             ("/robots.txt", "robots.txt"),
             ("/ads.txt", "ads.txt"),

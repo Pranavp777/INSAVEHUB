@@ -25,6 +25,19 @@
   {% endif %}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      try {
+        if (
+          (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+          (window.navigator && window.navigator.standalone === true) ||
+          (document.referrer && document.referrer.includes('android-app://'))
+        ) {
+          document.documentElement.classList.add('pwa-installed');
+        }
+      } catch (e) {}
+    })();
+  </script>
   <title>{{ page_title|default:"INSTASAVE HUB — Free Instagram Video, Reel & Photo Downloader (1080p HD)" }}</title>
   <meta name="description" content="{{ meta_description|default:'Download Instagram Videos, Reels, Photos, Carousels, and Profile Pictures in original 1080p Full HD MP4 & JPG with live video preview. Fast, free, no login required.' }}">
   <meta name="keywords" content="{{ meta_keywords|default:'instagram video downloader, instagram reel downloader, download instagram reels, instagram photo downloader, instasave hub, save instagram video 1080p, ig video preview, instagram carousel downloader, instagram post downloader, free ig downloader' }}">
@@ -56,14 +69,15 @@
   <meta name="twitter:image:alt" content="INSTASAVE HUB — 1080p Instagram Video, Reel & Photo Downloader">
 
   <!-- Progressive Web App (PWA) & Mobile Install Metadata -->
-  <link rel="manifest" href="{% url 'core:web_manifest' %}">
-  <meta name="theme-color" content="#030712">
+  <link rel="manifest" href="{% url 'core:manifest_json' %}">
+  <meta name="theme-color" content="{{ site_config.get_pwa_theme_color|default:'#030712' }}">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="INSTASAVE HUB">
+  <meta name="apple-mobile-web-app-title" content="{{ site_config.pwa_short_name|default:'INSTASAVE HUB' }}">
   <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
   <link rel="apple-touch-icon" href="{% static 'images/icon-192.png' %}">
+
 
   <!-- Typography & Preconnect Hints -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -200,13 +214,13 @@
 
       <div class="nav-actions">
         <!-- Install App Button (PWA / Native Install) -->
-        <button type="button" id="installAppNavBtn" class="btn-glass btn-sm nav-install-btn hide-tablet" title="Install INSTASAVE HUB App" aria-label="Install INSTASAVE HUB App">
+        <button type="button" id="installAppNavBtn" class="btn-glass btn-sm nav-install-btn hide-tablet pwa-install-trigger" title="Install INSTASAVE HUB App" aria-label="Install INSTASAVE HUB App">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M12 3v12"></path>
             <polyline points="7 10 12 15 17 10"></polyline>
             <path d="M5 21h14"></path>
           </svg>
-          <span>Install App</span>
+          <span>{{ site_config.get_pwa_install_button_text|default:'Install App' }}</span>
         </button>
 
         <!-- Small "Buy Us Coffee" Icon Option -->
@@ -254,14 +268,15 @@
       <a href="{% url 'core:disclaimer' %}" class="nav-link">Disclaimer</a>
       <a href="/#faq" class="nav-link">FAQ</a>
       <a href="{% url 'donations:index' %}" class="nav-link">Buy Us Coffee</a>
-      <button type="button" id="installAppMobileBtn" class="btn-glass btn-sm" style="justify-content: center;">
+      <button type="button" id="installAppMobileBtn" class="btn-glass btn-sm pwa-install-trigger" style="justify-content: center;">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12 3v12"></path>
           <polyline points="7 10 12 15 17 10"></polyline>
           <path d="M5 21h14"></path>
         </svg>
-        <span>Install INSTASAVE HUB App</span>
+        <span>{{ site_config.get_pwa_install_button_text|default:'Install App' }}</span>
       </button>
+
       {% if user.is_authenticated %}
         <a href="{% url 'dashboard:index' %}" class="nav-link">Dashboard</a>
         <a href="{% url 'accounts:profile' %}" class="nav-link">Profile</a>
@@ -607,6 +622,7 @@
   </div>
 
   <!-- Core Scripts -->
+  <script src="{% static 'js/pwa-install.js' %}" defer></script>
   <script src="{% static 'js/orbit-engine.js' %}" defer></script>
   <script src="{% static 'js/downloader.js' %}" defer></script>
   {% block extra_scripts %}{% endblock %}

@@ -1224,6 +1224,52 @@
 }
 
 /* ==========================================================================
+   PWA STANDALONE MODE & INSTALLED STATE — STRICTLY HIDE INSTALL OPTIONS
+   ========================================================================== */
+
+@media all and (display-mode: standalone) {
+  .pwa-install-trigger,
+  [data-install-app-trigger],
+  #installAppNavBtn,
+  #installAppMobileBtn,
+  #installAppHeroBtn,
+  #appInstallModal {
+    display: none !important;
+  }
+}
+
+html.pwa-installed .pwa-install-trigger,
+html.pwa-installed [data-install-app-trigger],
+html.pwa-installed #installAppNavBtn,
+html.pwa-installed #installAppMobileBtn,
+html.pwa-installed #installAppHeroBtn,
+html.pwa-installed #appInstallModal,
+body.pwa-installed .pwa-install-trigger,
+body.pwa-installed [data-install-app-trigger],
+body.pwa-installed #installAppNavBtn,
+body.pwa-installed #installAppMobileBtn,
+body.pwa-installed #installAppHeroBtn,
+body.pwa-installed #appInstallModal {
+  display: none !important;
+}
+
+/* Button loading state during active PWA install prompt */
+.btn-install-loading {
+  pointer-events: none;
+  opacity: 0.82;
+  position: relative;
+}
+
+.btn-install-loading svg {
+  animation: pwaSpin 1s linear infinite;
+}
+
+@keyframes pwaSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
    24-HOUR FREE ACCESS STATUS CARD & UNLOCK 24 HOURS FREE GLASS POPUP
    ========================================================================== */
 

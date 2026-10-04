@@ -56,6 +56,25 @@ class SiteConfigurationAdmin(admin.ModelAdmin):
             },
         ),
         (
+            "Progressive Web App (PWA) Settings",
+            {
+                "fields": (
+                    "pwa_name",
+                    "pwa_short_name",
+                    "pwa_description",
+                    "pwa_app_icon",
+                    "pwa_theme_color",
+                    "pwa_background_color",
+                    "pwa_install_button_text",
+                    "pwa_start_url",
+                ),
+                "description": (
+                    "Configure your Progressive Web App installation experience. "
+                    "Changes dynamically update manifest.json without breaking service worker or install flows."
+                ),
+            },
+        ),
+        (
             "Advertisement Sponsor Content",
             {
                 "fields": (

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-shell" style="max-width: 620px; padding-top: var(--space-10); padding-bottom: var(--space-10);">
+  <div class="glass-panel reveal-item" style="padding: var(--space-8); text-align: center; border-radius: var(--radius-2xl);">
+    
+    <div style="display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 50%; background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); margin-bottom: var(--space-4); color: var(--electric-blue);">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="1" y1="1" x2="23" y2="23"></line>
+        <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+        <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+        <path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path>
+        <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+        <line x1="12" y1="20" x2="12.01" y2="20"></line>
+      </svg>
+    </div>
+
+    <div style="margin-bottom: var(--space-2);">
+      <span class="mono-label" style="color: var(--light-cyan); letter-spacing: 0.12em;">NETWORK STATUS // OFFLINE</span>
+    </div>
+
+    <h1 style="font-size: 2rem; margin: var(--space-2) 0 var(--space-3); font-weight: 700;">
+      You Are Currently Offline
+    </h1>
+
+    <p style="color: var(--text-secondary); margin-bottom: var(--space-6); line-height: 1.6; font-size: 1rem;">
+      INSTASAVE HUB requires an active internet connection to analyze Instagram media streams and download videos, reels, and photos. Please verify your Wi-Fi or cellular network connection and try again.
+    </p>
+
+    <div id="offlineNoticeBanner" class="glass-subpanel" style="padding: var(--space-3) var(--space-4); margin-bottom: var(--space-6); display: inline-flex; align-items: center; gap: var(--space-2);">
+      <span class="status-dot status-dot-amber" id="offlineStatusDot"></span>
+      <span id="offlineStatusMessage" style="font-size: 0.88rem; color: var(--text-secondary);">Waiting for internet connection...</span>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-3);">
+      <button type="button" id="retryConnectionBtn" class="btn-glass btn-primary" onclick="window.location.reload();">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="23 4 23 10 17 10"></polyline>
+          <polyline points="1 20 1 14 7 14"></polyline>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+        </svg>
+        <span>Retry Connection</span>
+      </button>
+
+      <a href="{% url 'core:home' %}" class="btn-glass">
+        <span>Go to Cached Home</span>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  (function() {
+    function updateConnectionStatus() {
+      const msg = document.getElementById('offlineStatusMessage');
+      const dot = document.getElementById('offlineStatusDot');
+      if (navigator.onLine) {
+        if (msg) msg.textContent = 'Connection restored! Reloading page...';
+        if (dot) {
+          dot.classList.remove('status-dot-amber');
+          dot.classList.add('status-dot-emerald');
+        }
+        setTimeout(function() {
+          window.location.reload();
+        }, 800);
+      } else {
+        if (msg) msg.textContent = 'Waiting for internet connection...';
+        if (dot) {
+          dot.classList.add('status-dot-amber');
+          dot.classList.remove('status-dot-emerald');
+        }
+      }
+    }
+
+    window.addEventListener('online', updateConnectionStatus);
+    window.addEventListener('offline', updateConnectionStatus);
+  })();
+</script>
+{% endblock %}

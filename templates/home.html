@@ -81,13 +81,13 @@
           </svg>
         </a>
 
-        <button type="button" id="installAppHeroBtn" class="btn-glass" data-install-app-trigger>
+        <button type="button" id="installAppHeroBtn" class="btn-glass pwa-install-trigger" data-install-app-trigger>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M12 3v12"></path>
             <polyline points="7 10 12 15 17 10"></polyline>
             <path d="M5 21h14"></path>
           </svg>
-          <span>Install App</span>
+          <span>{{ site_config.get_pwa_install_button_text|default:'Install App' }}</span>
         </button>
       </div>
 

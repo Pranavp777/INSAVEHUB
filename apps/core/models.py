@@ -103,6 +103,47 @@ class SiteConfiguration(models.Model):
     ad_sponsor_cta_text = models.CharField(max_length=60, default="Learn About Our Architecture")
     ad_sponsor_cta_url = models.URLField(default="https://www.cloudflare.com/")
 
+    # Progressive Web App (PWA) Settings
+    pwa_name = models.CharField(
+        max_length=120,
+        default="INSTASAVE HUB — Instagram Video & Post Downloader",
+        help_text="Full application name displayed on device install screens.",
+    )
+    pwa_short_name = models.CharField(
+        max_length=40,
+        default="INSTASAVE HUB",
+        help_text="Short application name displayed on device home screens.",
+    )
+    pwa_description = models.TextField(
+        default="Download public Instagram Videos, Reels, Photos, and Carousels in 1080p MP4 and JPEG.",
+        help_text="Application description provided to PWA installers.",
+    )
+    pwa_app_icon = models.CharField(
+        max_length=255,
+        default="/static/images/icon-512.png",
+        help_text="Primary app icon path or URL (defaults to /static/images/icon-512.png).",
+    )
+    pwa_theme_color = models.CharField(
+        max_length=16,
+        default="#030712",
+        help_text="Hex color code for mobile status bar and browser frame (e.g. #030712).",
+    )
+    pwa_background_color = models.CharField(
+        max_length=16,
+        default="#030712",
+        help_text="Hex color code for splash screen background (e.g. #030712).",
+    )
+    pwa_install_button_text = models.CharField(
+        max_length=40,
+        default="Install App",
+        help_text="Label on the install button (e.g. Install App or Download App).",
+    )
+    pwa_start_url = models.CharField(
+        max_length=120,
+        default="/?source=pwa",
+        help_text="Entry URL launched when opening the installed PWA.",
+    )
+
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -161,11 +202,94 @@ class SiteConfiguration(models.Model):
         return bool(self.enable_adsense and self.get_adsense_publisher_id())
 
     def get_search_console_verification(self) -> str:
-        """Return Google Search Console verification code from DB or settings."""
-        val = (self.google_search_console_verification or "").strip()
-        if not val:
-            val = getattr(settings, "GOOGLE_SEARCH_CONSOLE_VERIFICATION", "").strip()
-        return val
+        """Return Google Search Console verification meta tag token."""
+        code = (self.google_search_console_verification or "").strip()
+        if not code:
+            code = getattr(settings, "GOOGLE_SEARCH_CONSOLE_VERIFICATION", "").strip()
+        return code
+
+    def get_pwa_theme_color(self) -> str:
+        """Return safe hex color string for theme-color."""
+        color = (self.pwa_theme_color or "").strip()
+        return color if color.startswith("#") and len(color) in (4, 7) else "#030712"
+
+    def get_pwa_background_color(self) -> str:
+        """Return safe hex color string for background-color."""
+        color = (self.pwa_background_color or "").strip()
+        return color if color.startswith("#") and len(color) in (4, 7) else "#030712"
+
+    def get_pwa_install_button_text(self) -> str:
+        """Return label for install trigger button."""
+        return (self.pwa_install_button_text or "").strip() or "Install App"
+
+    def get_pwa_manifest(self) -> Dict[str, Any]:
+        """Return complete W3C-compliant Web App Manifest dictionary."""
+        theme_color = self.get_pwa_theme_color()
+        bg_color = self.get_pwa_background_color()
+        start_url = (self.pwa_start_url or "").strip() or "/?source=pwa"
+        app_icon = (self.pwa_app_icon or "").strip() or "/static/images/icon-512.png"
+
+        return {
+            "id": "/",
+            "name": (self.pwa_name or "").strip() or "INSTASAVE HUB — Instagram Video & Post Downloader",
+            "short_name": (self.pwa_short_name or "").strip() or "INSTASAVE HUB",
+            "description": (self.pwa_description or "").strip() or "Download public Instagram Videos, Reels, Photos, and Carousels in 1080p MP4 and JPEG.",
+            "start_url": start_url,
+            "scope": "/",
+            "display": "standalone",
+            "orientation": "any",
+            "background_color": bg_color,
+            "theme_color": theme_color,
+            "categories": ["utilities", "photo", "video", "productivity"],
+            "icons": [
+                {
+                    "src": "/static/images/icon-192.png",
+                    "sizes": "192x192",
+                    "type": "image/png",
+                    "purpose": "any",
+                },
+                {
+                    "src": "/static/images/icon-192.png",
+                    "sizes": "192x192",
+                    "type": "image/png",
+                    "purpose": "maskable",
+                },
+                {
+                    "src": app_icon,
+                    "sizes": "512x512",
+                    "type": "image/png",
+                    "purpose": "any",
+                },
+                {
+                    "src": app_icon,
+                    "sizes": "512x512",
+                    "type": "image/png",
+                    "purpose": "maskable",
+                },
+                {
+                    "src": "/static/images/logo.png",
+                    "sizes": "256x256",
+                    "type": "image/png",
+                    "purpose": "any",
+                },
+            ],
+            "shortcuts": [
+                {
+                    "name": "Instagram Downloader",
+                    "short_name": "Download",
+                    "description": "Preview and download Instagram Videos and Reels",
+                    "url": "/downloads/",
+                    "icons": [{"src": "/static/images/icon-192.png", "sizes": "192x192"}],
+                },
+                {
+                    "name": "Media Suite Tools",
+                    "short_name": "Tools",
+                    "description": "Instagram media extraction suite",
+                    "url": "/tools/",
+                    "icons": [{"src": "/static/images/icon-192.png", "sizes": "192x192"}],
+                },
+            ],
+        }
 
     @classmethod
     def get_solo(cls) -> "SiteConfiguration":
