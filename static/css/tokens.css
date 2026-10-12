@@ -132,6 +132,44 @@ body {
   flex-direction: column;
 }
 
+/* Eliminate 300ms mobile touch delay across all interactive controls */
+button,
+a,
+input,
+select,
+textarea,
+[role="button"],
+[role="tab"],
+[role="radio"] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Mobile-tuned optical blur & scroll performance */
+@media (max-width: 768px) {
+  :root {
+    --blur-sm: blur(8px) saturate(130%);
+    --blur-md: blur(12px) saturate(140%);
+    --blur-lg: blur(16px) saturate(150%);
+  }
+
+  body {
+    background-attachment: scroll !important;
+  }
+}
+
+/* Accessibility: strict prefers-reduced-motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-weight: 600;

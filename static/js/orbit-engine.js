@@ -37,22 +37,62 @@
     const canvas = document.getElementById("ambientParticleCanvas");
     if (!canvas) return;
 
+    // Completely disable particle canvas loop on mobile (<=768px) and reduced motion
+    if (window.innerWidth <= 768 || reducedMotionQuery.matches) {
+      canvas.style.display = "none";
+      return;
+    }
+
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
+    let animFrameId = null;
+    let isPaused = false;
 
+    let resizeTimer = null;
     window.addEventListener(
       "resize",
       () => {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
+        if (resizeTimer) clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          if (window.innerWidth <= 768) {
+            canvas.style.display = "none";
+            if (animFrameId) {
+              cancelAnimationFrame(animFrameId);
+              animFrameId = null;
+            }
+            return;
+          }
+          canvas.style.display = "block";
+          width = canvas.width = window.innerWidth;
+          height = canvas.height = window.innerHeight;
+          if (!animFrameId && !isPaused) {
+            drawScene();
+          }
+        }, 200);
       },
       { passive: true }
     );
 
-    const count = Math.min(34, Math.max(16, Math.floor((width * height) / 48000)));
+    // Pause animation when tab is in background to conserve mobile battery & GPU
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        isPaused = true;
+        if (animFrameId) {
+          cancelAnimationFrame(animFrameId);
+          animFrameId = null;
+        }
+      } else {
+        if (isPaused && window.innerWidth > 768 && !reducedMotionQuery.matches) {
+          isPaused = false;
+          drawScene();
+        }
+      }
+    });
+
+    const count = Math.min(24, Math.max(12, Math.floor((width * height) / 64000)));
     const palette = [
       "rgba(96, 165, 250, 0.32)",
       "rgba(59, 130, 246, 0.25)",
@@ -63,39 +103,36 @@
     const motes = Array.from({ length: count }, (_, idx) => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      r: 0.9 + Math.random() * 1.6,
-      vx: (Math.random() - 0.5) * 0.18,
-      vy: (Math.random() - 0.5) * 0.18,
+      r: 0.8 + Math.random() * 1.4,
+      vx: (Math.random() - 0.5) * 0.16,
+      vy: (Math.random() - 0.5) * 0.16,
       phase: Math.random() * Math.PI * 2,
       color: palette[idx % palette.length],
     }));
 
     function drawScene() {
+      if (isPaused || window.innerWidth <= 768 || reducedMotionQuery.matches) return;
       ctx.clearRect(0, 0, width, height);
 
       for (let i = 0; i < motes.length; i++) {
         const m = motes[i];
-        if (!reducedMotionQuery.matches) {
-          m.x += m.vx;
-          m.y += m.vy;
-          m.phase += 0.015;
+        m.x += m.vx;
+        m.y += m.vy;
+        m.phase += 0.012;
 
-          if (m.x < 0) m.x = width;
-          if (m.x > width) m.x = 0;
-          if (m.y < 0) m.y = height;
-          if (m.y > height) m.y = 0;
-        }
+        if (m.x < 0) m.x = width;
+        if (m.x > width) m.x = 0;
+        if (m.y < 0) m.y = height;
+        if (m.y > height) m.y = 0;
 
-        const radius = Math.max(0.6, m.r + Math.sin(m.phase) * 0.35);
+        const radius = Math.max(0.5, m.r + Math.sin(m.phase) * 0.3);
         ctx.beginPath();
         ctx.arc(m.x, m.y, radius, 0, Math.PI * 2);
         ctx.fillStyle = m.color;
         ctx.fill();
       }
 
-      if (!reducedMotionQuery.matches) {
-        requestAnimationFrame(drawScene);
-      }
+      animFrameId = requestAnimationFrame(drawScene);
     }
 
     drawScene();
@@ -116,16 +153,35 @@
     const drawer = document.getElementById("mobileDrawer");
     if (!toggleBtn || !drawer) return;
 
-    toggleBtn.addEventListener("click", () => {
+    function closeDrawer() {
+      drawer.classList.remove("is-open");
+      toggleBtn.setAttribute("aria-expanded", "false");
+      document.body.classList.remove("nav-drawer-open");
+    }
+
+    toggleBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
       const isOpen = drawer.classList.toggle("is-open");
       toggleBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      document.body.classList.toggle("nav-drawer-open", isOpen);
     });
 
     drawer.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", () => {
-        drawer.classList.remove("is-open");
-        toggleBtn.setAttribute("aria-expanded", "false");
-      });
+      link.addEventListener("click", closeDrawer);
+    });
+
+    // Close on outside tap or touch
+    document.addEventListener("click", (e) => {
+      if (drawer.classList.contains("is-open") && !drawer.contains(e.target) && !toggleBtn.contains(e.target)) {
+        closeDrawer();
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && drawer.classList.contains("is-open")) {
+        closeDrawer();
+      }
     });
   }
 

@@ -2150,6 +2150,39 @@ body.pwa-installed #appInstallModal {
   .hero-feature-grid {
     grid-template-columns: 1fr;
   }
+  .ios-progress-card {
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    padding: var(--space-4);
+  }
+  .ios-progress-cancel-btn {
+    width: 100%;
+    text-align: center;
+  }
+  .ios-completed-card {
+    padding: var(--space-4);
+  }
+  .ios-completed-actions .btn-glass {
+    width: 100%;
+    justify-content: center;
+  }
 }
+
+@media (max-width: 360px) {
+  .ios-format-grid {
+    gap: 6px;
+  }
+  .ios-format-card {
+    padding: 10px 8px;
+    min-height: 72px;
+  }
+  .ios-format-title {
+    font-size: 0.92rem;
+  }
+  .ios-format-sub {
+    font-size: 0.6rem;
+  }
+}
+
 
 

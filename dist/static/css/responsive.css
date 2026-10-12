@@ -83,8 +83,19 @@ svg {
   }
 }
 
-.mobile-bottom-dock {
-  display: none;
+/* Core Web Vitals Optimization: Content Visibility for offscreen sections */
+#features,
+#howToDownload,
+#faq,
+.pricing-section,
+.glass-footer {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 600px;
+}
+
+body.nav-drawer-open {
+  overflow: hidden !important;
+  touch-action: none;
 }
 
 /* ==========================================================================
@@ -144,65 +155,30 @@ svg {
   }
 
   .main-viewport {
-    padding-bottom: calc(76px + env(safe-area-inset-bottom, 16px));
+    padding-bottom: calc(84px + env(safe-area-inset-bottom, 16px));
   }
 
-  /* Dedicated Mobile Bottom Control Dock (5 Items) */
-  .mobile-bottom-dock {
+  /* Dedicated iOS Floating Glass Bottom Navigation Bar */
+  .ios-bottom-nav {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     position: fixed;
-    bottom: max(10px, env(safe-area-inset-bottom));
-    left: 12px;
-    right: 12px;
+    bottom: max(12px, env(safe-area-inset-bottom, 12px));
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 24px);
+    max-width: 420px;
+    height: 60px;
     z-index: 98;
-    height: 64px;
     border-radius: var(--radius-pill);
-    background: rgba(8, 14, 30, 0.90);
+    background: rgba(8, 14, 30, 0.92);
     backdrop-filter: var(--blur-md);
     -webkit-backdrop-filter: var(--blur-md);
     border: 1px solid rgba(148, 184, 255, 0.22);
-    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.82);
-    padding: 0 var(--space-1);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.82), 0 0 24px -4px rgba(59, 130, 246, 0.25);
+    padding: 0 6px;
     align-items: center;
-  }
-
-  .dock-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    font-family: var(--font-sans);
-    font-size: 0.68rem;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    color: var(--text-muted);
-    min-height: 48px;
-    border-radius: var(--radius-pill);
-    transition: all var(--duration-fast) ease;
-    text-decoration: none;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .dock-item svg {
-    width: 19px;
-    height: 19px;
-    transition: transform var(--duration-fast) ease;
-  }
-
-  .dock-item.is-active {
-    color: #FFFFFF;
-    background: rgba(59, 130, 246, 0.16);
-  }
-
-  .dock-item.is-active svg {
-    color: var(--light-cyan);
-    transform: translateY(-1px);
-  }
-
-  .dock-item:hover {
-    color: #FFFFFF;
+    touch-action: manipulation;
   }
 
   /* Prevent automatic iOS Safari zoom by enforcing 16px on form inputs */
@@ -392,7 +368,7 @@ svg {
   }
 
   .glass-panel {
-    padding: var(--space-5) var(--space-4);
+    padding: var(--space-5) var(--space-4) !important;
     border-radius: 20px;
   }
 
@@ -421,6 +397,11 @@ svg {
 @media (max-width: 360px) {
   .container-shell {
     padding: 0 10px;
+  }
+
+  .glass-panel {
+    padding: var(--space-4) var(--space-3) !important;
+    border-radius: 16px;
   }
 
   .brand-wordmark {
@@ -460,21 +441,21 @@ svg {
     padding: 0 6px;
   }
 
-  .mobile-bottom-dock {
-    left: 6px;
-    right: 6px;
-    bottom: max(6px, env(safe-area-inset-bottom));
-    height: 58px;
-    padding: 0 2px;
+  .ios-bottom-nav {
+    width: calc(100% - 12px);
+    max-width: 340px;
+    height: 56px;
+    bottom: max(8px, env(safe-area-inset-bottom, 8px));
+    padding: 0 4px;
   }
 
-  .dock-item {
-    font-size: 0.6rem;
+  .ios-bottom-nav-item {
+    font-size: 0.62rem;
     min-height: 44px;
     gap: 2px;
   }
 
-  .dock-item svg {
+  .ios-bottom-nav-item svg {
     width: 17px;
     height: 17px;
   }
@@ -488,3 +469,24 @@ svg {
     font-size: 1.45rem;
   }
 }
+
+/* AdSense Mobile Viewport & Container Zero-Overflow Guard */
+@media (max-width: 768px) {
+  .adsense-slot-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: var(--space-4) auto !important;
+    padding: var(--space-2) !important;
+    overflow: hidden !important;
+  }
+
+  .adsense-ad-viewport {
+    width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .adsense-ad-viewport ins.adsbygoogle {
+    max-width: 100% !important;
+  }
+}
+

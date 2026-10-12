@@ -375,6 +375,27 @@
   50% { opacity: 1; }
 }
 
+/* Mobile GPU & Battery Saver: Pause infinite background animations */
+@media (max-width: 768px) {
+  .atmosphere-layer::after {
+    animation: none !important;
+    filter: blur(28px) !important;
+    width: 520px;
+    height: 260px;
+    top: -50px;
+    right: -80px;
+  }
+
+  .atmosphere-grid {
+    animation: none !important;
+  }
+
+  .ambient-particle-canvas {
+    display: none !important;
+  }
+}
+
+
 /* Strict Accessibility: Respect prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
   *,
