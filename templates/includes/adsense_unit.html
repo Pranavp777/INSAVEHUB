@@ -4,14 +4,15 @@
     <span class="adsense-disclosure-label">ADVERTISEMENT</span>
   </div>
   <div class="adsense-ad-viewport">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ adsense_client|default:'ca-pub-7764836554568456' }}"
+         crossorigin="anonymous"></script>
+    <!-- ads 1 -->
     <ins class="adsbygoogle"
-         style="display:block; text-align:center; min-height: 90px; width: 100%;"
-         data-ad-client="{{ adsense_client }}"
-         {% if ad_slot %}data-ad-slot="{{ ad_slot }}"{% endif %}
-         data-ad-format="{{ ad_format|default:'auto' }}"
-         data-full-width-responsive="true"></ins>
+         style="display:inline-block;width:728px;height:90px"
+         data-ad-client="{{ adsense_client|default:'ca-pub-7764836554568456' }}"
+         data-ad-slot="{{ ad_slot|default:adsense_ad_slot|default:'8738112208' }}"></ins>
     <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
+         (adsbygoogle = window.adsbygoogle || []).push({});
     </script>
   </div>
 </div>

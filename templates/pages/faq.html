@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I preview and download Instagram Videos or Reels in 1080p?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Paste any public Instagram Reel, Video, or Post URL into the downloader input box on INSTASAVE HUB, click 'Analyze', preview the high-definition stream in the built-in video player, and tap 'Download MP4' to save the file directly to your device."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I watch a video preview before downloading?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! Every analyzed Instagram Reel or Video includes an instant in-browser HD video preview player with full playback, volume, and fullscreen controls so you can inspect the media before initiating the download."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is INSTASAVE HUB free and does it require my Instagram password?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "INSTASAVE HUB is 100% free to use and never asks for your Instagram login, password, or account credentials. You never need to connect your personal social media account."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does INSTASAVE HUB work on iPhone, Android, Mac, and Windows?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. INSTASAVE HUB is fully responsive and compatible with all modern browsers including Safari on iOS, Chrome on Android, Firefox, Edge, and macOS/Windows desktop browsers. You can also install it as a standalone Progressive Web App (PWA)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I download content from private Instagram accounts?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. To protect user privacy and adhere to platform security standards, INSTASAVE HUB only retrieves content from public Instagram accounts and posts."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does INSTASAVE HUB store or keep copies of downloaded videos?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. We operate under a strict zero-retention privacy policy. Video and image streams are proxied live on-demand from Instagram's public CDN directly to your browser without permanent server storage or logging."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I install INSTASAVE HUB as an App on my phone or computer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Click the 'Install App' button located in the top navigation bar. On mobile Safari, tap the Share icon and select 'Add to Home Screen'. On Android Chrome, tap the install prompt to add it to your home screen."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why did my download display 'Instagram CDN stream expired'?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Instagram CDN URLs are time-limited security tokens that naturally expire after a few hours. If a link expires, simply paste the original Instagram post URL into the analyzer again to generate a fresh, active stream token."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container-shell" style="padding-top: var(--space-6); padding-bottom: var(--space-16); max-width: 900px;">
+  <!-- Header -->
+  <div class="section-header reveal-item" style="margin-bottom: var(--space-8);">
+    <span class="hero-eyebrow-pill" style="margin-bottom: var(--space-3);">
+      <span class="status-dot status-dot-emerald"></span>
+      <span>HELP &amp; FREQUENTLY ASKED QUESTIONS</span>
+    </span>
+    <h1 class="section-title">Frequently Asked Questions</h1>
+    <p class="section-subtitle">
+      Find quick answers about downloading 1080p Instagram Reels, Videos, Photos, browser compatibility, PWA installation, and privacy.
+    </p>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+    <!-- FAQ Items -->
+    <details class="glass-panel faq-accordion reveal-item" open style="padding: var(--space-6); cursor: pointer;">
+      <summary style="font-weight: 600; font-size: 1.1rem; color: var(--text-primary); list-style: none; display: flex; justify-content: space-between; align-items: center;">
+        <span>How do I preview and download Instagram Videos or Reels in 1080p?</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.2s ease;">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </summary>
+      <div style="margin-top: var(--space-3); line-height: 1.75; color: var(--text-secondary); font-size: 0.95rem;">
+        Paste any public Instagram Reel, Video, or Post URL into the downloader input box on INSTASAVE HUB, click <strong>Analyze</strong>, preview the high-definition stream in the built-in video player, and tap <strong>Download MP4</strong> to save the file directly to your device.
+      </div>
+    </details>
+
+    <details class="glass-panel faq-accordion reveal-item" open style="padding: var(--space-6); cursor: pointer;">
+      <summary style="font-weight: 600; font-size: 1.1rem; color: var(--text-primary); list-style: none; display: flex; justify-content: space-between; align-items: center;">
+        <span>Can I watch a video preview before downloading?</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.2s ease;">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </summary>
+      <div style="margin-top: var(--space-3); line-height: 1.75; color: var(--text-secondary); font-size: 0.95rem;">
+        Yes! Every analyzed Instagram Reel or Video includes an instant in-browser HD video preview player with full audio playback, progress scrubber, and fullscreen controls so you can inspect the media before initiating the download.
+      </div>
+    </details>
+
+    <details class="glass-panel faq-accordion reveal-item" style="padding: var(--space-6); cursor: pointer;">
+      <summary style="font-weight: 600; font-size: 1.1rem; color: var(--text-primary); list-style: none; display: flex; justify-content: space-between; align-items: center;">
+        <span>Is INSTASAVE HUB free and does it require my Instagram password?</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.2s ease;">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </summary>
+      <div style="margin-top: var(--space-3); line-height: 1.75; color: var(--text-secondary); font-size: 0.95rem;">
+        INSTASAVE HUB is 100% free to use and never asks for your Instagram login, password, or account credentials. You never need to connect your personal social media account or install suspicious browser plugins.
+      </div>
+    </details>
+
+    <details class="glass-panel faq-accordion reveal-item" style="padding: var(--space-6); cursor: pointer;">
+      <summary style="font-weight: 600; font-size: 1.1rem; color: var(--text-primary); list-style: none; display: flex; justify-content: space-between; align-items: center;">
+        <span>Does INSTASAVE HUB work on iPhone, Android, Mac, and Windows?</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.2s ease;">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </summary>
+      <div style="margin-top: var(--space-3); line-height: 1.75; color: var(--text-secondary); font-size: 0.95rem;">
+        Yes. INSTASAVE HUB is fully responsive and compatible with all modern browsers including Safari on iOS, Chrome on Android, Firefox, Microsoft Edge, and macOS/Windows desktop browsers. You can also install it as a standalone Progressive Web App (PWA) with a single tap.
+      </div>
+    </details>
+
+    <details class="glass-panel faq-accordion reveal-item" style="padding: var(--space-6); cursor: pointer;">
+      <summary style="font-weight: 600; font-size: 1.1rem; color: var(--text-primary); list-style: none; display: flex; justify-content: space-between; align-items: center;">
+        <span>Can I download content from private Instagram accounts?</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.2s ease;">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </summary>
+      <div style="margin-top: var(--space-3); line-height: 1.75; color: var(--text-secondary); font-size: 0.95rem;">
+        No. To protect individual privacy and adhere to platform security standards, INSTASAVE HUB only retrieves content from public Instagram accounts and posts. Posts from private or restricted profiles cannot and should not be accessed.
+      </div>
+    </details>
+
+    <details class="glass-panel faq-accordion reveal-item" style="padding: var(--space-6); cursor: pointer;">
+      <summary style="font-weight: 600; font-size: 1.1rem; color: var(--text-primary); list-style: none; display: flex; justify-content: space-between; align-items: center;">
+        <span>Does INSTASAVE HUB store or keep copies of downloaded videos?</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.2s ease;">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </summary>
+      <div style="margin-top: var(--space-3); line-height: 1.75; color: var(--text-secondary); font-size: 0.95rem;">
+        No. We operate under a strict zero-retention privacy policy. Video and image streams are proxied live on-demand from Instagram's public CDN directly to your browser without permanent server storage, logging, or database recording.
+      </div>
+    </details>
+
+    <details class="glass-panel faq-accordion reveal-item" style="padding: var(--space-6); cursor: pointer;">
+      <summary style="font-weight: 600; font-size: 1.1rem; color: var(--text-primary); list-style: none; display: flex; justify-content: space-between; align-items: center;">
+        <span>How do I install INSTASAVE HUB as an App on my phone or computer?</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.2s ease;">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </summary>
+      <div style="margin-top: var(--space-3); line-height: 1.75; color: var(--text-secondary); font-size: 0.95rem;">
+        Click the <strong>Install App</strong> button in the top navigation bar.
+        <ul style="margin: var(--space-2) 0 0 var(--space-4); padding-left: var(--space-2);">
+          <li>On <strong>iPhone &amp; iPad</strong>: In Safari, tap the Share button and tap "Add to Home Screen".</li>
+          <li>On <strong>Android</strong>: In Chrome, tap "Install App" or "Add to Home screen" in the browser menu.</li>
+          <li>On <strong>Mac &amp; Windows</strong>: In Chrome or Edge, click the install icon in the address bar.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="glass-panel faq-accordion reveal-item" style="padding: var(--space-6); cursor: pointer;">
+      <summary style="font-weight: 600; font-size: 1.1rem; color: var(--text-primary); list-style: none; display: flex; justify-content: space-between; align-items: center;">
+        <span>Why did my download display "Instagram CDN stream expired"?</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.2s ease;">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </summary>
+      <div style="margin-top: var(--space-3); line-height: 1.75; color: var(--text-secondary); font-size: 0.95rem;">
+        Instagram CDN URLs are time-limited signed security tokens that naturally expire after a few hours. If a link expires, simply paste the original Instagram post URL into the analyzer again to generate a fresh, active stream token.
+      </div>
+    </details>
+
+    <div class="glass-panel reveal-item" style="padding: var(--space-6); margin-top: var(--space-4); text-align: center;">
+      <h3 style="font-size: 1.2rem; color: var(--text-primary); margin-bottom: var(--space-2);">Still have questions?</h3>
+      <p style="color: var(--text-secondary); margin-bottom: var(--space-4);">
+        Our technical support team is here to assist you with any questions or feedback.
+      </p>
+      <a href="{% url 'core:contact' %}" class="btn-glass btn-primary" style="display: inline-flex;">Contact Support</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

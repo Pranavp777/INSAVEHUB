@@ -122,9 +122,11 @@ def _render_without_db(dist_dir: Path) -> None:
         "active_ad_remaining_seconds": 0,
     }
     anon_user = SimpleNamespace(is_authenticated=False, is_staff=False, is_superuser=False, username="")
+    canonical_base = getattr(settings, "CANONICAL_BASE_URL", "https://insavehub.com").rstrip("/")
+    canonical_host = canonical_base.split("://")[-1].split("/")[0]
 
     def make_ctx(path: str, extra: dict) -> dict:
-        req = rf.get(path, HTTP_HOST="insavehub.workers.dev")
+        req = rf.get(path, HTTP_HOST=canonical_host, HTTP_X_FORWARDED_PROTO="https")
         req.user = anon_user
         req.session = {}
         base_ctx = {
@@ -132,10 +134,16 @@ def _render_without_db(dist_dir: Path) -> None:
             "user": anon_user,
             "site_config": site_config,
             "access_state": access_state,
-            "canonical_base_url": "https://insavehub.workers.dev",
+            "canonical_base_url": canonical_base,
             "google_oauth_enabled": True,
             "messages": [],
             "csrf_token": "cloudflare-edge-csrf-token",
+            "adsense_publisher_id": getattr(settings, "ADSENSE_PUBLISHER_ID", "pub-7764836554568456").strip() or "pub-7764836554568456",
+            "adsense_client": "ca-pub-7764836554568456",
+            "adsense_ad_slot": getattr(settings, "ADSENSE_AD_SLOT", "8738112208").strip() or "8738112208",
+            "adsense_enabled": getattr(settings, "ENABLE_ADSENSE", True),
+            "adsense_auto_ads": True,
+            "google_search_console_verification": getattr(settings, "GOOGLE_SEARCH_CONSOLE_VERIFICATION", "").strip(),
         }
         base_ctx.update(extra)
         return base_ctx
@@ -267,8 +275,35 @@ def _render_without_db(dist_dir: Path) -> None:
             },
         ),
         (
+            "/privacy-policy/",
+            "privacy-policy/index.html",
+            "pages/privacy.html",
+            {
+                "page_title": "Privacy Policy | INSTASAVE HUB",
+                "meta_description": "Privacy Policy and Google AdSense compliance for INSTASAVE HUB.",
+            },
+        ),
+        (
             "/terms/",
             "terms/index.html",
+            "pages/terms.html",
+            {
+                "page_title": "Terms & Conditions | INSTASAVE HUB",
+                "meta_description": "Terms and conditions of use for INSTASAVE HUB.",
+            },
+        ),
+        (
+            "/terms-of-service/",
+            "terms-of-service/index.html",
+            "pages/terms.html",
+            {
+                "page_title": "Terms of Service | INSTASAVE HUB",
+                "meta_description": "Terms of Service and Acceptable Use for INSTASAVE HUB.",
+            },
+        ),
+        (
+            "/terms-and-conditions/",
+            "terms-and-conditions/index.html",
             "pages/terms.html",
             {
                 "page_title": "Terms & Conditions | INSTASAVE HUB",
@@ -282,6 +317,24 @@ def _render_without_db(dist_dir: Path) -> None:
             {
                 "page_title": "Legal Disclaimer | INSTASAVE HUB",
                 "meta_description": "Legal disclaimer and trademark notice for INSTASAVE HUB.",
+            },
+        ),
+        (
+            "/dmca/",
+            "dmca/index.html",
+            "pages/dmca.html",
+            {
+                "page_title": "DMCA & Copyright Policy | INSTASAVE HUB",
+                "meta_description": "Official DMCA notice and takedown policy for INSTASAVE HUB.",
+            },
+        ),
+        (
+            "/faq/",
+            "faq/index.html",
+            "pages/faq.html",
+            {
+                "page_title": "Frequently Asked Questions (FAQ) | INSTASAVE HUB",
+                "meta_description": "Frequently asked questions for INSTASAVE HUB.",
             },
         ),
         (
@@ -358,7 +411,7 @@ def _render_without_db(dist_dir: Path) -> None:
         out_file.write_text(html_str, encoding="utf-8")
         print(f"[INSTASAVE HUB Build] Rendered {route_path} -> dist/{target_rel}")
 
-    req_root = rf.get("/")
+    req_root = rf.get("/", HTTP_HOST=canonical_host, HTTP_X_FORWARDED_PROTO="https")
     manifest_bytes = web_manifest(req_root).content
     sw_bytes = service_worker(req_root).content
     (dist_dir / "manifest.json").write_bytes(manifest_bytes)
@@ -367,33 +420,35 @@ def _render_without_db(dist_dir: Path) -> None:
     (dist_dir / "sw.js").write_bytes(sw_bytes)
     (dist_dir / "robots.txt").write_bytes(robots_txt(req_root).content)
 
-    pub_id = getattr(settings, "ADSENSE_PUBLISHER_ID", "").strip()
-    if pub_id:
-        import re
-        clean_pub = re.sub(r"^ca-", "", pub_id, flags=re.IGNORECASE).strip()
-        if not clean_pub.lower().startswith("pub-"):
-            clean_pub = f"pub-{clean_pub}"
-        ads_txt_body = f"google.com, {clean_pub}, DIRECT, f08c47fec0942fa0\n"
-    else:
-        ads_txt_body = "# Google AdSense ads.txt for INSTASAVE HUB\n# Set ADSENSE_PUBLISHER_ID environment variable to configure your publisher ID.\n"
+    pub_id = getattr(settings, "ADSENSE_PUBLISHER_ID", "").strip() or "pub-7764836554568456"
+    import re
+    clean_pub = re.sub(r"^ca-", "", pub_id, flags=re.IGNORECASE).strip()
+    if not clean_pub.lower().startswith("pub-"):
+        clean_pub = f"pub-{clean_pub}"
+    ads_txt_body = f"google.com, {clean_pub}, DIRECT, f08c47fec0942fa0\n"
     (dist_dir / "ads.txt").write_text(ads_txt_body, encoding="utf-8")
 
     tool_sitemap_entries = "\n".join(
-        f"  <url><loc>https://insavehub.workers.dev/tools/{t.slug}/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>"
+        f"  <url><loc>{canonical_base}/tools/{t.slug}/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>"
         for t in tools
     )
     sitemap_xml_content = f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://insavehub.workers.dev/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
-  <url><loc>https://insavehub.workers.dev/downloads/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://insavehub.workers.dev/tools/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>{canonical_base}/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>{canonical_base}/downloads/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>{canonical_base}/tools/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
 {tool_sitemap_entries}
-  <url><loc>https://insavehub.workers.dev/about/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://insavehub.workers.dev/contact/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://insavehub.workers.dev/privacy/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://insavehub.workers.dev/terms/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://insavehub.workers.dev/disclaimer/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://insavehub.workers.dev/donations/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>{canonical_base}/about/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>{canonical_base}/contact/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>{canonical_base}/privacy/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>{canonical_base}/privacy-policy/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>{canonical_base}/terms/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>{canonical_base}/terms-of-service/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>{canonical_base}/terms-and-conditions/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>{canonical_base}/disclaimer/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>{canonical_base}/dmca/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>{canonical_base}/faq/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>{canonical_base}/donations/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>"""
     (dist_dir / "sitemap.xml").write_text(sitemap_xml_content, encoding="utf-8")
 
@@ -440,7 +495,9 @@ def main() -> None:
         _copy_safe(staticfiles_dir, dist_dir / "static")
         ensure_default_tools()
 
-        client = Client(HTTP_HOST="localhost")
+        canonical_base = getattr(settings, "CANONICAL_BASE_URL", "https://insavehub.com").rstrip("/")
+        canonical_host = canonical_base.split("://")[-1].split("/")[0]
+        client = Client(HTTP_HOST=canonical_host, HTTP_X_FORWARDED_PROTO="https")
         routes = [
             ("/", "index.html"),
             ("/tools/", "tools/index.html"),
@@ -449,8 +506,13 @@ def main() -> None:
             ("/about/", "about/index.html"),
             ("/contact/", "contact/index.html"),
             ("/privacy/", "privacy/index.html"),
+            ("/privacy-policy/", "privacy-policy/index.html"),
             ("/terms/", "terms/index.html"),
+            ("/terms-of-service/", "terms-of-service/index.html"),
+            ("/terms-and-conditions/", "terms-and-conditions/index.html"),
             ("/disclaimer/", "disclaimer/index.html"),
+            ("/dmca/", "dmca/index.html"),
+            ("/faq/", "faq/index.html"),
             ("/donations/", "donations/index.html"),
             ("/auth/login/", "auth/login/index.html"),
             ("/auth/register/", "auth/register/index.html"),
@@ -480,6 +542,49 @@ def main() -> None:
             (dist_dir / "404.html").write_bytes(resp_404.content)
     else:
         _render_without_db(dist_dir)
+
+    # Write Cloudflare _headers & _redirects
+    headers_content = """/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: interest-cohort=()
+
+/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/ads.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=3600
+
+/robots.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=3600
+
+/sitemap.xml
+  Content-Type: application/xml; charset=utf-8
+  Cache-Control: public, max-age=3600
+"""
+    (dist_dir / "_headers").write_text(headers_content, encoding="utf-8")
+
+    redirects_content = """/privacy-policy /privacy/ 301
+/terms-of-service /terms/ 301
+/terms-and-conditions /terms/ 301
+"""
+    (dist_dir / "_redirects").write_text(redirects_content, encoding="utf-8")
+
+    # Post-process all rendered text/HTML files to guarantee no residual localhost references
+    canonical_base = getattr(settings, "CANONICAL_BASE_URL", "https://insavehub.com").rstrip("/")
+    for target_file in dist_dir.rglob("*"):
+        if target_file.is_file() and target_file.suffix in (".html", ".xml", ".txt", ".json", ".webmanifest"):
+            try:
+                content = target_file.read_text(encoding="utf-8")
+                if "http://localhost:8000" in content or "http://localhost" in content:
+                    content = content.replace("http://localhost:8000", canonical_base)
+                    content = content.replace("http://localhost", canonical_base)
+                    target_file.write_text(content, encoding="utf-8")
+            except Exception:
+                pass
 
     for alias in ("public", "build"):
         alias_dir = BASE_DIR / alias

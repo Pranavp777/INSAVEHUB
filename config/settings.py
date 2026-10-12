@@ -278,7 +278,8 @@ GOOGLE_OAUTH_REDIRECT_URI = os.environ.get(
 ).strip()
 
 # Google AdSense & Search Console Settings (Configurable via Environment)
-ADSENSE_PUBLISHER_ID = os.environ.get("ADSENSE_PUBLISHER_ID", "").strip()
+ADSENSE_PUBLISHER_ID = os.environ.get("ADSENSE_PUBLISHER_ID", "pub-7764836554568456").strip()
+ADSENSE_AD_SLOT = os.environ.get("ADSENSE_AD_SLOT", "8738112208").strip()
 ENABLE_ADSENSE = env_bool("ENABLE_ADSENSE", default=True)
 GOOGLE_SEARCH_CONSOLE_VERIFICATION = os.environ.get(
     "GOOGLE_SEARCH_CONSOLE_VERIFICATION", ""

@@ -6,6 +6,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { spawnSync } from "node:child_process";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
@@ -26,13 +27,30 @@ function copyRecursive(src, dest) {
   }
 }
 
-console.log("[INSTASAVE HUB Build] Syncing static assets into dist/static...");
-fs.mkdirSync(distDir, { recursive: true });
-copyRecursive(staticDir, path.join(distDir, "static"));
+// Attempt to invoke the full Python / Django renderer if python is available
+let pythonRan = false;
+for (const pyCmd of ["python", "python3"]) {
+  try {
+    const res = spawnSync(pyCmd, ["scripts/build_cloudflare.py"], {
+      cwd: rootDir,
+      stdio: "inherit",
+    });
+    if (res.status === 0) {
+      pythonRan = true;
+      break;
+    }
+  } catch (_e) {}
+}
 
-for (const alias of ["public", "build"]) {
-  const aliasDir = path.join(rootDir, alias);
-  copyRecursive(distDir, aliasDir);
+if (!pythonRan) {
+  console.log("[INSTASAVE HUB Build] Python not available or skipped; syncing static assets into dist/static...");
+  fs.mkdirSync(distDir, { recursive: true });
+  copyRecursive(staticDir, path.join(distDir, "static"));
+
+  for (const alias of ["public", "build"]) {
+    const aliasDir = path.join(rootDir, alias);
+    copyRecursive(distDir, aliasDir);
+  }
 }
 
 console.log("[INSTASAVE HUB Build] Build completed successfully.");

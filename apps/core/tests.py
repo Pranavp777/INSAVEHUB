@@ -127,3 +127,66 @@ class CoreRateLimitAndSEOTests(TestCase):
         self.assertContains(home_resp, "/manifest.json")
         self.assertContains(home_resp, "/static/js/pwa-install.js")
 
+    def test_all_public_legal_pages_availability(self) -> None:
+        """Verify that all essential informational, legal, and compliance pages return HTTP 200."""
+        routes_to_test = [
+            ("/", "INSTASAVE HUB"),
+            ("/about/", "About INSTASAVE HUB"),
+            ("/contact/", "Contact Us"),
+            ("/privacy/", "Privacy Policy"),
+            ("/privacy-policy/", "Privacy Policy"),
+            ("/terms/", "Terms &amp; Conditions"),
+            ("/terms-of-service/", "Terms &amp; Conditions"),
+            ("/terms-and-conditions/", "Terms &amp; Conditions"),
+            ("/disclaimer/", "Disclaimer"),
+            ("/dmca/", "DMCA &amp; Copyright Policy"),
+            ("/faq/", "Frequently Asked Questions"),
+        ]
+        for url, expected_text in routes_to_test:
+            resp = self.client.get(url, HTTP_HOST="insavehub.com")
+            self.assertEqual(resp.status_code, 200, f"Route {url} failed with status {resp.status_code}")
+            self.assertContains(resp, expected_text, msg_prefix=f"Route {url} missing expected text: {expected_text}")
+
+    def test_ads_txt_default_and_custom_publisher_id(self) -> None:
+        """Verify /ads.txt serves official publisher ID and never an empty comment."""
+        resp = self.client.get("/ads.txt")
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn("google.com", resp.content.decode("utf-8"))
+        self.assertIn("pub-7764836554568456", resp.content.decode("utf-8"))
+        self.assertIn("DIRECT, f08c47fec0942fa0", resp.content.decode("utf-8"))
+
+    def test_sitemap_xml_and_robots_txt_contains_all_routes(self) -> None:
+        """Verify /sitemap.xml and /robots.txt include all legal and utility routes."""
+        sitemap_resp = self.client.get("/sitemap.xml", HTTP_HOST="insavehub.com")
+        self.assertEqual(sitemap_resp.status_code, 200)
+        sitemap_text = sitemap_resp.content.decode("utf-8")
+        self.assertIn("/privacy/", sitemap_text)
+        self.assertIn("/privacy-policy/", sitemap_text)
+        self.assertIn("/terms/", sitemap_text)
+        self.assertIn("/dmca/", sitemap_text)
+        self.assertIn("/faq/", sitemap_text)
+        self.assertIn("/about/", sitemap_text)
+        self.assertIn("/contact/", sitemap_text)
+        self.assertNotIn("localhost", sitemap_text)
+
+        robots_resp = self.client.get("/robots.txt", HTTP_HOST="insavehub.com")
+        self.assertEqual(robots_resp.status_code, 200)
+        robots_text = robots_resp.content.decode("utf-8")
+        self.assertIn("User-agent: Mediapartners-Google", robots_text)
+        self.assertIn("Allow: /dmca/", robots_text)
+        self.assertIn("Allow: /faq/", robots_text)
+        self.assertIn("Allow: /privacy-policy/", robots_text)
+        self.assertNotIn("localhost", robots_text)
+
+    def test_adsense_ad_unit_rendering(self) -> None:
+        """Verify AdSense ad unit renders the exact slot 8738112208 and ads 1 comment."""
+        resp = self.client.get(reverse("core:home"), HTTP_HOST="insavehub.com")
+        self.assertEqual(resp.status_code, 200)
+        content = resp.content.decode("utf-8")
+        self.assertIn("ca-pub-7764836554568456", content)
+        self.assertIn("8738112208", content)
+        self.assertIn("<!-- ads 1 -->", content)
+        self.assertIn('style="display:inline-block;width:728px;height:90px"', content)
+        self.assertIn("ADVERTISEMENT", content)
+
+

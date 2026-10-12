@@ -513,9 +513,75 @@ export async function handleExecuteDownload(token, request = null) {
   });
 }
 
+function sanitizeHtmlResponse(response, origin) {
+  const contentType = response.headers.get("content-type") || "";
+  if (!contentType.includes("text/html")) {
+    return response;
+  }
+  if (typeof HTMLRewriter === "undefined") {
+    return response;
+  }
+  const rewriter = new HTMLRewriter()
+    .on("link[rel='canonical']", {
+      element(el) {
+        const href = el.getAttribute("href");
+        if (href && (href.includes("localhost") || href.includes("insavehub.workers.dev"))) {
+          try {
+            const p = new URL(href, origin).pathname;
+            el.setAttribute("href", `${origin}${p}`);
+          } catch (_e) {}
+        }
+      },
+    })
+    .on("link[rel='alternate']", {
+      element(el) {
+        const href = el.getAttribute("href");
+        if (href && (href.includes("localhost") || href.includes("insavehub.workers.dev"))) {
+          try {
+            const p = new URL(href, origin).pathname;
+            el.setAttribute("href", `${origin}${p}`);
+          } catch (_e) {}
+        }
+      },
+    })
+    .on("meta[property='og:url']", {
+      element(el) {
+        const content = el.getAttribute("content");
+        if (content && (content.includes("localhost") || content.includes("insavehub.workers.dev"))) {
+          try {
+            const p = new URL(content, origin).pathname;
+            el.setAttribute("content", `${origin}${p}`);
+          } catch (_e) {}
+        }
+      },
+    })
+    .on("meta[property='og:image'], meta[name='twitter:image']", {
+      element(el) {
+        const content = el.getAttribute("content");
+        if (content && content.includes("localhost")) {
+          try {
+            const p = new URL(content, origin).pathname;
+            el.setAttribute("content", `${origin}${p}`);
+          } catch (_e) {}
+        }
+      },
+    });
+
+  return rewriter.transform(response);
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+
+    // Enforce HTTPS in production (redirect HTTP -> HTTPS)
+    const isHttp = url.protocol === "http:" || request.headers.get("x-forwarded-proto") === "http";
+    const isLocal = url.hostname === "localhost" || url.hostname === "127.0.0.1";
+    if (isHttp && !isLocal) {
+      const httpsUrl = new URL(request.url);
+      httpsUrl.protocol = "https:";
+      return Response.redirect(httpsUrl.toString(), 301);
+    }
 
     if (url.pathname === "/api/downloads/analyze/" && request.method === "POST") {
       return await handleAnalyzeRequest(request);
@@ -523,13 +589,14 @@ export default {
 
     if (url.pathname === "/ads.txt") {
       let pubId = env && env.ADSENSE_PUBLISHER_ID ? String(env.ADSENSE_PUBLISHER_ID).trim() : "";
+      if (!pubId) {
+        pubId = "pub-7764836554568456";
+      }
       pubId = pubId.replace(/^ca-/i, "").trim();
       if (pubId && !pubId.toLowerCase().startsWith("pub-")) {
         pubId = `pub-${pubId}`;
       }
-      const adsTxtContent = pubId
-        ? `google.com, ${pubId}, DIRECT, f08c47fec0942fa0\n`
-        : `# Google AdSense ads.txt for INSTASAVE HUB\n# Set ADSENSE_PUBLISHER_ID environment variable to configure your publisher ID.\n`;
+      const adsTxtContent = `google.com, ${pubId}, DIRECT, f08c47fec0942fa0\n`;
       return new Response(adsTxtContent, {
         status: 200,
         headers: {
@@ -560,8 +627,13 @@ export default {
         "Allow: /about/",
         "Allow: /contact/",
         "Allow: /privacy/",
+        "Allow: /privacy-policy/",
         "Allow: /terms/",
+        "Allow: /terms-of-service/",
+        "Allow: /terms-and-conditions/",
         "Allow: /disclaimer/",
+        "Allow: /dmca/",
+        "Allow: /faq/",
         "Allow: /ads.txt",
         "Allow: /sitemap.xml",
         "Disallow: /admin/",
@@ -574,6 +646,49 @@ export default {
         status: 200,
         headers: {
           "Content-Type": "text/plain; charset=utf-8",
+          "Cache-Control": "public, max-age=3600",
+        },
+      });
+    }
+
+    if (url.pathname === "/sitemap.xml") {
+      const origin = url.origin;
+      const now = new Date().toISOString().split("T")[0];
+      const sitemapUrls = [
+        { loc: `${origin}/`, changefreq: "daily", priority: "1.0" },
+        { loc: `${origin}/downloads/`, changefreq: "weekly", priority: "0.9" },
+        { loc: `${origin}/tools/`, changefreq: "weekly", priority: "0.9" },
+        { loc: `${origin}/tools/video-downloader/`, changefreq: "weekly", priority: "0.8" },
+        { loc: `${origin}/tools/reel-downloader/`, changefreq: "weekly", priority: "0.8" },
+        { loc: `${origin}/tools/public-post-downloader/`, changefreq: "weekly", priority: "0.8" },
+        { loc: `${origin}/tools/image-downloader/`, changefreq: "weekly", priority: "0.8" },
+        { loc: `${origin}/tools/profile-media-utility/`, changefreq: "weekly", priority: "0.8" },
+        { loc: `${origin}/tools/content-info-extractor/`, changefreq: "weekly", priority: "0.8" },
+        { loc: `${origin}/about/`, changefreq: "monthly", priority: "0.8" },
+        { loc: `${origin}/contact/`, changefreq: "monthly", priority: "0.8" },
+        { loc: `${origin}/privacy/`, changefreq: "monthly", priority: "0.7" },
+        { loc: `${origin}/privacy-policy/`, changefreq: "monthly", priority: "0.7" },
+        { loc: `${origin}/terms/`, changefreq: "monthly", priority: "0.7" },
+        { loc: `${origin}/terms-of-service/`, changefreq: "monthly", priority: "0.7" },
+        { loc: `${origin}/terms-and-conditions/`, changefreq: "monthly", priority: "0.7" },
+        { loc: `${origin}/disclaimer/`, changefreq: "monthly", priority: "0.7" },
+        { loc: `${origin}/dmca/`, changefreq: "monthly", priority: "0.7" },
+        { loc: `${origin}/faq/`, changefreq: "weekly", priority: "0.8" },
+        { loc: `${origin}/donations/`, changefreq: "monthly", priority: "0.6" },
+      ];
+      const xml =
+        '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+        sitemapUrls
+          .map(
+            (p) =>
+              `  <url>\n    <loc>${p.loc}</loc>\n    <lastmod>${now}</lastmod>\n    <changefreq>${p.changefreq}</changefreq>\n    <priority>${p.priority}</priority>\n  </url>`
+          )
+          .join("\n") +
+        "\n</urlset>";
+      return new Response(xml, {
+        status: 200,
+        headers: {
+          "Content-Type": "application/xml; charset=utf-8",
           "Cache-Control": "public, max-age=3600",
         },
       });
@@ -609,15 +724,60 @@ export default {
     }
 
     if (env && env.ASSETS) {
-      const assetResp = await env.ASSETS.fetch(request);
-      if (assetResp.status !== 404) {
-        return assetResp;
+      // Normal asset fetch
+      let assetResp = await env.ASSETS.fetch(request);
+      if (assetResp.status === 200 || assetResp.status === 304 || assetResp.status === 206) {
+        return sanitizeHtmlResponse(assetResp, url.origin);
       }
-      if (!url.pathname.endsWith("/") && !url.pathname.includes(".")) {
+
+      // If missing trailing slash on non-file path, try trailing slash
+      if (assetResp.status === 404 && !url.pathname.endsWith("/") && !url.pathname.includes(".")) {
         const slashUrl = new URL(request.url);
         slashUrl.pathname = `${url.pathname}/`;
-        return await env.ASSETS.fetch(new Request(slashUrl.toString(), request));
+        assetResp = await env.ASSETS.fetch(new Request(slashUrl.toString(), request));
+        if (assetResp.status === 200 || assetResp.status === 304) {
+          return sanitizeHtmlResponse(assetResp, url.origin);
+        }
       }
+
+      // Route aliases fallbacks for legal and compliance pages
+      const aliasMap = {
+        "/privacy-policy/": "/privacy/",
+        "/privacy-policy": "/privacy/",
+        "/terms-of-service/": "/terms/",
+        "/terms-of-service": "/terms/",
+        "/terms-and-conditions/": "/terms/",
+        "/terms-and-conditions": "/terms/",
+        "/dmca": "/dmca/",
+        "/faq": "/faq/",
+      };
+
+      if (assetResp.status === 404 && aliasMap[url.pathname]) {
+        const targetAlias = new URL(request.url);
+        targetAlias.pathname = aliasMap[url.pathname];
+        const aliasResp = await env.ASSETS.fetch(new Request(targetAlias.toString(), request));
+        if (aliasResp.status === 200 || aliasResp.status === 304) {
+          return sanitizeHtmlResponse(aliasResp, url.origin);
+        }
+      }
+
+      // If 404, return styled 404 page if available
+      if (assetResp.status === 404) {
+        try {
+          const notFoundUrl = new URL("/404.html", request.url);
+          const custom404 = await env.ASSETS.fetch(new Request(notFoundUrl.toString(), request));
+          if (custom404.status === 200) {
+            return new Response(custom404.body, {
+              status: 404,
+              headers: {
+                "Content-Type": "text/html; charset=utf-8",
+                "Cache-Control": "no-cache",
+              },
+            });
+          }
+        } catch (_e) {}
+      }
+
       return assetResp;
     }
 

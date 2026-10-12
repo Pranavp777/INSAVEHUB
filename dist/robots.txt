@@ -17,12 +17,17 @@ Allow: /downloads/
 Allow: /about/
 Allow: /contact/
 Allow: /privacy/
+Allow: /privacy-policy/
 Allow: /terms/
+Allow: /terms-of-service/
+Allow: /terms-and-conditions/
 Allow: /disclaimer/
+Allow: /dmca/
+Allow: /faq/
 Allow: /ads.txt
 Allow: /sitemap.xml
 Disallow: /admin/
 Disallow: /api/
 Disallow: /dashboard/
 
-Sitemap: http://localhost:8000/sitemap.xml
+Sitemap: https://insavehub.com/sitemap.xml

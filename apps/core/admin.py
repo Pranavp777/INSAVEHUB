@@ -46,6 +46,7 @@ class SiteConfigurationAdmin(admin.ModelAdmin):
                     "enable_adsense",
                     "enable_adsense_auto_ads",
                     "adsense_publisher_id",
+                    "adsense_ad_slot",
                     "google_search_console_verification",
                 ),
                 "description": (

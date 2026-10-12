@@ -74,6 +74,12 @@ class SiteConfiguration(models.Model):
         default="",
         help_text="Google AdSense Publisher ID (e.g. pub-1234567890123456 or ca-pub-1234567890123456). Falls back to ADSENSE_PUBLISHER_ID environment variable if blank.",
     )
+    adsense_ad_slot = models.CharField(
+        max_length=64,
+        blank=True,
+        default="8738112208",
+        help_text="Default Google AdSense Ad Slot ID (e.g. 8738112208). Falls back to ADSENSE_AD_SLOT environment variable.",
+    )
     enable_adsense = models.BooleanField(
         default=True,
         help_text="Master toggle to enable or disable Google AdSense scripts and ad slots site-wide.",
@@ -196,6 +202,13 @@ class SiteConfiguration(models.Model):
         if not pub_id:
             return ""
         return f"ca-{pub_id}"
+
+    def get_adsense_ad_slot(self) -> str:
+        """Return the default Google AdSense Ad Slot ID."""
+        slot = (self.adsense_ad_slot or "").strip()
+        if not slot:
+            slot = getattr(settings, "ADSENSE_AD_SLOT", "").strip()
+        return slot or "8738112208"
 
     def is_adsense_active(self) -> bool:
         """Return whether AdSense is enabled and a publisher ID is configured."""

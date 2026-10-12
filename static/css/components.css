@@ -1544,6 +1544,10 @@ body.pwa-installed #appInstallModal {
   overflow: hidden;
 }
 
+.adsense-ad-viewport ins.adsbygoogle {
+  max-width: 100%;
+}
+
 .adsense-slot-inline {
   margin: var(--space-6) 0;
 }

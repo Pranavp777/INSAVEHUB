@@ -42,9 +42,9 @@
   <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="author" content="INSTASAVE HUB">
   <meta name="publisher" content="INSTASAVE HUB">
-  <link rel="canonical" href="http://localhost:8000/auth/login/">
-  <link rel="alternate" hreflang="en" href="http://localhost:8000/auth/login/">
-  <link rel="alternate" hreflang="x-default" href="http://localhost:8000/auth/login/">
+  <link rel="canonical" href="https://insavehub.com/auth/login/">
+  <link rel="alternate" hreflang="en" href="https://insavehub.com/auth/login/">
+  <link rel="alternate" hreflang="x-default" href="https://insavehub.com/auth/login/">
 
   <!-- Open Graph Metadata -->
   <meta property="og:type" content="website">
@@ -52,8 +52,8 @@
   <meta property="og:site_name" content="INSTASAVE HUB">
   <meta property="og:title" content="Sign In | INSTASAVE HUB">
   <meta property="og:description" content="Sign in to your INSTASAVE HUB control center.">
-  <meta property="og:url" content="http://localhost:8000/auth/login/">
-  <meta property="og:image" content="http://localhost:8000/static/images/icon-512.png">
+  <meta property="og:url" content="https://insavehub.com/auth/login/">
+  <meta property="og:image" content="https://insavehub.com/static/images/icon-512.png">
   <meta property="og:image:width" content="512">
   <meta property="og:image:height" content="512">
   <meta property="og:image:alt" content="INSTASAVE HUB — 1080p Instagram Video, Reel & Photo Downloader">
@@ -62,7 +62,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Sign In | INSTASAVE HUB">
   <meta name="twitter:description" content="Sign in to your INSTASAVE HUB control center.">
-  <meta name="twitter:image" content="http://localhost:8000/static/images/icon-512.png">
+  <meta name="twitter:image" content="https://insavehub.com/static/images/icon-512.png">
   <meta name="twitter:image:alt" content="INSTASAVE HUB — 1080p Instagram Video, Reel & Photo Downloader">
 
   <!-- Progressive Web App (PWA) & Mobile Install Metadata -->
@@ -95,34 +95,34 @@
     "@graph": [
       {
         "@type": "WebSite",
-        "@id": "http://localhost:8000/#website",
+        "@id": "https://insavehub.com/#website",
         "name": "INSTASAVE HUB",
         "alternateName": ["InstaSave Hub", "InSave Hub", "Instagram Video Downloader"],
-        "url": "http://localhost:8000/",
+        "url": "https://insavehub.com/",
         "inLanguage": "en",
         "potentialAction": {
           "@type": "SearchAction",
-          "target": "http://localhost:8000/downloads/?url={search_term_string}",
+          "target": "https://insavehub.com/downloads/?url={search_term_string}",
           "query-input": "required name=search_term_string"
         }
       },
       {
         "@type": "Organization",
-        "@id": "http://localhost:8000/#organization",
+        "@id": "https://insavehub.com/#organization",
         "name": "INSTASAVE HUB",
-        "url": "http://localhost:8000/",
+        "url": "https://insavehub.com/",
         "logo": {
           "@type": "ImageObject",
-          "url": "http://localhost:8000/static/images/icon-512.png",
+          "url": "https://insavehub.com/static/images/icon-512.png",
           "width": 512,
           "height": 512
         }
       },
       {
         "@type": "WebApplication",
-        "@id": "http://localhost:8000/#webapp",
+        "@id": "https://insavehub.com/#webapp",
         "name": "INSTASAVE HUB — Instagram Video, Reel & Photo Downloader",
-        "url": "http://localhost:8000/",
+        "url": "https://insavehub.com/",
         "applicationCategory": "MultimediaApplication",
         "operatingSystem": "All, Web, iOS, Android, Windows, macOS",
         "browserRequirements": "Requires JavaScript and HTML5 Video support",
@@ -149,19 +149,19 @@
       },
       {
         "@type": "BreadcrumbList",
-        "@id": "http://localhost:8000/auth/login/#breadcrumb",
+        "@id": "https://insavehub.com/auth/login/#breadcrumb",
         "itemListElement": [
           {
             "@type": "ListItem",
             "position": 1,
             "name": "Home",
-            "item": "http://localhost:8000/"
+            "item": "https://insavehub.com/"
           },
           {
             "@type": "ListItem",
             "position": 2,
             "name": "Sign In | INSTASAVE HUB",
-            "item": "http://localhost:8000/auth/login/"
+            "item": "https://insavehub.com/auth/login/"
           }
         ]
       }
@@ -204,7 +204,7 @@
             <a href="/contact/" class="nav-link ">Contact</a>
           </li>
           <li>
-            <a href="/#faq" class="nav-link">FAQ</a>
+            <a href="/faq/" class="nav-link ">FAQ</a>
           </li>
         </ul>
       </nav>
@@ -260,7 +260,8 @@
       <a href="/privacy/" class="nav-link">Privacy Policy</a>
       <a href="/terms/" class="nav-link">Terms &amp; Conditions</a>
       <a href="/disclaimer/" class="nav-link">Disclaimer</a>
-      <a href="/#faq" class="nav-link">FAQ</a>
+      <a href="/dmca/" class="nav-link">DMCA Policy</a>
+      <a href="/faq/" class="nav-link">FAQ</a>
       <a href="/donations/" class="nav-link">Buy Us Coffee</a>
       <button type="button" id="installAppMobileBtn" class="btn-glass btn-sm pwa-install-trigger" style="justify-content: center;">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -342,7 +343,7 @@
 
     <!-- Standard Login Form -->
     <form method="post" action="/auth/login/" novalidate>
-      <input type="hidden" name="csrfmiddlewaretoken" value="A58Um12GIN0IJMJx42n0DGPJ276a5sjLuubcSd9aHBzoPc4FnZ3A9q3gRFa5MYT7">
+      <input type="hidden" name="csrfmiddlewaretoken" value="imw4qQaeBvVVR1ZWYmDANrB1FH8ujd2H7y0EUHfi7FqJkPxqNc4zaZuO20XmYdQJ">
 
       
 
@@ -383,14 +384,15 @@
     <span class="adsense-disclosure-label">ADVERTISEMENT</span>
   </div>
   <div class="adsense-ad-viewport">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7764836554568456"
+         crossorigin="anonymous"></script>
+    <!-- ads 1 -->
     <ins class="adsbygoogle"
-         style="display:block; text-align:center; min-height: 90px; width: 100%;"
+         style="display:inline-block;width:728px;height:90px"
          data-ad-client="ca-pub-7764836554568456"
-         
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
+         data-ad-slot="8738112208"></ins>
     <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
+         (adsbygoogle = window.adsbygoogle || []).push({});
     </script>
   </div>
 </div>
@@ -434,7 +436,7 @@
       </svg>
       <span>About</span>
     </a>
-    <a href="/#faq" class="dock-item" aria-label="FAQ">
+    <a href="/faq/" class="dock-item " aria-label="FAQ">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <circle cx="12" cy="12" r="10"></circle>
         <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
@@ -489,6 +491,8 @@
             <li><a href="/privacy/">Privacy Policy</a></li>
             <li><a href="/terms/">Terms &amp; Conditions</a></li>
             <li><a href="/disclaimer/">Disclaimer &amp; Trademarks</a></li>
+            <li><a href="/dmca/">DMCA &amp; Copyright Policy</a></li>
+            <li><a href="/faq/">Frequently Asked Questions</a></li>
           </ul>
         </div>
       </div>
@@ -496,12 +500,16 @@
       <div style="padding-top: var(--space-6); border-top: 1px solid var(--border-hairline); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4); font-size: 0.8rem; color: var(--text-dim);">
         <span>&copy; 2026 INSTASAVE HUB. All rights reserved.</span>
         <span>Independent tool. Not affiliated with, endorsed by, or sponsored by Instagram or Meta Platforms, Inc.</span>
-        <div style="display: flex; gap: var(--space-3);">
+        <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
           <a href="/privacy/" style="color: var(--text-muted);">Privacy</a>
           <span>&bull;</span>
           <a href="/terms/" style="color: var(--text-muted);">Terms</a>
           <span>&bull;</span>
           <a href="/disclaimer/" style="color: var(--text-muted);">Disclaimer</a>
+          <span>&bull;</span>
+          <a href="/dmca/" style="color: var(--text-muted);">DMCA</a>
+          <span>&bull;</span>
+          <a href="/faq/" style="color: var(--text-muted);">FAQ</a>
         </div>
       </div>
     </div>

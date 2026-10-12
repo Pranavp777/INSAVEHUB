@@ -67,6 +67,19 @@ def home(request: HttpRequest) -> HttpResponse:
     return render(request, "home.html", context)
 
 
+def _get_canonical_base_url(request: HttpRequest) -> str:
+    """Helper to determine clean public canonical base URL without localhost leakage."""
+    base_url = getattr(settings, "CANONICAL_BASE_URL", "").rstrip("/")
+    if not base_url or "localhost" in base_url:
+        host = request.get_host() if hasattr(request, "get_host") else ""
+        if host and "localhost" not in host and "127.0.0.1" not in host and "testserver" not in host:
+            scheme = "https" if request.is_secure() or request.META.get("HTTP_X_FORWARDED_PROTO") == "https" else "http"
+            base_url = f"{scheme}://{host}"
+        elif not base_url or "localhost" in base_url:
+            base_url = "https://insavehub.com"
+    return base_url
+
+
 def robots_txt(request: HttpRequest) -> HttpResponse:
     """
     Serve robots.txt for search engine crawlers and AdSense verification bots.
@@ -74,7 +87,7 @@ def robots_txt(request: HttpRequest) -> HttpResponse:
     Google-Display-Ads-Bot, and general crawlers to index public pages, ads.txt,
     and sitemap.xml while keeping admin and private API endpoints disallow-listed.
     """
-    base_url = getattr(settings, "CANONICAL_BASE_URL", "http://localhost:8000").rstrip("/")
+    base_url = _get_canonical_base_url(request)
     lines = [
         "User-agent: Mediapartners-Google",
         "Allow: /",
@@ -95,8 +108,13 @@ def robots_txt(request: HttpRequest) -> HttpResponse:
         "Allow: /about/",
         "Allow: /contact/",
         "Allow: /privacy/",
+        "Allow: /privacy-policy/",
         "Allow: /terms/",
+        "Allow: /terms-of-service/",
+        "Allow: /terms-and-conditions/",
         "Allow: /disclaimer/",
+        "Allow: /dmca/",
+        "Allow: /faq/",
         "Allow: /ads.txt",
         "Allow: /sitemap.xml",
         "Disallow: /admin/",
@@ -112,18 +130,20 @@ def ads_txt(request: HttpRequest) -> HttpResponse:
     """
     Serve dynamic ads.txt for Google AdSense verification.
     Generates the official 'google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0'
-    entry from the configured ADSENSE_PUBLISHER_ID.
+    entry from the configured ADSENSE_PUBLISHER_ID, falling back to pub-7764836554568456.
     """
-    config = SiteConfiguration.get_solo()
-    pub_id = config.get_adsense_publisher_id()
+    import re
 
-    if not pub_id:
-        body = (
-            "# Google AdSense ads.txt for INSTASAVE HUB\n"
-            "# Configure ADSENSE_PUBLISHER_ID in environment or Django Admin to publish your publisher ID.\n"
-        )
+    config = SiteConfiguration.get_solo()
+    pub_id = config.get_adsense_publisher_id() or getattr(settings, "ADSENSE_PUBLISHER_ID", "").strip()
+
+    if pub_id:
+        clean_pub = re.sub(r"^ca-", "", pub_id, flags=re.IGNORECASE).strip()
+        if not clean_pub.lower().startswith("pub-"):
+            clean_pub = f"pub-{clean_pub}"
+        body = f"google.com, {clean_pub}, DIRECT, f08c47fec0942fa0\n"
     else:
-        body = f"google.com, {pub_id}, DIRECT, f08c47fec0942fa0\n"
+        body = "google.com, pub-7764836554568456, DIRECT, f08c47fec0942fa0\n"
 
     return HttpResponse(body, content_type="text/plain; charset=utf-8")
 
@@ -134,7 +154,7 @@ def sitemap_xml(request: HttpRequest) -> HttpResponse:
     and required informational/legal pages for Google Search Console and crawlers.
     """
     ensure_default_tools()
-    base_url = getattr(settings, "CANONICAL_BASE_URL", "http://localhost:8000").rstrip("/")
+    base_url = _get_canonical_base_url(request)
     now_iso = timezone.now().strftime("%Y-%m-%d")
 
     # Static public routes with respective changefreq and crawl priorities
@@ -145,8 +165,11 @@ def sitemap_xml(request: HttpRequest) -> HttpResponse:
         (reverse("core:about"), "monthly", "0.8"),
         (reverse("core:contact"), "monthly", "0.8"),
         (reverse("core:privacy"), "monthly", "0.7"),
+        (reverse("core:privacy_policy"), "monthly", "0.7"),
         (reverse("core:terms"), "monthly", "0.7"),
         (reverse("core:disclaimer"), "monthly", "0.7"),
+        (reverse("core:dmca"), "monthly", "0.7"),
+        (reverse("core:faq"), "weekly", "0.8"),
         (reverse("donations:index"), "monthly", "0.6"),
     ]
 
@@ -281,6 +304,36 @@ def disclaimer_view(request: HttpRequest) -> HttpResponse:
             "meta_description": (
                 "Official legal disclaimer for INSTASAVE HUB: independent utility status, "
                 "non-affiliation with Meta Platforms and Instagram, and copyright compliance notice."
+            ),
+        },
+    )
+
+
+def dmca_view(request: HttpRequest) -> HttpResponse:
+    """Render the DMCA and Copyright Compliance Policy page."""
+    return render(
+        request,
+        "pages/dmca.html",
+        {
+            "page_title": "DMCA & Copyright Policy | INSTASAVE HUB",
+            "meta_description": (
+                "Official DMCA and Copyright Policy for INSTASAVE HUB: notice and takedown procedure, "
+                "designated copyright agent, and intellectual property compliance."
+            ),
+        },
+    )
+
+
+def faq_view(request: HttpRequest) -> HttpResponse:
+    """Render the Frequently Asked Questions page."""
+    return render(
+        request,
+        "pages/faq.html",
+        {
+            "page_title": "Frequently Asked Questions (FAQ) | INSTASAVE HUB",
+            "meta_description": (
+                "Frequently asked questions about downloading 1080p Instagram Reels, Videos, "
+                "Photos, live preview player, browser support, PWA install, and privacy."
             ),
         },
     )

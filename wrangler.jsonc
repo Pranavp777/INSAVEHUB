@@ -7,12 +7,18 @@
   },
   "assets": {
     "directory": "./dist",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
   },
   "vars": {
     "DJANGO_SETTINGS_MODULE": "config.settings",
     "DJANGO_ENV": "production",
     "DJANGO_DEBUG": "False",
+    "CANONICAL_BASE_URL": "https://insavehub.com",
+    "ADSENSE_PUBLISHER_ID": "pub-7764836554568456",
+    "ADSENSE_AD_SLOT": "8738112208",
+    "ENABLE_ADSENSE": "True",
     "PAYMENT_PROVIDER": "razorpay",
     "DONATION_CURRENCY": "INR",
     "AD_COUNTDOWN_SECONDS": "30",

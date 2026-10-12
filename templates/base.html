@@ -206,7 +206,7 @@
             <a href="{% url 'core:contact' %}" class="nav-link {% if '/contact/' in request.path %}is-current{% endif %}">Contact</a>
           </li>
           <li>
-            <a href="/#faq" class="nav-link">FAQ</a>
+            <a href="{% url 'core:faq' %}" class="nav-link {% if '/faq/' in request.path %}is-current{% endif %}">FAQ</a>
           </li>
         </ul>
       </nav>
@@ -265,7 +265,8 @@
       <a href="{% url 'core:privacy' %}" class="nav-link">Privacy Policy</a>
       <a href="{% url 'core:terms' %}" class="nav-link">Terms &amp; Conditions</a>
       <a href="{% url 'core:disclaimer' %}" class="nav-link">Disclaimer</a>
-      <a href="/#faq" class="nav-link">FAQ</a>
+      <a href="{% url 'core:dmca' %}" class="nav-link">DMCA Policy</a>
+      <a href="{% url 'core:faq' %}" class="nav-link">FAQ</a>
       <a href="{% url 'donations:index' %}" class="nav-link">Buy Us Coffee</a>
       <button type="button" id="installAppMobileBtn" class="btn-glass btn-sm pwa-install-trigger" style="justify-content: center;">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -372,7 +373,7 @@
       </svg>
       <span>About</span>
     </a>
-    <a href="/#faq" class="dock-item" aria-label="FAQ">
+    <a href="{% url 'core:faq' %}" class="dock-item {% if '/faq/' in request.path %}is-active{% endif %}" aria-label="FAQ">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <circle cx="12" cy="12" r="10"></circle>
         <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
@@ -427,6 +428,8 @@
             <li><a href="{% url 'core:privacy' %}">Privacy Policy</a></li>
             <li><a href="{% url 'core:terms' %}">Terms &amp; Conditions</a></li>
             <li><a href="{% url 'core:disclaimer' %}">Disclaimer &amp; Trademarks</a></li>
+            <li><a href="{% url 'core:dmca' %}">DMCA &amp; Copyright Policy</a></li>
+            <li><a href="{% url 'core:faq' %}">Frequently Asked Questions</a></li>
           </ul>
         </div>
       </div>
@@ -434,12 +437,16 @@
       <div style="padding-top: var(--space-6); border-top: 1px solid var(--border-hairline); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4); font-size: 0.8rem; color: var(--text-dim);">
         <span>&copy; 2026 INSTASAVE HUB. All rights reserved.</span>
         <span>Independent tool. Not affiliated with, endorsed by, or sponsored by Instagram or Meta Platforms, Inc.</span>
-        <div style="display: flex; gap: var(--space-3);">
+        <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
           <a href="{% url 'core:privacy' %}" style="color: var(--text-muted);">Privacy</a>
           <span>&bull;</span>
           <a href="{% url 'core:terms' %}" style="color: var(--text-muted);">Terms</a>
           <span>&bull;</span>
           <a href="{% url 'core:disclaimer' %}" style="color: var(--text-muted);">Disclaimer</a>
+          <span>&bull;</span>
+          <a href="{% url 'core:dmca' %}" style="color: var(--text-muted);">DMCA</a>
+          <span>&bull;</span>
+          <a href="{% url 'core:faq' %}" style="color: var(--text-muted);">FAQ</a>
         </div>
       </div>
     </div>
