@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Reels vs Stories vs Posts: Technical Media Architecture & Preservation",
+  "description": "Comprehensive engineering analysis of Meta's CDN architecture comparing ephemeral 24-hour Story blobs with permanent Reels and multi-slide carousels, with digital archiving strategies.",
+  "image": "{{ canonical_base_url }}{% static 'images/icon-512.png' %}",
+  "datePublished": "2026-02-18T08:00:00+00:00",
+  "dateModified": "2026-10-15T12:00:00+00:00",
+  "author": {
+    "@type": "Organization",
+    "name": "INSTASAVE HUB Engineering & Research",
+    "url": "{{ canonical_base_url }}/about/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "INSTASAVE HUB",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ canonical_base_url }}{% static 'images/icon-512.png' %}"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ canonical_url }}"
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container-shell" style="padding-top: var(--space-4);">
+  <!-- Breadcrumb Navigation -->
+  <nav aria-label="Breadcrumb" style="margin-bottom: var(--space-4);">
+    <ol style="display: flex; gap: var(--space-2); list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: var(--text-muted); align-items: center;">
+      <li><a href="{% url 'core:home' %}" style="color: var(--text-muted); text-decoration: none;">Home</a></li>
+      <li>&rsaquo;</li>
+      <li><a href="{% url 'core:guides_index' %}" style="color: var(--text-muted); text-decoration: none;">Guides</a></li>
+      <li>&rsaquo;</li>
+      <li style="color: var(--light-cyan);">Reels vs Stories vs Posts</li>
+    </ol>
+  </nav>
+
+  <article class="glass-panel reveal-item" style="padding: var(--space-8); margin-bottom: var(--space-8);">
+    <header style="margin-bottom: var(--space-6); border-bottom: 1px solid var(--border-hairline); padding-bottom: var(--space-6);">
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3);">
+        <span class="tool-badge">MEDIA ARCHITECTURE</span>
+        <span class="mono-label" style="color: var(--light-cyan);">UPDATED: OCTOBER 2026</span>
+        <span class="mono-label" style="color: var(--text-muted);">&bull; 11 MIN READ</span>
+      </div>
+      <h1 style="font-size: clamp(1.85rem, 3.5vw, 2.5rem); line-height: 1.25; margin-bottom: var(--space-3);">
+        Reels vs Stories vs Posts: Technical Media Architecture &amp; Digital Preservation
+      </h1>
+      <p style="color: var(--text-secondary); font-size: 1.1rem; line-height: 1.6; max-width: 75ch;">
+        To the everyday user, Instagram is a single seamless feed. Under the hood, however, Meta manages three completely distinct media delivery architectures with varying lifetimes, caching policies, and compression profiles.
+      </p>
+    </header>
+
+    <div style="font-size: 1rem; line-height: 1.75; color: var(--text-secondary); max-width: 80ch;">
+      <h2 style="font-size: 1.5rem; color: var(--text-primary); margin: var(--space-6) 0 var(--space-3);">
+        1. Architectural Overview &amp; CDN Storage Lifecycles
+      </h2>
+      <p>
+        Understanding how Instagram structures and stores media types determines how creators and archivists should approach digital asset preservation:
+      </p>
+
+      <div style="overflow-x: auto; margin: var(--space-5) 0;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+          <thead>
+            <tr style="border-bottom: 1px solid var(--border-medium); background: rgba(255, 255, 255, 0.03);">
+              <th style="padding: 12px 14px; color: var(--text-primary);">Format Dimension</th>
+              <th style="padding: 12px 14px; color: var(--text-primary);">Instagram Reels</th>
+              <th style="padding: 12px 14px; color: var(--text-primary);">Instagram Feed Posts</th>
+              <th style="padding: 12px 14px; color: var(--text-primary);">Instagram Stories</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid var(--border-hairline);">
+              <td style="padding: 12px 14px; font-weight: 600; color: var(--text-primary);">CDN Storage Model</td>
+              <td style="padding: 12px 14px; color: var(--light-cyan);">Permanent Edge Cache</td>
+              <td style="padding: 12px 14px; color: var(--light-cyan);">Permanent Edge Cache</td>
+              <td style="padding: 12px 14px; color: #f87171;">Ephemeral (24-Hour Expiry)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-hairline);">
+              <td style="padding: 12px 14px; font-weight: 600; color: var(--text-primary);">Canonical URL Pattern</td>
+              <td style="padding: 12px 14px; font-family: var(--font-mono);">/reel/{shortcode}/</td>
+              <td style="padding: 12px 14px; font-family: var(--font-mono);">/p/{shortcode}/</td>
+              <td style="padding: 12px 14px; font-family: var(--font-mono);">/stories/{user}/{id}/</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-hairline);">
+              <td style="padding: 12px 14px; font-weight: 600; color: var(--text-primary);">Primary Aspect Ratio</td>
+              <td style="padding: 12px 14px;">9:16 (1080x1920)</td>
+              <td style="padding: 12px 14px;">1:1 (1080x1080) or 4:5</td>
+              <td style="padding: 12px 14px;">9:16 (1080x1920)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-hairline);">
+              <td style="padding: 12px 14px; font-weight: 600; color: var(--text-primary);">Max Duration</td>
+              <td style="padding: 12px 14px;">Up to 90 seconds (15m in feed)</td>
+              <td style="padding: 12px 14px;">Up to 60 minutes</td>
+              <td style="padding: 12px 14px;">60 seconds per card</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px 14px; font-weight: 600; color: var(--text-primary);">Multi-Slide Support</td>
+              <td style="padding: 12px 14px;">No (Single stream)</td>
+              <td style="padding: 12px 14px; color: var(--light-cyan);">Yes (Carousels up to 20 slides)</td>
+              <td style="padding: 12px 14px;">Sequential cards</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 style="font-size: 1.5rem; color: var(--text-primary); margin: var(--space-8) 0 var(--space-3);">
+        2. Deep Dive: The Instagram Reels Engine
+      </h2>
+      <p>
+        Reels are prioritized across Meta’s discovery engine (Explore and algorithmic recommendations). To support instant vertical scrolling, Reels leverage aggressive edge pre-fetching:
+      </p>
+      <ul style="padding-left: var(--space-5); margin-bottom: var(--space-5);">
+        <li><strong>Pre-buffering:</strong> The Instagram mobile client buffers the first 2.5 seconds of the subsequent 3 candidate Reels while the user is still watching the current video.</li>
+        <li><strong>Transcoding Pipeline:</strong> Uploaded video is encoded into multiple bitrate streams (360p, 480p, 720p, and 1080p). The master 1080p rendition typically features an average bitrate of 4.5 Mbps with AAC-LC audio.</li>
+        <li><strong>Audio Separation:</strong> Reels often store the video track and audio track as separate CDN streams, especially when creators choose licensed music from the audio library. When downloading a public Reel, InSave Hub automatically maps the unified high-definition stream so audio and video stay perfectly synchronized.</li>
+      </ul>
+
+      <h2 style="font-size: 1.5rem; color: var(--text-primary); margin: var(--space-8) 0 var(--space-3);">
+        3. Deep Dive: Carousel Multi-Slide Posts (`edge_sidecar_to_children`)
+      </h2>
+      <p>
+        Instagram feed posts can contain single still images, standalone videos, or complex multi-item carousels. Internally, Instagram’s GraphQL schema models carousels as an array named <code>edge_sidecar_to_children</code>:
+      </p>
+      <ul style="padding-left: var(--space-5); margin-bottom: var(--space-5);">
+        <li>Each child slide has its own independent media ID, resolution dimensions, and direct CDN URL.</li>
+        <li>A single carousel can seamlessly mix 1080p MP4 videos alongside high-resolution sRGB JPEG photographs.</li>
+        <li>Instagram enforces a unified aspect ratio across all items within a carousel based on the first slide. If slide 1 is 1:1 square, subsequent 4:5 slides are automatically cropped to 1:1 on the feed.</li>
+      </ul>
+
+      <h2 style="font-size: 1.5rem; color: var(--text-primary); margin: var(--space-8) 0 var(--space-3);">
+        4. Stories: The Ephemeral Ingestion Model
+      </h2>
+      <p>
+        Instagram Stories are intentionally designed with ephemeral 24-hour retention:
+      </p>
+      <ul style="padding-left: var(--space-5); margin-bottom: var(--space-5);">
+        <li>Once published, Story media is stored on temporary CDN nodes with time-limited signed URL query tokens (<code>?oh=...&amp;oe=...</code>).</li>
+        <li>Unless saved to a permanent profile "Highlight" by the author, the media blob and access tokens are permanently deleted from public routing after 24 hours.</li>
+        <li>For privacy and security reasons, InSave Hub does not bypass private account barriers or access-gated Stories, strictly processing publicly accessible post and reel links.</li>
+      </ul>
+
+      <h2 style="font-size: 1.5rem; color: var(--text-primary); margin: var(--space-8) 0 var(--space-3);">
+        5. Best Practices for Digital Creators &amp; Archivists
+      </h2>
+      <p>
+        If your organization relies on Instagram for content distribution or archival research, follow these best practices:
+      </p>
+      <ol style="padding-left: var(--space-5); margin-bottom: var(--space-5);">
+        <li><strong>Archive Source Masters Locally:</strong> Never rely on social media platforms as your sole backup. Always maintain uncompressed camera masters on redundant local storage or cloud vaults.</li>
+        <li><strong>Verify Published Streams:</strong> Use a public analyzer to verify that your uploaded Reels are rendering in 1080p and that audio synchronization has not drifted during transcoding.</li>
+        <li><strong>Preserve Complete Carousel Slides:</strong> When archiving educational infographics or photography portfolios, capture every slide in the carousel sequence to retain full contextual value.</li>
+      </ol>
+
+      <div class="glass-subpanel" style="padding: var(--space-5); margin: var(--space-6) 0; border: 1px solid var(--border-cyan-glow);">
+        <h4 style="color: var(--text-primary); margin-bottom: var(--space-2);">Analyze Public Media Streams</h4>
+        <p style="font-size: 0.9rem; margin-bottom: var(--space-4);">
+          Ready to inspect or download public Instagram Reels, multi-slide carousels, or feed videos?
+        </p>
+        <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
+          <a href="{% url 'downloads:tool_detail' slug='public-post-downloader' %}" class="btn-glass btn-primary btn-sm">Post &amp; Carousel Tool</a>
+          <a href="{% url 'downloads:tool_detail' slug='reel-downloader' %}" class="btn-glass btn-secondary btn-sm">Reel Downloader Tool</a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Related Guides Section -->
+  <div class="section-header reveal-item" style="margin-bottom: var(--space-4);">
+    <span class="mono-label">EXPLORE MORE GUIDES</span>
+    <h3 style="font-size: 1.35rem;">Recommended Creator Resources</h3>
+  </div>
+  <div class="grid-3" style="margin-bottom: var(--space-8);">
+    <div class="glass-panel" style="padding: var(--space-5);">
+      <h4 style="font-size: 1.05rem; margin-bottom: var(--space-2);">
+        <a href="{% url 'core:guide_video_specs' %}" style="color: var(--text-primary); text-decoration: none;">Video Specifications Guide &rarr;</a>
+      </h4>
+      <p style="font-size: 0.85rem; color: var(--text-secondary);">Aspect ratios, optimal bitrates, audio codecs, and FFmpeg export commands.</p>
+    </div>
+    <div class="glass-panel" style="padding: var(--space-5);">
+      <h4 style="font-size: 1.05rem; margin-bottom: var(--space-2);">
+        <a href="{% url 'core:guide_troubleshoot_blurry' %}" style="color: var(--text-primary); text-decoration: none;">Troubleshoot Blurry Videos &rarr;</a>
+      </h4>
+      <p style="font-size: 0.85rem; color: var(--text-secondary);">Learn why uploads lose sharpness and how to prevent harsh compression artifacts.</p>
+    </div>
+    <div class="glass-panel" style="padding: var(--space-5);">
+      <h4 style="font-size: 1.05rem; margin-bottom: var(--space-2);">
+        <a href="{% url 'core:guide_fair_use' %}" style="color: var(--text-primary); text-decoration: none;">Fair Use &amp; Copyright Guide &rarr;</a>
+      </h4>
+      <p style="font-size: 0.85rem; color: var(--text-secondary);">Understanding copyright laws, attribution, and avoiding DMCA notices.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -14,6 +14,9 @@ User-agent: *
 Allow: /
 Allow: /tools/
 Allow: /downloads/
+Allow: /guides/
+Allow: /editorial-standards/
+Allow: /status/
 Allow: /about/
 Allow: /contact/
 Allow: /privacy/

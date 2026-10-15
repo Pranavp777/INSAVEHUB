@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "name": "Editorial & Publishing Standards | INSTASAVE HUB",
+  "description": "Editorial standards, testing methodology, factual verification protocols, and zero-retention privacy audits for INSTASAVE HUB.",
+  "url": "{{ canonical_url }}",
+  "publisher": {
+    "@type": "Organization",
+    "name": "INSTASAVE HUB",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ canonical_base_url }}{% static 'images/icon-512.png' %}"
+    }
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container-shell" style="padding-top: var(--space-4);">
+  <!-- Breadcrumb Navigation -->
+  <nav aria-label="Breadcrumb" style="margin-bottom: var(--space-4);">
+    <ol style="display: flex; gap: var(--space-2); list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: var(--text-muted); align-items: center;">
+      <li><a href="{% url 'core:home' %}" style="color: var(--text-muted); text-decoration: none;">Home</a></li>
+      <li>&rsaquo;</li>
+      <li style="color: var(--light-cyan);">Editorial Standards</li>
+    </ol>
+  </nav>
+
+  <article class="glass-panel reveal-item" style="padding: var(--space-8); margin-bottom: var(--space-8);">
+    <header style="margin-bottom: var(--space-6); border-bottom: 1px solid var(--border-hairline); padding-bottom: var(--space-6);">
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3);">
+        <span class="tool-badge">EDITORIAL POLICY</span>
+        <span class="mono-label" style="color: var(--light-cyan);">LAST REVISED: OCTOBER 2026</span>
+        <span class="mono-label" style="color: var(--text-muted);">&bull; VERSION 2.4</span>
+      </div>
+      <h1 style="font-size: clamp(1.85rem, 3.5vw, 2.5rem); line-height: 1.25; margin-bottom: var(--space-3);">
+        Editorial &amp; Publishing Standards
+      </h1>
+      <p style="color: var(--text-secondary); font-size: 1.1rem; line-height: 1.6; max-width: 75ch;">
+        INSTASAVE HUB is committed to delivering authentic, accurate, peer-reviewed technical documentation, media engineering blueprints, and transparent utility software for creators, digital media archivists, and journalists.
+      </p>
+    </header>
+
+    <div style="font-size: 1rem; line-height: 1.75; color: var(--text-secondary); max-width: 80ch;">
+      <h2 style="font-size: 1.5rem; color: var(--text-primary); margin: var(--space-6) 0 var(--space-3);">
+        1. Editorial Mission &amp; Guiding Principles
+      </h2>
+      <p>
+        Our publication and utility engineering teams operate under four core tenets:
+      </p>
+      <ul style="padding-left: var(--space-5); margin-bottom: var(--space-5);">
+        <li><strong>Factual Precision:</strong> All technical specifications—including bitrates, color spaces, container structures, and frame rate parameters—are empirically verified through stream analysis using industry-standard tools (FFprobe, MediaInfo, Wireshark).</li>
+        <li><strong>Utility Integrity:</strong> We do not offer deceptive "clickbait" tools or artificial downscaling. When our tools indicate 1080p Full HD, the direct media stream is guaranteed to match the highest resolution rendition delivered by Meta’s CDN servers.</li>
+        <li><strong>Zero-Retention Privacy:</strong> We believe utility software should never spy on its users. We never log or store downloaded media, and we do not maintain persistent user tracking databases.</li>
+        <li><strong>Intellectual Property Respect:</strong> We provide comprehensive fair-use educational guidance and operate a dedicated DMCA compliance department to safeguard the rights of content creators.</li>
+      </ul>
+
+      <h2 style="font-size: 1.5rem; color: var(--text-primary); margin: var(--space-8) 0 var(--space-3);">
+        2. Technical Testing &amp; Verification Methodology
+      </h2>
+      <p>
+        Social media network protocols and CDN endpoints change frequently. To ensure continuous operational reliability, our engineering and editorial staff run a rigorous weekly testing battery:
+      </p>
+
+      <div style="overflow-x: auto; margin: var(--space-5) 0;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+          <thead>
+            <tr style="border-bottom: 1px solid var(--border-medium); background: rgba(255, 255, 255, 0.03);">
+              <th style="padding: 12px 14px; color: var(--text-primary);">Test Platform</th>
+              <th style="padding: 12px 14px; color: var(--text-primary);">Target Environment</th>
+              <th style="padding: 12px 14px; color: var(--text-primary);">Test Scope</th>
+              <th style="padding: 12px 14px; color: var(--text-primary);">Frequency</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid var(--border-hairline);">
+              <td style="padding: 12px 14px; font-weight: 600; color: var(--text-primary);">iOS / iPadOS</td>
+              <td style="padding: 12px 14px;">Mobile Safari (WebKit)</td>
+              <td style="padding: 12px 14px;">1080p HTML5 Video Preview, AAC Audio playback, Safari Downloads Manager integration</td>
+              <td style="padding: 12px 14px; color: var(--light-cyan);">Weekly</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-hairline);">
+              <td style="padding: 12px 14px; font-weight: 600; color: var(--text-primary);">Android</td>
+              <td style="padding: 12px 14px;">Google Chrome &amp; Samsung Internet</td>
+              <td style="padding: 12px 14px;">Direct stream resolution, touch latency, Progressive Web App (PWA) standalone mode</td>
+              <td style="padding: 12px 14px; color: var(--light-cyan);">Weekly</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-hairline);">
+              <td style="padding: 12px 14px; font-weight: 600; color: var(--text-primary);">macOS &amp; Windows</td>
+              <td style="padding: 12px 14px;">Chrome, Safari, Firefox, Edge</td>
+              <td style="padding: 12px 14px;">Cross-origin CDN stream negotiation, FastStart moov atom playback, JSON metadata export</td>
+              <td style="padding: 12px 14px; color: var(--light-cyan);">Continuous CI</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px 14px; font-weight: 600; color: var(--text-primary);">Network Emulation</td>
+              <td style="padding: 12px 14px;">Slow 3G, 4G, High-Latency Edge</td>
+              <td style="padding: 12px 14px;">Core Web Vitals compliance (LCP &lt; 1.5s, CLS = 0, INP &lt; 100ms), offline fallback</td>
+              <td style="padding: 12px 14px; color: var(--light-cyan);">Every Build</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 style="font-size: 1.5rem; color: var(--text-primary); margin: var(--space-8) 0 var(--space-3);">
+        3. Zero-Retention Security &amp; Privacy Audits
+      </h2>
+      <p>
+        In an era of rampant data harvesting, INSTASAVE HUB sets an explicit standard for user privacy:
+      </p>
+      <ul style="padding-left: var(--space-5); margin-bottom: var(--space-5);">
+        <li><strong>No Server-Side Media Retention:</strong> Download streams are routed statelessly directly between your client browser and the origin CDN edge. No video, audio, or image files are ever permanently saved or cached on our physical server disks.</li>
+        <li><strong>Ephemeral One-Way IP Hashing:</strong> When rate limiting is enforced to prevent DDoS abuse, client IP addresses are transformed using one-way SHA-256 cryptographic hashes combined with a rotating daily secret salt. IP addresses cannot be reverse-engineered or linked to individuals.</li>
+        <li><strong>No Credential Ingestion:</strong> We never request, process, or store your Instagram password, session cookies, or personal account credentials.</li>
+      </ul>
+
+      <h2 style="font-size: 1.5rem; color: var(--text-primary); margin: var(--space-8) 0 var(--space-3);">
+        4. Corrections, Revisions &amp; Updates Policy
+      </h2>
+      <p>
+        Our editorial team actively monitors social media platform updates, video codec developments, and copyright case law:
+      </p>
+      <ul style="padding-left: var(--space-5); margin-bottom: var(--space-5);">
+        <li><strong>Technical Corrections:</strong> If an engineering specification changes (for example, if Instagram modifies their default GOP size or introduces native AV1 ingestion), our documentation is revised within 48 hours of verification.</li>
+        <li><strong>Transparent Revision Logs:</strong> Substantial changes to our technical guides or operational policies are recorded with revision timestamps and documented on our public <a href="{% url 'core:status' %}" style="color: var(--light-cyan);">Platform Status &amp; Maintenance Changelog</a>.</li>
+        <li><strong>User Feedback Desk:</strong> We welcome peer review from fellow software developers, videographers, and researchers. Readers may report technical inaccuracies to <code>editorial@insavehub.com</code>.</li>
+      </ul>
+
+      <h2 style="font-size: 1.5rem; color: var(--text-primary); margin: var(--space-8) 0 var(--space-3);">
+        5. Advertising &amp; Commercial Independence
+      </h2>
+      <p>
+        To keep our educational guides and media utility tools free for all users worldwide, INSTASAVE HUB partners with reputable digital advertising networks, including Google AdSense.
+      </p>
+      <p>
+        Our commercial partnerships adhere to strict standards:
+      </p>
+      <ul style="padding-left: var(--space-5); margin-bottom: var(--space-5);">
+        <li>Advertisements are clearly demarcated from editorial content with visible "ADVERTISEMENT" labels.</li>
+        <li>Advertisers possess zero influence over our technical reviews, codec analyses, or editorial conclusions.</li>
+        <li>We prohibit intrusive pop-ups, misleading deceptive download buttons, and malicious redirects.</li>
+      </ul>
+
+      <div class="glass-subpanel" style="padding: var(--space-5); margin: var(--space-6) 0; border: 1px solid var(--border-cyan-glow);">
+        <h4 style="color: var(--text-primary); margin-bottom: var(--space-2);">Editorial Board &amp; Inquiries</h4>
+        <p style="font-size: 0.9rem; margin-bottom: var(--space-4);">
+          Have a question regarding our testing methodology, or wish to submit a technical correction? Reach out to our engineering and editorial team directly.
+        </p>
+        <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
+          <a href="{% url 'core:contact' %}" class="btn-glass btn-primary btn-sm">Contact Editorial Board</a>
+          <a href="{% url 'core:about' %}" class="btn-glass btn-secondary btn-sm">About InSave Hub</a>
+        </div>
+      </div>
+    </div>
+  </article>
+</div>
+{% endblock %}

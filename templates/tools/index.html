@@ -1,13 +1,53 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Instagram Media Tools Suite | INSTASAVE HUB",
+  "description": "Explore the complete INSTASAVE HUB Instagram Media Tools Suite: 1080p Video Downloader, Reel Saver, Photo Extractor, Carousel Archiver, and HD Profile Picture Viewer.",
+  "url": "{{ canonical_url }}",
+  "publisher": {
+    "@type": "Organization",
+    "name": "INSTASAVE HUB",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ canonical_base_url }}{% static 'images/icon-512.png' %}"
+    }
+  }
+}
+</script>
+{% endblock %}
 
 {% block content %}
 <div class="container-shell" style="padding-top: var(--space-4);">
-  <div class="section-header reveal-item">
-    <span class="mono-label">INSTAGRAM DOWNLOADER SUITE</span>
-    <h1 class="section-title">Instagram Media Tools</h1>
+  <!-- Hero Section -->
+  <div class="glass-panel reveal-item" style="padding: var(--space-8); margin-bottom: var(--space-8); text-align: center;">
+    <div style="display: inline-flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-3);" class="telemetry-pill">
+      <span class="status-dot status-dot-emerald"></span>
+      <span class="mono-label">FULL 1080P HD SUITE &bull; ZERO SERVER STORAGE</span>
+    </div>
+    <h1 style="font-size: clamp(2rem, 4vw, 2.75rem); max-width: 22ch; margin: 0 auto var(--space-3); line-height: 1.2;">
+      Instagram Media Tools Suite
+    </h1>
+    <p style="color: var(--text-secondary); max-width: 65ch; margin: 0 auto var(--space-6); font-size: 1.05rem; line-height: 1.6;">
+      High-precision, browser-based media utilities designed for digital creators, social media archivists, and educators. Inspect live video previews and save 1080p MP4 and JPEG streams directly from Instagram's content delivery network.
+    </p>
+    <div style="display: flex; justify-content: center; gap: var(--space-4); flex-wrap: wrap;">
+      <a href="{% url 'downloads:interface' %}" class="btn-glass btn-primary">Open Universal Downloader</a>
+      <a href="{% url 'core:guides_index' %}" class="btn-glass btn-secondary">Creator Guides Hub</a>
+    </div>
   </div>
 
-  <div class="grid-3">
+  <!-- Tools Grid -->
+  <div class="section-header reveal-item" style="margin-bottom: var(--space-5);">
+    <span class="mono-label">AVAILABLE MODULES</span>
+    <h2 class="section-title">Dedicated Instagram Utilities</h2>
+  </div>
+
+  <div class="grid-3" style="margin-bottom: var(--space-10);">
     {% for tool in tools %}
       <article class="glass-panel glass-panel-interactive tool-card reveal-item">
         <div>
@@ -23,16 +63,107 @@
 
         <div>
           <div class="glass-subpanel" style="padding: var(--space-3); margin-bottom: var(--space-4);">
-            <span class="spec-label">SUPPORTED URL</span>
+            <span class="spec-label">SUPPORTED URL PATTERN</span>
             <span class="spec-val" style="font-size: 0.75rem; word-break: break-all;">{{ tool.supported_url_hint }}</span>
           </div>
           <div style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="{% url 'downloads:tool_detail' slug=tool.slug %}" class="btn-glass btn-primary btn-sm">Open Tool</a>
-            <span class="mono-label">{{ tool.output_formats|truncatechars:26 }}</span>
+            <a href="{% url 'downloads:tool_detail' slug=tool.slug %}" class="btn-glass btn-primary btn-sm">Launch Tool &rarr;</a>
+            <span class="mono-label" style="font-size: 0.75rem;">{{ tool.output_formats|truncatechars:26 }}</span>
           </div>
         </div>
       </article>
     {% endfor %}
+  </div>
+
+  <!-- Suite Comparison Matrix Table -->
+  <div class="glass-panel reveal-item" style="padding: var(--space-8); margin-bottom: var(--space-8);">
+    <div style="margin-bottom: var(--space-6); border-bottom: 1px solid var(--border-hairline); padding-bottom: var(--space-4);">
+      <span class="mono-label">TECHNICAL MATRIX</span>
+      <h3 style="font-size: 1.4rem; margin-top: var(--space-2);">Feature &amp; Specification Comparison</h3>
+      <p style="color: var(--text-secondary); font-size: 0.95rem;">
+        Compare capabilities across all 6 Instagram media processing utilities.
+      </p>
+    </div>
+
+    <div style="overflow-x: auto;">
+      <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem;">
+        <thead>
+          <tr style="border-bottom: 1px solid var(--border-medium); background: rgba(255,255,255,0.03);">
+            <th style="padding: 12px 14px; color: var(--text-primary);">Tool Name</th>
+            <th style="padding: 12px 14px; color: var(--text-primary);">Target Media</th>
+            <th style="padding: 12px 14px; color: var(--text-primary);">Max Resolution</th>
+            <th style="padding: 12px 14px; color: var(--text-primary);">Output Format</th>
+            <th style="padding: 12px 14px; color: var(--text-primary);">Audio Sync</th>
+            <th style="padding: 12px 14px; color: var(--text-primary);">Primary Use Case</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid var(--border-hairline);">
+            <td style="padding: 12px 14px; font-weight: 600;"><a href="{% url 'downloads:tool_detail' slug='reel-downloader' %}" style="color: var(--text-primary); text-decoration: none;">Reel Downloader</a></td>
+            <td style="padding: 12px 14px;">Vertical Reels (9:16)</td>
+            <td style="padding: 12px 14px; color: var(--light-cyan); font-family: var(--font-mono);">1080 x 1920 px</td>
+            <td style="padding: 12px 14px;">MP4 (H.264)</td>
+            <td style="padding: 12px 14px; color: #34d399;">Yes (AAC-LC)</td>
+            <td style="padding: 12px 14px;">Short-form vertical video archiving</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-hairline);">
+            <td style="padding: 12px 14px; font-weight: 600;"><a href="{% url 'downloads:tool_detail' slug='video-downloader' %}" style="color: var(--text-primary); text-decoration: none;">Video Downloader</a></td>
+            <td style="padding: 12px 14px;">Feed Posts &amp; IGTV</td>
+            <td style="padding: 12px 14px; color: var(--light-cyan); font-family: var(--font-mono);">1080p (4:5 / 16:9)</td>
+            <td style="padding: 12px 14px;">MP4 (H.264)</td>
+            <td style="padding: 12px 14px; color: #34d399;">Yes (AAC-LC)</td>
+            <td style="padding: 12px 14px;">Long-form interviews, tutorials &amp; feed video</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-hairline);">
+            <td style="padding: 12px 14px; font-weight: 600;"><a href="{% url 'downloads:tool_detail' slug='image-downloader' %}" style="color: var(--text-primary); text-decoration: none;">Image Downloader</a></td>
+            <td style="padding: 12px 14px;">Standard Feed Photos</td>
+            <td style="padding: 12px 14px; color: var(--light-cyan); font-family: var(--font-mono);">1080 px (Max Width)</td>
+            <td style="padding: 12px 14px;">JPEG (sRGB)</td>
+            <td style="padding: 12px 14px; color: var(--text-muted);">N/A</td>
+            <td style="padding: 12px 14px;">Photography, artwork &amp; design preservation</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-hairline);">
+            <td style="padding: 12px 14px; font-weight: 600;"><a href="{% url 'downloads:tool_detail' slug='public-post-downloader' %}" style="color: var(--text-primary); text-decoration: none;">Post &amp; Carousel</a></td>
+            <td style="padding: 12px 14px;">Multi-Slide Albums</td>
+            <td style="padding: 12px 14px; color: var(--light-cyan); font-family: var(--font-mono);">Up to 1080p</td>
+            <td style="padding: 12px 14px;">Mixed MP4 / JPEG</td>
+            <td style="padding: 12px 14px; color: #34d399;">Supported</td>
+            <td style="padding: 12px 14px;">Educational carousels &amp; multi-image sets</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-hairline);">
+            <td style="padding: 12px 14px; font-weight: 600;"><a href="{% url 'downloads:tool_detail' slug='profile-media-utility' %}" style="color: var(--text-primary); text-decoration: none;">Profile Media Utility</a></td>
+            <td style="padding: 12px 14px;">Account Avatars</td>
+            <td style="padding: 12px 14px; color: var(--light-cyan); font-family: var(--font-mono);">1080 x 1080 px</td>
+            <td style="padding: 12px 14px;">JPEG</td>
+            <td style="padding: 12px 14px; color: var(--text-muted);">N/A</td>
+            <td style="padding: 12px 14px;">Full-resolution avatar viewing</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px 14px; font-weight: 600;"><a href="{% url 'downloads:tool_detail' slug='content-info-extractor' %}" style="color: var(--text-primary); text-decoration: none;">Metadata Extractor</a></td>
+            <td style="padding: 12px 14px;">Public Post Graph</td>
+            <td style="padding: 12px 14px; color: var(--light-cyan); font-family: var(--font-mono);">Structured JSON</td>
+            <td style="padding: 12px 14px;">JSON Manifest</td>
+            <td style="padding: 12px 14px; color: var(--text-muted);">N/A</td>
+            <td style="padding: 12px 14px;">Research analysis, media auditing &amp; development</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Educational Guides Cross-Link Banner -->
+  <div class="glass-panel reveal-item" style="padding: var(--space-6); margin-bottom: var(--space-8); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4); border-left: 3px solid var(--electric-cyan);">
+    <div>
+      <span class="mono-label" style="color: var(--light-cyan);">CREATOR GUIDES &amp; KNOWLEDGE HUB</span>
+      <h3 style="font-size: 1.25rem; margin: var(--space-2) 0;">Learn How to Optimize &amp; Preserve Your Media</h3>
+      <p style="color: var(--text-secondary); font-size: 0.9rem; max-width: 65ch; line-height: 1.6;">
+        Explore our comprehensive engineering guides on Instagram aspect ratios, H.264 bitrates, video troubleshooting, and Section 107 copyright fair use.
+      </p>
+    </div>
+    <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
+      <a href="{% url 'core:guides_index' %}" class="btn-glass btn-primary btn-sm">Explore All Guides &rarr;</a>
+      <a href="{% url 'core:editorial_standards' %}" class="btn-glass btn-secondary btn-sm">Editorial Standards</a>
+    </div>
   </div>
 </div>
 {% endblock %}

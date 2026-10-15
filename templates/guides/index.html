@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Instagram Media & Video Creator Knowledge Hub | INSTASAVE HUB",
+  "description": "Comprehensive technical guides, encoding specifications, video aspect ratio breakdowns, and copyright guidelines for Instagram creators and archivists.",
+  "url": "{{ canonical_url }}",
+  "publisher": {
+    "@type": "Organization",
+    "name": "INSTASAVE HUB",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ canonical_base_url }}{% static 'images/icon-512.png' %}"
+    }
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container-shell" style="padding-top: var(--space-4);">
+  <!-- Hero Section -->
+  <div class="glass-panel reveal-item" style="padding: var(--space-8); margin-bottom: var(--space-8); text-align: center;">
+    <div style="display: inline-flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-3);" class="telemetry-pill">
+      <span class="status-dot status-dot-emerald"></span>
+      <span class="mono-label">CREATOR EDUCATION &amp; MEDIA SPECIFICATIONS</span>
+    </div>
+    <h1 style="font-size: clamp(2rem, 4vw, 2.75rem); max-width: 22ch; margin: 0 auto var(--space-3); line-height: 1.2;">
+      Instagram Media &amp; Video Knowledge Hub
+    </h1>
+    <p style="color: var(--text-secondary); max-width: 65ch; margin: 0 auto var(--space-6); font-size: 1.05rem; line-height: 1.6;">
+      Authoritative, peer-reviewed technical guides, video encoding blueprints, aspect ratio cheat sheets, and fair-use legal frameworks written by digital media engineers.
+    </p>
+    <div style="display: flex; justify-content: center; gap: var(--space-4); flex-wrap: wrap;">
+      <a href="{% url 'core:guide_video_specs' %}" class="btn-glass btn-primary">Video Specs Guide</a>
+      <a href="{% url 'downloads:tools_list' %}" class="btn-glass btn-secondary">Explore Media Tools</a>
+    </div>
+  </div>
+
+  <!-- Featured Guides Grid -->
+  <div class="section-header reveal-item" style="margin-bottom: var(--space-5);">
+    <span class="mono-label">CORNERSTONE TECHNICAL GUIDES</span>
+    <h2 class="section-title">In-Depth Guides &amp; Research</h2>
+  </div>
+
+  <div class="grid-2" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-6); margin-bottom: var(--space-10);">
+    <!-- Guide 1 -->
+    <article class="glass-panel glass-panel-interactive reveal-item" style="padding: var(--space-6); display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3);">
+          <span class="tool-badge">GUIDE-01</span>
+          <span class="mono-label" style="font-size: 0.75rem; color: var(--light-cyan);">UPDATED OCTOBER 2026</span>
+        </div>
+        <h3 style="font-size: 1.35rem; margin-bottom: var(--space-3); line-height: 1.3;">
+          <a href="{% url 'core:guide_video_specs' %}" style="color: var(--text-primary); text-decoration: none;">
+            Complete Instagram Video Specifications Guide: Aspect Ratios, 1080p Bitrates &amp; Codecs
+          </a>
+        </h3>
+        <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6; margin-bottom: var(--space-4);">
+          Master the exact technical requirements for Instagram Reels, feed videos, and Stories. Includes optimal H.264 profiles, audio bitrates, frame rates (30 vs 60 fps), and copy-paste FFmpeg export commands.
+        </p>
+      </div>
+      <div>
+        <div class="glass-subpanel" style="padding: var(--space-3); margin-bottom: var(--space-4); font-size: 0.8rem; color: var(--text-muted);">
+          <span>Topic: H.264 Encoding &bull; 9:16 Aspect Ratio &bull; Bitrate Tuning &bull; 1080p Resolution</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span class="mono-label" style="font-size: 0.8rem;">9 MIN READ</span>
+          <a href="{% url 'core:guide_video_specs' %}" class="btn-glass btn-sm btn-primary">Read Guide &rarr;</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Guide 2 -->
+    <article class="glass-panel glass-panel-interactive reveal-item" style="padding: var(--space-6); display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3);">
+          <span class="tool-badge">GUIDE-02</span>
+          <span class="mono-label" style="font-size: 0.75rem; color: var(--light-cyan);">UPDATED OCTOBER 2026</span>
+        </div>
+        <h3 style="font-size: 1.35rem; margin-bottom: var(--space-3); line-height: 1.3;">
+          <a href="{% url 'core:guide_troubleshoot_blurry' %}" style="color: var(--text-primary); text-decoration: none;">
+            Why Instagram Compresses Videos &amp; How to Preserve 1080p Maximum Quality
+          </a>
+        </h3>
+        <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6; margin-bottom: var(--space-4);">
+          Ever wonder why crisp 4K camera footage looks blurry on Instagram? Discover Instagram's automated transcoding pipeline, Adaptive Bitrate Streaming (ABR), and the exact export presets for Premiere, Final Cut, and CapCut.
+        </p>
+      </div>
+      <div>
+        <div class="glass-subpanel" style="padding: var(--space-3); margin-bottom: var(--space-4); font-size: 0.8rem; color: var(--text-muted);">
+          <span>Topic: Compression Artifacts &bull; Variable Bitrate &bull; Color Shifts &bull; Export Settings</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span class="mono-label" style="font-size: 0.8rem;">8 MIN READ</span>
+          <a href="{% url 'core:guide_troubleshoot_blurry' %}" class="btn-glass btn-sm btn-primary">Read Guide &rarr;</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Guide 3 -->
+    <article class="glass-panel glass-panel-interactive reveal-item" style="padding: var(--space-6); display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3);">
+          <span class="tool-badge">GUIDE-03</span>
+          <span class="mono-label" style="font-size: 0.75rem; color: var(--light-cyan);">UPDATED OCTOBER 2026</span>
+        </div>
+        <h3 style="font-size: 1.35rem; margin-bottom: var(--space-3); line-height: 1.3;">
+          <a href="{% url 'core:guide_reels_vs_posts' %}" style="color: var(--text-primary); text-decoration: none;">
+            Reels vs Stories vs Posts: Technical Media Architecture &amp; Digital Preservation
+          </a>
+        </h3>
+        <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6; margin-bottom: var(--space-4);">
+          A technical architectural comparison of how Meta handles ephemeral 24-hour Story CDN blobs versus permanently indexed Reels and multi-slide carousels, with preservation strategies for archivists.
+        </p>
+      </div>
+      <div>
+        <div class="glass-subpanel" style="padding: var(--space-3); margin-bottom: var(--space-4); font-size: 0.8rem; color: var(--text-muted);">
+          <span>Topic: CDN Architectures &bull; Ephemeral Storage &bull; Carousels &bull; Media Archiving</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span class="mono-label" style="font-size: 0.8rem;">11 MIN READ</span>
+          <a href="{% url 'core:guide_reels_vs_posts' %}" class="btn-glass btn-sm btn-primary">Read Guide &rarr;</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Guide 4 -->
+    <article class="glass-panel glass-panel-interactive reveal-item" style="padding: var(--space-6); display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3);">
+          <span class="tool-badge">GUIDE-04</span>
+          <span class="mono-label" style="font-size: 0.75rem; color: var(--light-cyan);">UPDATED OCTOBER 2026</span>
+        </div>
+        <h3 style="font-size: 1.35rem; margin-bottom: var(--space-3); line-height: 1.3;">
+          <a href="{% url 'core:guide_fair_use' %}" style="color: var(--text-primary); text-decoration: none;">
+            Social Media Fair Use, Copyright &amp; Content Attribution Guide
+          </a>
+        </h3>
+        <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6; margin-bottom: var(--space-4);">
+          Everything digital creators, journalists, and researchers need to know about Section 107 fair use, transformative criticism, attribution protocols, avoiding DMCA notices, and ethical media archiving.
+        </p>
+      </div>
+      <div>
+        <div class="glass-subpanel" style="padding: var(--space-3); margin-bottom: var(--space-4); font-size: 0.8rem; color: var(--text-muted);">
+          <span>Topic: Copyright Law &bull; Section 107 &bull; Transformative Works &bull; Attribution Ethics</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span class="mono-label" style="font-size: 0.8rem;">12 MIN READ</span>
+          <a href="{% url 'core:guide_fair_use' %}" class="btn-glass btn-sm btn-primary">Read Guide &rarr;</a>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <!-- Editorial & Standards Banner -->
+  <div class="glass-panel reveal-item" style="padding: var(--space-6); margin-bottom: var(--space-8); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4); border-left: 3px solid var(--electric-cyan);">
+    <div>
+      <span class="mono-label" style="color: var(--light-cyan);">EDITORIAL INTEGRITY &amp; TESTING METHODOLOGY</span>
+      <h3 style="font-size: 1.25rem; margin: var(--space-2) 0;">Maintained by Video Engineers &amp; Media Researchers</h3>
+      <p style="color: var(--text-secondary); font-size: 0.9rem; max-width: 65ch; line-height: 1.6;">
+        All technical specs and guides are verified against real-world Instagram CDN streams using FFprobe, MediaInfo, and cross-browser testing across iOS Safari, Android Chrome, and desktop environments.
+      </p>
+    </div>
+    <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
+      <a href="{% url 'core:editorial_standards' %}" class="btn-glass btn-secondary btn-sm">Editorial Standards</a>
+      <a href="{% url 'core:status' %}" class="btn-glass btn-sm">Platform Status</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

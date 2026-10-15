@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Complete Instagram Video Specifications Guide: Aspect Ratios, 1080p Bitrates & Codecs",
+  "description": "Comprehensive engineering breakdown of Instagram video specifications including 9:16 vertical Reels, 4:5 feed videos, 1080p bitrates, H.264 profiles, audio codecs, and export presets.",
+  "image": "{{ canonical_base_url }}{% static 'images/icon-512.png' %}",
+  "datePublished": "2026-01-15T08:00:00+00:00",
+  "dateModified": "2026-10-15T12:00:00+00:00",
+  "author": {
+    "@type": "Organization",
+    "name": "INSTASAVE HUB Engineering & Research",
+    "url": "{{ canonical_base_url }}/about/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "INSTASAVE HUB",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ canonical_base_url }}{% static 'images/icon-512.png' %}"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ canonical_url }}"
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container-shell" style="padding-top: var(--space-4);">
+  <!-- Breadcrumb Navigation -->
+  <nav aria-label="Breadcrumb" style="margin-bottom: var(--space-4);">
+    <ol style="display: flex; gap: var(--space-2); list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: var(--text-muted); align-items: center;">
+      <li><a href="{% url 'core:home' %}" style="color: var(--text-muted); text-decoration: none;">Home</a></li>
+      <li>&rsaquo;</li>
+      <li><a href="{% url 'core:guides_index' %}" style="color: var(--text-muted); text-decoration: none;">Guides</a></li>
+      <li>&rsaquo;</li>
+      <li style="color: var(--light-cyan);">Instagram Video Specs</li>
+    </ol>
+  </nav>
+
+  <article class="glass-panel reveal-item" style="padding: var(--space-8); margin-bottom: var(--space-8);">
+    <header style="margin-bottom: var(--space-6); border-bottom: 1px solid var(--border-hairline); padding-bottom: var(--space-6);">
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3);">
+        <span class="tool-badge">TECH SPECIFICATION</span>
+        <span class="mono-label" style="color: var(--light-cyan);">UPDATED: OCTOBER 2026</span>
+        <span class="mono-label" style="color: var(--text-muted);">&bull; 9 MIN READ</span>
+      </div>
+      <h1 style="font-size: clamp(1.85rem, 3.5vw, 2.5rem); line-height: 1.25; margin-bottom: var(--space-3);">
+        Complete Instagram Video Specifications Guide: Aspect Ratios, 1080p Bitrates &amp; Codecs
+      </h1>
+      <p style="color: var(--text-secondary); font-size: 1.1rem; line-height: 1.6; max-width: 75ch;">
+        Whether you are a digital content creator, social media archivist, or media production studio, understanding Instagram's video ingestion engine is critical for delivering crisp, artifact-free 1080p playback.
+      </p>
+    </header>
+
+    <div style="font-size: 1rem; line-height: 1.75; color: var(--text-secondary); max-width: 80ch;">
+      <h2 style="font-size: 1.5rem; color: var(--text-primary); margin: var(--space-6) 0 var(--space-3);">
+        1. Instagram Aspect Ratio &amp; Resolution Matrix
+      </h2>
+      <p>
+        Instagram enforces strict aspect ratio limits. Uploading a video that deviates from these ratios triggers automatic crop or letterboxing algorithms that degrade visual presentation.
+      </p>
+
+      <div style="overflow-x: auto; margin: var(--space-5) 0;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+          <thead>
+            <tr style="border-bottom: 1px solid var(--border-medium); background: rgba(255, 255, 255, 0.03);">
+              <th style="padding: 12px 14px; color: var(--text-primary);">Format Type</th>
+              <th style="padding: 12px 14px; color: var(--text-primary);">Aspect Ratio</th>
+              <th style="padding: 12px 14px; color: var(--text-primary);">Optimal Resolution</th>
+              <th style="padding: 12px 14px; color: var(--text-primary);">Max Frame Rate</th>
+              <th style="padding: 12px 14px; color: var(--text-primary);">Target Bitrate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid var(--border-hairline);">
+              <td style="padding: 12px 14px; font-weight: 600; color: var(--text-primary);">Reels (Vertical)</td>
+              <td style="padding: 12px 14px; font-family: var(--font-mono); color: var(--light-cyan);">9:16</td>
+              <td style="padding: 12px 14px;">1080 x 1920 px</td>
+              <td style="padding: 12px 14px;">60 fps (30 recommended)</td>
+              <td style="padding: 12px 14px;">3,500 – 5,500 kbps</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-hairline);">
+              <td style="padding: 12px 14px; font-weight: 600; color: var(--text-primary);">Feed Portrait</td>
+              <td style="padding: 12px 14px; font-family: var(--font-mono); color: var(--light-cyan);">4:5</td>
+              <td style="padding: 12px 14px;">1080 x 1350 px</td>
+              <td style="padding: 12px 14px;">30 fps</td>
+              <td style="padding: 12px 14px;">3,500 – 4,500 kbps</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-hairline);">
+              <td style="padding: 12px 14px; font-weight: 600; color: var(--text-primary);">Feed Square</td>
+              <td style="padding: 12px 14px; font-family: var(--font-mono); color: var(--light-cyan);">1:1</td>
+              <td style="padding: 12px 14px;">1080 x 1080 px</td>
+              <td style="padding: 12px 14px;">30 fps</td>
+              <td style="padding: 12px 14px;">3,000 – 4,000 kbps</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-hairline);">
+              <td style="padding: 12px 14px; font-weight: 600; color: var(--text-primary);">Feed Landscape</td>
+              <td style="padding: 12px 14px; font-family: var(--font-mono); color: var(--light-cyan);">16:9 / 1.91:1</td>
+              <td style="padding: 12px 14px;">1920 x 1080 px</td>
+              <td style="padding: 12px 14px;">30 fps</td>
+              <td style="padding: 12px 14px;">4,000 – 6,000 kbps</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px 14px; font-weight: 600; color: var(--text-primary);">Stories (Ephemeral)</td>
+              <td style="padding: 12px 14px; font-family: var(--font-mono); color: var(--light-cyan);">9:16</td>
+              <td style="padding: 12px 14px;">1080 x 1920 px</td>
+              <td style="padding: 12px 14px;">30 fps</td>
+              <td style="padding: 12px 14px;">3,000 – 4,500 kbps</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 style="font-size: 1.5rem; color: var(--text-primary); margin: var(--space-8) 0 var(--space-3);">
+        2. Video Codec &amp; Container Architecture
+      </h2>
+      <p>
+        Instagram's ingestion servers parse uploaded MP4 containers through an automated transcoding cluster. To avoid destructive secondary re-compression, your source file should align as closely as possible to Meta’s native pipeline:
+      </p>
+      <ul style="padding-left: var(--space-5); margin-bottom: var(--space-5);">
+        <li><strong>Container:</strong> ISO Base Media File Format (MP4 / QuickTime). Ensure the <code>moov</code> atom is placed at the front of the file (FastStart flag enabled) so mobile browsers can begin playback before the entire file downloads.</li>
+        <li><strong>Video Codec:</strong> Advanced Video Coding (AVC / H.264). We recommend <em>High Profile @ Level 4.1</em> or <em>Main Profile</em>. While Instagram internally tests AV1 and VP9 for select accounts, H.264 remains the universal standard across all mobile devices.</li>
+        <li><strong>Chroma Subsampling:</strong> YUV 4:2:0. Videos exported in 4:2:2 or 4:4:4 color formats will suffer gamma shifts and oversaturation upon ingestion.</li>
+        <li><strong>Color Space:</strong> Rec. 709 (sRGB transfer curve). Do NOT upload in HDR (Apple Log, DCI-P3, HLG, or Rec. 2020) without tonemapping to SDR Rec. 709; otherwise, non-HDR displays will show washed-out, milky gray tones.</li>
+        <li><strong>Keyframe Interval (GOP Size):</strong> Closed GOP with keyframes every 1 to 2 seconds (e.g., GOP=60 frames at 30fps). This enables seamless variable-rate scrubbing in Instagram's mobile player.</li>
+      </ul>
+
+      <h2 style="font-size: 1.5rem; color: var(--text-primary); margin: var(--space-8) 0 var(--space-3);">
+        3. Audio Codec &amp; Bitrate Requirements
+      </h2>
+      <p>
+        Poor audio encoding frequently results in clipping, tinny treble, or out-of-sync playback. Use these exact specifications:
+      </p>
+      <ul style="padding-left: var(--space-5); margin-bottom: var(--space-5);">
+        <li><strong>Audio Codec:</strong> AAC-LC (Advanced Audio Coding - Low Complexity).</li>
+        <li><strong>Sample Rate:</strong> 44.1 kHz or 48.0 kHz (standard broadcast rate).</li>
+        <li><strong>Bitrate:</strong> 128 kbps to 256 kbps, Constant Bitrate (CBR) stereo.</li>
+        <li><strong>Loudness Normalization:</strong> Aim for -14 LUFS integrated loudness with true peaks below -1.0 dB TP. Instagram applies automatic gain attenuation to loud audio, creating muddy compression pump artifacts.</li>
+      </ul>
+
+      <h2 style="font-size: 1.5rem; color: var(--text-primary); margin: var(--space-8) 0 var(--space-3);">
+        4. Production-Ready FFmpeg Export Script
+      </h2>
+      <p>
+        For video editors and developers seeking byte-perfect rendering, execute the following command in terminal or command prompt:
+      </p>
+
+      <div class="glass-subpanel" style="padding: var(--space-4); margin: var(--space-4) 0; overflow-x: auto; background: rgba(5, 10, 25, 0.7);">
+        <pre style="margin: 0; font-family: var(--font-mono); font-size: 0.85rem; color: var(--light-cyan); white-space: pre-wrap; word-break: break-all;"><code>ffmpeg -i input_master.mov \
+  -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,format=yuv420p" \
+  -c:v libx264 -preset slow -profile:v high -level 4.1 \
+  -b:v 4500k -maxrate 5500k -bufsize 9000k \
+  -g 60 -keyint_min 60 -sc_threshold 0 \
+  -c:a aac -b:a 192k -ar 48000 \
+  -movflags +faststart \
+  output_instagram_reel.mp4</code></pre>
+      </div>
+
+      <h2 style="font-size: 1.5rem; color: var(--text-primary); margin: var(--space-8) 0 var(--space-3);">
+        5. Quality Preservation &amp; Stream Previewing
+      </h2>
+      <p>
+        Once your content is live, validating that Instagram's CDN is serving full 1080p resolution rather than a degraded 480p proxy stream is essential. You can inspect public Reel streams directly using our built-in analyzer:
+      </p>
+
+      <div class="glass-subpanel" style="padding: var(--space-5); margin: var(--space-5) 0; border: 1px solid var(--border-cyan-glow);">
+        <h4 style="color: var(--text-primary); margin-bottom: var(--space-2);">Verify Your Video Stream</h4>
+        <p style="font-size: 0.9rem; margin-bottom: var(--space-4);">
+          Paste your public Reel or Post URL into our analyzer to inspect the actual resolution, duration, bitrate, and codec served from Instagram's edge CDN.
+        </p>
+        <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
+          <a href="{% url 'downloads:tool_detail' slug='reel-downloader' %}" class="btn-glass btn-primary btn-sm">Analyze Reel Stream</a>
+          <a href="{% url 'downloads:tool_detail' slug='video-downloader' %}" class="btn-glass btn-secondary btn-sm">Analyze Video Stream</a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Related Guides Section -->
+  <div class="section-header reveal-item" style="margin-bottom: var(--space-4);">
+    <span class="mono-label">CONTINUE READING</span>
+    <h3 style="font-size: 1.35rem;">Related Guides &amp; Creator Manuals</h3>
+  </div>
+  <div class="grid-3" style="margin-bottom: var(--space-8);">
+    <div class="glass-panel" style="padding: var(--space-5);">
+      <h4 style="font-size: 1.05rem; margin-bottom: var(--space-2);">
+        <a href="{% url 'core:guide_troubleshoot_blurry' %}" style="color: var(--text-primary); text-decoration: none;">Troubleshoot Blurry Videos &rarr;</a>
+      </h4>
+      <p style="font-size: 0.85rem; color: var(--text-secondary);">Learn why uploads lose sharpness and how to prevent harsh compression artifacts.</p>
+    </div>
+    <div class="glass-panel" style="padding: var(--space-5);">
+      <h4 style="font-size: 1.05rem; margin-bottom: var(--space-2);">
+        <a href="{% url 'core:guide_reels_vs_posts' %}" style="color: var(--text-primary); text-decoration: none;">Reels vs Stories vs Posts &rarr;</a>
+      </h4>
+      <p style="font-size: 0.85rem; color: var(--text-secondary);">Compare media architectures and learn effective long-term digital archiving.</p>
+    </div>
+    <div class="glass-panel" style="padding: var(--space-5);">
+      <h4 style="font-size: 1.05rem; margin-bottom: var(--space-2);">
+        <a href="{% url 'core:guide_fair_use' %}" style="color: var(--text-primary); text-decoration: none;">Fair Use &amp; Attribution Guide &rarr;</a>
+      </h4>
+      <p style="font-size: 0.85rem; color: var(--text-secondary);">Navigate social media copyright, fair use, and attribution ethics.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

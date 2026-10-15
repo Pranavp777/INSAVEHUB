@@ -338,6 +338,69 @@ def _render_without_db(dist_dir: Path) -> None:
             },
         ),
         (
+            "/editorial-standards/",
+            "editorial-standards/index.html",
+            "pages/editorial_standards.html",
+            {
+                "page_title": "Editorial & Publishing Standards | INSTASAVE HUB",
+                "meta_description": "Review INSTASAVE HUB's editorial guidelines, testing methodology, and zero-retention privacy commitments.",
+            },
+        ),
+        (
+            "/status/",
+            "status/index.html",
+            "pages/status.html",
+            {
+                "page_title": "Platform Status & Maintenance Logs | INSTASAVE HUB",
+                "meta_description": "Live system health, edge network latency, and structural maintenance changelog.",
+            },
+        ),
+        (
+            "/guides/",
+            "guides/index.html",
+            "guides/index.html",
+            {
+                "page_title": "Instagram Media & Video Creator Knowledge Hub | INSTASAVE HUB",
+                "meta_description": "Comprehensive technical guides, encoding specifications, and fair use guidelines for creators.",
+            },
+        ),
+        (
+            "/guides/instagram-video-specs/",
+            "guides/instagram-video-specs/index.html",
+            "guides/instagram_video_specs.html",
+            {
+                "page_title": "Complete Instagram Video Specifications Guide (1080p Bitrates & Codecs) | INSTASAVE HUB",
+                "meta_description": "Engineering breakdown of Instagram video specifications: 9:16 Reels, 4:5 feed, bitrates, and FFmpeg export commands.",
+            },
+        ),
+        (
+            "/guides/troubleshoot-blurry-videos/",
+            "guides/troubleshoot-blurry-videos/index.html",
+            "guides/troubleshoot_blurry_videos.html",
+            {
+                "page_title": "Why Instagram Compresses Videos & How to Preserve 1080p Quality | INSTASAVE HUB",
+                "meta_description": "Troubleshoot blurry Instagram uploads. Learn about Adaptive Bitrate Streaming (ABR) and export presets.",
+            },
+        ),
+        (
+            "/guides/reels-vs-stories-vs-posts/",
+            "guides/reels-vs-stories-vs-posts/index.html",
+            "guides/reels_vs_stories_vs_posts.html",
+            {
+                "page_title": "Reels vs Stories vs Posts: Technical Media Architecture & Preservation | INSTASAVE HUB",
+                "meta_description": "Technical comparison of Meta's CDN storage models: ephemeral 24h Story blobs versus permanent Reels.",
+            },
+        ),
+        (
+            "/guides/fair-use-copyright-guide/",
+            "guides/fair-use-copyright-guide/index.html",
+            "guides/fair_use_copyright_guide.html",
+            {
+                "page_title": "Social Media Fair Use, Copyright & Content Attribution Guide | INSTASAVE HUB",
+                "meta_description": "Essential legal and ethical framework for creators using social media content under Section 107 Fair Use doctrine.",
+            },
+        ),
+        (
             "/donations/",
             "donations/index.html",
             "donations/index.html",
@@ -438,6 +501,13 @@ def _render_without_db(dist_dir: Path) -> None:
   <url><loc>{canonical_base}/downloads/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>{canonical_base}/tools/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
 {tool_sitemap_entries}
+  <url><loc>{canonical_base}/guides/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>{canonical_base}/guides/instagram-video-specs/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>{canonical_base}/guides/troubleshoot-blurry-videos/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>{canonical_base}/guides/reels-vs-stories-vs-posts/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>{canonical_base}/guides/fair-use-copyright-guide/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>{canonical_base}/editorial-standards/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>{canonical_base}/status/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>{canonical_base}/about/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>{canonical_base}/contact/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>{canonical_base}/privacy/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
@@ -513,6 +583,13 @@ def main() -> None:
             ("/disclaimer/", "disclaimer/index.html"),
             ("/dmca/", "dmca/index.html"),
             ("/faq/", "faq/index.html"),
+            ("/editorial-standards/", "editorial-standards/index.html"),
+            ("/status/", "status/index.html"),
+            ("/guides/", "guides/index.html"),
+            ("/guides/instagram-video-specs/", "guides/instagram-video-specs/index.html"),
+            ("/guides/troubleshoot-blurry-videos/", "guides/troubleshoot-blurry-videos/index.html"),
+            ("/guides/reels-vs-stories-vs-posts/", "guides/reels-vs-stories-vs-posts/index.html"),
+            ("/guides/fair-use-copyright-guide/", "guides/fair-use-copyright-guide/index.html"),
             ("/donations/", "donations/index.html"),
             ("/auth/login/", "auth/login/index.html"),
             ("/auth/register/", "auth/register/index.html"),

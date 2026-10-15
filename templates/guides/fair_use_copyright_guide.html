@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Social Media Fair Use, Copyright & Content Attribution Guide",
+  "description": "Essential legal and ethical framework for digital creators, journalists, and educators downloading and repurposing social media content under Section 107 Fair Use doctrine.",
+  "image": "{{ canonical_base_url }}{% static 'images/icon-512.png' %}",
+  "datePublished": "2026-03-01T08:00:00+00:00",
+  "dateModified": "2026-10-15T12:00:00+00:00",
+  "author": {
+    "@type": "Organization",
+    "name": "INSTASAVE HUB Legal & Compliance",
+    "url": "{{ canonical_base_url }}/about/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "INSTASAVE HUB",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ canonical_base_url }}{% static 'images/icon-512.png' %}"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ canonical_url }}"
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container-shell" style="padding-top: var(--space-4);">
+  <!-- Breadcrumb Navigation -->
+  <nav aria-label="Breadcrumb" style="margin-bottom: var(--space-4);">
+    <ol style="display: flex; gap: var(--space-2); list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: var(--text-muted); align-items: center;">
+      <li><a href="{% url 'core:home' %}" style="color: var(--text-muted); text-decoration: none;">Home</a></li>
+      <li>&rsaquo;</li>
+      <li><a href="{% url 'core:guides_index' %}" style="color: var(--text-muted); text-decoration: none;">Guides</a></li>
+      <li>&rsaquo;</li>
+      <li style="color: var(--light-cyan);">Fair Use &amp; Attribution Guide</li>
+    </ol>
+  </nav>
+
+  <article class="glass-panel reveal-item" style="padding: var(--space-8); margin-bottom: var(--space-8);">
+    <header style="margin-bottom: var(--space-6); border-bottom: 1px solid var(--border-hairline); padding-bottom: var(--space-6);">
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3);">
+        <span class="tool-badge">LEGAL &amp; ETHICS GUIDE</span>
+        <span class="mono-label" style="color: var(--light-cyan);">UPDATED: OCTOBER 2026</span>
+        <span class="mono-label" style="color: var(--text-muted);">&bull; 12 MIN READ</span>
+      </div>
+      <h1 style="font-size: clamp(1.85rem, 3.5vw, 2.5rem); line-height: 1.25; margin-bottom: var(--space-3);">
+        Social Media Fair Use, Copyright &amp; Content Attribution Guide
+      </h1>
+      <p style="color: var(--text-secondary); font-size: 1.1rem; line-height: 1.6; max-width: 75ch;">
+        As digital media remixing, commentary videos, journalism, and academic research thrive across social platforms, understanding copyright boundaries and fair use standards is essential for responsible creators.
+      </p>
+    </header>
+
+    <div style="font-size: 1rem; line-height: 1.75; color: var(--text-secondary); max-width: 80ch;">
+      <h2 style="font-size: 1.5rem; color: var(--text-primary); margin: var(--space-6) 0 var(--space-3);">
+        1. The Legal Doctrine of Fair Use (17 U.S.C. &sect; 107)
+      </h2>
+      <p>
+        In the United States and recognized under equivalent doctrines internationally (such as "Fair Dealing" in the United Kingdom, Canada, and Australia), copyright law protects original works while carving out vital exceptions for public expression, education, and commentary.
+      </p>
+      <p>
+        Under <strong>Section 107 of the U.S. Copyright Act</strong>, using copyrighted material without explicit prior permission is legally permitted for purposes such as:
+      </p>
+      <ul style="padding-left: var(--space-5); margin-bottom: var(--space-5);">
+        <li><strong>Criticism &amp; Commentary:</strong> Reviewing a film, dissecting a political speech, or critiquing a visual artwork.</li>
+        <li><strong>News Reporting:</strong> Broadcasting or reporting on public events, newsworthy occurrences, or breaking public statements.</li>
+        <li><strong>Teaching &amp; Scholarship:</strong> Illustrating technical concepts in academic classrooms or educational research papers.</li>
+        <li><strong>Parody &amp; Satire:</strong> Transforming the original work to mock, comment upon, or satirize the original message or society at large.</li>
+      </ul>
+
+      <h2 style="font-size: 1.5rem; color: var(--text-primary); margin: var(--space-8) 0 var(--space-3);">
+        2. The Four Pillars of Fair Use Analysis
+      </h2>
+      <p>
+        Courts evaluate potential fair use disputes by balancing four statutory factors on a case-by-case basis:
+      </p>
+
+      <div class="glass-subpanel" style="padding: var(--space-5); margin: var(--space-5) 0;">
+        <h4 style="color: var(--light-cyan); margin-bottom: var(--space-2);">Factor 1: Purpose and Character of the Use</h4>
+        <p style="font-size: 0.95rem; margin-bottom: var(--space-3);">
+          Is the new work <em>transformative</em>? Does it add new expression, meaning, or message, or does it merely duplicate the original? Non-commercial educational use weighs heavily in favor of fair use, whereas purely commercial redistribution weighs against it.
+        </p>
+
+        <h4 style="color: var(--light-cyan); margin-bottom: var(--space-2);">Factor 2: Nature of the Copyrighted Work</h4>
+        <p style="font-size: 0.95rem; margin-bottom: var(--space-3);">
+          Using factual, news-oriented, or historical footage is more readily defensible than reproducing highly fictionalized, scripted artistic entertainment works.
+        </p>
+
+        <h4 style="color: var(--light-cyan); margin-bottom: var(--space-2);">Factor 3: Amount and Substantiality of the Portion Used</h4>
+        <p style="font-size: 0.95rem; margin-bottom: var(--space-3);">
+          Did you extract only the brief snippet necessary to illustrate your point, or did you download and republish the entire video? Using the "heart" of a work without commentary weakens a fair use defense.
+        </p>
+
+        <h4 style="color: var(--light-cyan); margin-bottom: var(--space-2);">Factor 4: Effect of the Use Upon the Potential Market</h4>
+        <p style="font-size: 0.95rem; margin-bottom: 0;">
+          Does your secondary use substitute for the original work in the marketplace? If a user would watch your re-upload instead of visiting the original creator's profile, financial harm is demonstrated and fair use fails.
+        </p>
+      </div>
+
+      <h2 style="font-size: 1.5rem; color: var(--text-primary); margin: var(--space-8) 0 var(--space-3);">
+        3. Transformative Use vs. Direct Free-Riding
+      </h2>
+      <p>
+        The landmark Supreme Court precedent in <em>Campbell v. Acuff-Rose Music, Inc.</em> established that the more transformative the new work, the less significant the other factors (like commerciality) become.
+      </p>
+      <p>
+        <strong>What is Transformative:</strong>
+      </p>
+      <ul style="padding-left: var(--space-5); margin-bottom: var(--space-4);">
+        <li>A video essayist analyzing the camera composition, lighting, or rhetoric in a public Reel.</li>
+        <li>A journalist citing a 5-second public statement as proof within an investigative news article.</li>
+        <li>A researcher examining algorithmic trends across public social media feeds.</li>
+      </ul>
+      <p>
+        <strong>What is NOT Transformative (Copyright Infringement):</strong>
+      </p>
+      <ul style="padding-left: var(--space-5); margin-bottom: var(--space-5);">
+        <li>Downloading another creator's Reel and re-uploading it to your account without commentary or alteration.</li>
+        <li>Cropping out watermarks or credits to present someone else’s creative effort as your own.</li>
+        <li>Operating a "repost aggregation page" for monetization without licensing permissions from original rights holders.</li>
+      </ul>
+
+      <h2 style="font-size: 1.5rem; color: var(--text-primary); margin: var(--space-8) 0 var(--space-3);">
+        4. Creator Attribution Golden Rules
+      </h2>
+      <p>
+        Even when a use qualifies as fair use, ethical digital citizenship demands transparent attribution:
+      </p>
+      <ol style="padding-left: var(--space-5); margin-bottom: var(--space-5);">
+        <li><strong>Prominently Display Creator Handles:</strong> Include the author’s Instagram handle (e.g., <code>Credit: @username</code>) in both the video frame and the caption description.</li>
+        <li><strong>Link Back to the Original Post:</strong> Whenever feasible, provide a direct URL link so viewers can explore and engage with the original creator’s work.</li>
+        <li><strong>Obtain Direct Permission for Commercial Use:</strong> If your secondary video is sponsored, contains affiliate sales links, or serves as a commercial advertisement, obtain written consent from the copyright owner before publishing.</li>
+      </ol>
+
+      <h2 style="font-size: 1.5rem; color: var(--text-primary); margin: var(--space-8) 0 var(--space-3);">
+        5. InSave Hub’s Commitment to Creator Rights
+      </h2>
+      <p>
+        InSave Hub provides media stream analysis and download utility software intended for lawful personal archival, research, and transformative commentary purposes:
+      </p>
+      <ul style="padding-left: var(--space-5); margin-bottom: var(--space-5);">
+        <li>We do not store, host, index, or syndicate media files on our servers. All downloads are directly negotiated between your client browser and the public content delivery network (CDN).</li>
+        <li>We strictly respect private account boundaries, never bypassing authentication barriers.</li>
+        <li>We operate a comprehensive <a href="{% url 'core:dmca' %}" style="color: var(--light-cyan);">DMCA Takedown &amp; Copyright Policy</a> with a designated copyright agent to promptly address intellectual property concerns.</li>
+      </ul>
+
+      <div class="glass-subpanel" style="padding: var(--space-5); margin: var(--space-6) 0; border: 1px solid var(--border-cyan-glow);">
+        <h4 style="color: var(--text-primary); margin-bottom: var(--space-2);">Need Further Clarification?</h4>
+        <p style="font-size: 0.9rem; margin-bottom: var(--space-4);">
+          Review our legal policies, reach out to our compliance desk, or inspect public media streams for personal research.
+        </p>
+        <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
+          <a href="{% url 'core:dmca' %}" class="btn-glass btn-secondary btn-sm">DMCA Policy</a>
+          <a href="{% url 'core:terms' %}" class="btn-glass btn-secondary btn-sm">Terms of Service</a>
+          <a href="{% url 'core:contact' %}" class="btn-glass btn-primary btn-sm">Contact Compliance</a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Related Guides Section -->
+  <div class="section-header reveal-item" style="margin-bottom: var(--space-4);">
+    <span class="mono-label">EXPLORE MORE GUIDES</span>
+    <h3 style="font-size: 1.35rem;">Recommended Creator Resources</h3>
+  </div>
+  <div class="grid-3" style="margin-bottom: var(--space-8);">
+    <div class="glass-panel" style="padding: var(--space-5);">
+      <h4 style="font-size: 1.05rem; margin-bottom: var(--space-2);">
+        <a href="{% url 'core:guide_video_specs' %}" style="color: var(--text-primary); text-decoration: none;">Video Specifications Guide &rarr;</a>
+      </h4>
+      <p style="font-size: 0.85rem; color: var(--text-secondary);">Aspect ratios, optimal bitrates, audio codecs, and FFmpeg export commands.</p>
+    </div>
+    <div class="glass-panel" style="padding: var(--space-5);">
+      <h4 style="font-size: 1.05rem; margin-bottom: var(--space-2);">
+        <a href="{% url 'core:guide_troubleshoot_blurry' %}" style="color: var(--text-primary); text-decoration: none;">Troubleshoot Blurry Videos &rarr;</a>
+      </h4>
+      <p style="font-size: 0.85rem; color: var(--text-secondary);">Learn why uploads lose sharpness and how to prevent harsh compression artifacts.</p>
+    </div>
+    <div class="glass-panel" style="padding: var(--space-5);">
+      <h4 style="font-size: 1.05rem; margin-bottom: var(--space-2);">
+        <a href="{% url 'core:guide_reels_vs_posts' %}" style="color: var(--text-primary); text-decoration: none;">Reels vs Stories vs Posts &rarr;</a>
+      </h4>
+      <p style="font-size: 0.85rem; color: var(--text-secondary);">CDN lifecycle differences and digital media preservation strategies.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

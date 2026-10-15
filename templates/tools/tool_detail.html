@@ -1,26 +1,114 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block extra_head %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "{{ tool.name|escapejs }} — INSTASAVE HUB",
-  "url": "{{ canonical_url }}",
-  "applicationCategory": "MultimediaApplication",
-  "operatingSystem": "All",
-  "description": "{{ tool.short_description|escapejs }}",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  }
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "{{ tool.name|escapejs }} — INSTASAVE HUB",
+      "url": "{{ canonical_url }}",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "All, iOS, Android, Windows, macOS",
+      "description": "{{ tool.short_description|escapejs }}",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    },
+    {
+      "@type": "HowTo",
+      "name": "How to Preview and Download with {{ tool.name|escapejs }}",
+      "description": "Step-by-step instructions for using the {{ tool.name|escapejs }} on iPhone, Android, or desktop computer.",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Copy Public Instagram Link",
+          "text": "Open the Instagram app or website, find the public post, reel, or photo, and tap Share > Copy Link."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Paste URL into Analyzer",
+          "text": "Paste the copied URL into the INSTASAVE HUB analyzer bar and tap Preview & Download."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Inspect Live Stream Preview",
+          "text": "Use the built-in HTML5 player to verify video resolution, audio sync, and duration."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Save High-Definition Media",
+          "text": "Tap Download to save the 1080p MP4 or high-resolution JPEG directly to your device storage."
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does {{ tool.name|escapejs }} require an Instagram account or login?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. INSTASAVE HUB never requires you to enter your Instagram login credentials, session cookies, or personal information. All publicly available posts can be inspected and downloaded freely."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the maximum resolution supported by this tool?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "This tool delivers the original 1080p Full HD stream (up to 1080x1920 for vertical Reels, 1080x1350 for portrait feed videos, and 1080x1080 for square media) directly from Instagram's content delivery network."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I preview the media with audio before saving it?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. INSTASAVE HUB features an integrated HTML5 video preview player that lets you verify image clarity, aspect ratio, and audio synchronization prior to downloading."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does INSTASAVE HUB store or keep copies of downloaded files?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Our platform operates on a strict zero-retention architecture. Media streams are routed directly between your device and the origin CDN edge without permanent storage on our servers."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I save videos to my iPhone Camera Roll?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "On iOS Safari, tap Download, then tap the Safari Downloads icon in the address bar. Select the completed MP4 video, tap the iOS Share icon, and select 'Save Video' to export it to your Photos app."
+          }
+        }
+      ]
+    }
+  ]
 }
 </script>
 {% endblock %}
 
 {% block content %}
 <div class="container-shell" style="padding-top: var(--space-4);">
+  <!-- Breadcrumb Navigation -->
+  <nav aria-label="Breadcrumb" style="margin-bottom: var(--space-4);">
+    <ol style="display: flex; gap: var(--space-2); list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: var(--text-muted); align-items: center;">
+      <li><a href="{% url 'core:home' %}" style="color: var(--text-muted); text-decoration: none;">Home</a></li>
+      <li>&rsaquo;</li>
+      <li><a href="{% url 'downloads:tools_list' %}" style="color: var(--text-muted); text-decoration: none;">Tools</a></li>
+      <li>&rsaquo;</li>
+      <li style="color: var(--light-cyan);">{{ tool.name }}</li>
+    </ol>
+  </nav>
+
   <div class="glass-panel reveal-item" style="padding: var(--space-8); margin-bottom: var(--space-8);">
     <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4); margin-bottom: var(--space-5);">
       <div>
@@ -29,7 +117,7 @@
           <span class="mono-label">{{ tool.get_category_display }}</span>
         </div>
         <h1 style="font-size: clamp(1.75rem, 3vw, 2.35rem);">{{ tool.name }}</h1>
-        <p style="color: var(--text-secondary); margin-top: var(--space-1);">
+        <p style="color: var(--text-secondary); margin-top: var(--space-1); max-width: 70ch;">
           {{ tool.short_description }}
         </p>
       </div>
@@ -142,6 +230,321 @@
               <a id="resDownloadActionBtn" href="#" class="btn-glass btn-primary">Download</a>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Deep Technical Content Section (Bespoke Per Tool) -->
+  <div class="glass-panel reveal-item" style="padding: var(--space-8); margin-bottom: var(--space-8);">
+    {% if tool.slug == 'reel-downloader' %}
+      <div class="section-header" style="margin-bottom: var(--space-5);">
+        <span class="mono-label">TECHNICAL DOCUMENTATION &bull; REEL UTILITY</span>
+        <h2 style="font-size: 1.6rem;">How the Instagram Reel Downloader Operates</h2>
+      </div>
+      <div style="line-height: 1.75; color: var(--text-secondary); font-size: 0.98rem; max-width: 80ch;">
+        <p>
+          Instagram Reels are formatted in a <strong>9:16 vertical aspect ratio (1080x1920 pixels)</strong> and compressed using the Advanced Video Coding (AVC / H.264 High Profile @ Level 4.1) codec. Audio is carried via stereo Advanced Audio Coding (AAC-LC) sampled at 44.1 kHz or 48.0 kHz.
+        </p>
+        <p>
+          When a public Reel URL is entered, our edge analyzer reads the canonical shortcode and contacts the origin Polaris GraphQL endpoints. It extracts the raw high-bitrate progressive MP4 master stream rather than a compressed preview proxy. This ensures that you receive the exact 1080p stream as rendered on Meta's global CDN servers.
+        </p>
+      </div>
+
+      <h3 style="font-size: 1.25rem; color: var(--text-primary); margin: var(--space-6) 0 var(--space-3);">
+        Reel Engineering Specifications
+      </h3>
+      <div style="overflow-x: auto; margin-bottom: var(--space-6);">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem;">
+          <thead>
+            <tr style="border-bottom: 1px solid var(--border-medium); background: rgba(255,255,255,0.03);">
+              <th style="padding: 10px 14px; color: var(--text-primary);">Metric</th>
+              <th style="padding: 10px 14px; color: var(--text-primary);">Standard Value</th>
+              <th style="padding: 10px 14px; color: var(--text-primary);">Technical Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid var(--border-hairline);">
+              <td style="padding: 10px 14px; font-weight: 600;">Max Resolution</td>
+              <td style="padding: 10px 14px; color: var(--light-cyan); font-family: var(--font-mono);">1080 x 1920 px</td>
+              <td style="padding: 10px 14px;">Full HD 9:16 vertical ratio</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-hairline);">
+              <td style="padding: 10px 14px; font-weight: 600;">Video Codec</td>
+              <td style="padding: 10px 14px; color: var(--light-cyan); font-family: var(--font-mono);">H.264 / AVC (High@L4.1)</td>
+              <td style="padding: 10px 14px;">Hardware decoded on iOS, Android, and PC</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-hairline);">
+              <td style="padding: 10px 14px; font-weight: 600;">Audio Codec</td>
+              <td style="padding: 10px 14px; color: var(--light-cyan); font-family: var(--font-mono);">AAC-LC Stereo (128-256 kbps)</td>
+              <td style="padding: 10px 14px;">Synchronized with video timeline</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-hairline);">
+              <td style="padding: 10px 14px; font-weight: 600;">Frame Rate</td>
+              <td style="padding: 10px 14px; color: var(--light-cyan); font-family: var(--font-mono);">30 fps or 60 fps</td>
+              <td style="padding: 10px 14px;">Native creator upload cadence</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 14px; font-weight: 600;">Watermark Policy</td>
+              <td style="padding: 10px 14px; color: #34d399; font-weight: 600;">Zero Watermarks</td>
+              <td style="padding: 10px 14px;">Lossless original CDN stream pass-through</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    {% elif tool.slug == 'video-downloader' %}
+      <div class="section-header" style="margin-bottom: var(--space-5);">
+        <span class="mono-label">TECHNICAL DOCUMENTATION &bull; VIDEO UTILITY</span>
+        <h2 style="font-size: 1.6rem;">How the Instagram Video &amp; IGTV Downloader Operates</h2>
+      </div>
+      <div style="line-height: 1.75; color: var(--text-secondary); font-size: 0.98rem; max-width: 80ch;">
+        <p>
+          Instagram feed videos and long-form IGTV posts support multiple native aspect ratios: <strong>1:1 square (1080x1080)</strong>, <strong>4:5 portrait (1080x1350)</strong>, and <strong>16:9 landscape (1920x1080)</strong>.
+        </p>
+        <p>
+          Our video analyzer parses the video version array within the post's metadata manifest, picking the candidate rendition with the highest bitrate and pixel density. The video player incorporates an instant FastStart buffer, allowing you to preview the stream seamlessly before initiating the full file download.
+        </p>
+      </div>
+
+      <h3 style="font-size: 1.25rem; color: var(--text-primary); margin: var(--space-6) 0 var(--space-3);">
+        Video Engineering Specifications
+      </h3>
+      <div style="overflow-x: auto; margin-bottom: var(--space-6);">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem;">
+          <thead>
+            <tr style="border-bottom: 1px solid var(--border-medium); background: rgba(255,255,255,0.03);">
+              <th style="padding: 10px 14px; color: var(--text-primary);">Metric</th>
+              <th style="padding: 10px 14px; color: var(--text-primary);">Standard Value</th>
+              <th style="padding: 10px 14px; color: var(--text-primary);">Technical Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid var(--border-hairline);">
+              <td style="padding: 10px 14px; font-weight: 600;">Supported Ratios</td>
+              <td style="padding: 10px 14px; color: var(--light-cyan); font-family: var(--font-mono);">1:1, 4:5, 16:9, 1.91:1</td>
+              <td style="padding: 10px 14px;">All standard Instagram feed aspect ratios</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-hairline);">
+              <td style="padding: 10px 14px; font-weight: 600;">Max File Bitrate</td>
+              <td style="padding: 10px 14px; color: var(--light-cyan); font-family: var(--font-mono);">3,500 – 6,000 kbps</td>
+              <td style="padding: 10px 14px;">Variable bitrate (VBR) master stream</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-hairline);">
+              <td style="padding: 10px 14px; font-weight: 600;">Container</td>
+              <td style="padding: 10px 14px; color: var(--light-cyan); font-family: var(--font-mono);">ISO MP4 (moov atom at head)</td>
+              <td style="padding: 10px 14px;">FastStart streaming enabled</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 14px; font-weight: 600;">Duration Limits</td>
+              <td style="padding: 10px 14px; color: var(--light-cyan); font-family: var(--font-mono);">Up to 60 minutes</td>
+              <td style="padding: 10px 14px;">Supports standard feed clips and long IGTV videos</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    {% elif tool.slug == 'image-downloader' %}
+      <div class="section-header" style="margin-bottom: var(--space-5);">
+        <span class="mono-label">TECHNICAL DOCUMENTATION &bull; IMAGE UTILITY</span>
+        <h2 style="font-size: 1.6rem;">How the Instagram Photo Downloader Operates</h2>
+      </div>
+      <div style="line-height: 1.75; color: var(--text-secondary); font-size: 0.98rem; max-width: 80ch;">
+        <p>
+          Instagram photos are stored across a hierarchy of image candidates ranging from 150px square thumbnails to <strong>1080px uncompressed JPEG masters</strong>. Meta's image compression pipeline utilizes the MozJPEG encoder with chroma subsampling (4:2:0) and sRGB color profiles.
+        </p>
+        <p>
+          When you use our photo downloader, the service automatically skips intermediate 640px and 750px display variants, isolating the highest-dimension master file on the CDN to ensure pristine sharpness for graphic designers, digital artists, and photographers.
+        </p>
+      </div>
+
+      <h3 style="font-size: 1.25rem; color: var(--text-primary); margin: var(--space-6) 0 var(--space-3);">
+        Image Specifications
+      </h3>
+      <div style="overflow-x: auto; margin-bottom: var(--space-6);">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem;">
+          <thead>
+            <tr style="border-bottom: 1px solid var(--border-medium); background: rgba(255,255,255,0.03);">
+              <th style="padding: 10px 14px; color: var(--text-primary);">Metric</th>
+              <th style="padding: 10px 14px; color: var(--text-primary);">Standard Value</th>
+              <th style="padding: 10px 14px; color: var(--text-primary);">Technical Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid var(--border-hairline);">
+              <td style="padding: 10px 14px; font-weight: 600;">Max Width</td>
+              <td style="padding: 10px 14px; color: var(--light-cyan); font-family: var(--font-mono);">1080 px</td>
+              <td style="padding: 10px 14px;">Original Instagram master resolution</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-hairline);">
+              <td style="padding: 10px 14px; font-weight: 600;">File Format</td>
+              <td style="padding: 10px 14px; color: var(--light-cyan); font-family: var(--font-mono);">JPEG / JFIF</td>
+              <td style="padding: 10px 14px;">High quality sRGB color reproduction</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-hairline);">
+              <td style="padding: 10px 14px; font-weight: 600;">EXIF Metadata</td>
+              <td style="padding: 10px 14px; color: var(--text-muted); font-family: var(--font-mono);">Stripped by Meta</td>
+              <td style="padding: 10px 14px;">Instagram removes GPS and camera metadata for user privacy</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    {% elif tool.slug == 'public-post-downloader' %}
+      <div class="section-header" style="margin-bottom: var(--space-5);">
+        <span class="mono-label">TECHNICAL DOCUMENTATION &bull; CAROUSEL &amp; POST UTILITY</span>
+        <h2 style="font-size: 1.6rem;">How the Instagram Post &amp; Carousel Downloader Operates</h2>
+      </div>
+      <div style="line-height: 1.75; color: var(--text-secondary); font-size: 0.98rem; max-width: 80ch;">
+        <p>
+          Multi-slide posts (carousels) are represented within Meta's internal graph as <code>edge_sidecar_to_children</code> nodes. A single carousel can contain up to 20 distinct media items combining 1080p MP4 videos with high-definition JPEG stills.
+        </p>
+        <p>
+          Our analyzer queries the post structure to index every individual slide in order. You can preview slide 1 immediately, and proceed to download the media asset in its native format without loss of clarity.
+        </p>
+      </div>
+
+    {% elif tool.slug == 'profile-media-utility' %}
+      <div class="section-header" style="margin-bottom: var(--space-5);">
+        <span class="mono-label">TECHNICAL DOCUMENTATION &bull; PROFILE AVATAR UTILITY</span>
+        <h2 style="font-size: 1.6rem;">How the Instagram Profile Picture Downloader Operates</h2>
+      </div>
+      <div style="line-height: 1.75; color: var(--text-secondary); font-size: 0.98rem; max-width: 80ch;">
+        <p>
+          While the Instagram mobile app displays profile pictures at a compact 150x150 thumbnail size, Instagram's media storage retains high-resolution 1080x1080 source avatar files.
+        </p>
+        <p>
+          Our profile media utility queries public profile headers and resolves the direct CDN link to the full-resolution uncropped avatar. This tool strictly interacts with public profile endpoints and never requests private account access or personal authentication tokens.
+        </p>
+      </div>
+
+    {% else %}
+      <div class="section-header" style="margin-bottom: var(--space-5);">
+        <span class="mono-label">TECHNICAL DOCUMENTATION &bull; METADATA EXTRACTION</span>
+        <h2 style="font-size: 1.6rem;">How the Content Information Extractor Operates</h2>
+      </div>
+      <div style="line-height: 1.75; color: var(--text-secondary); font-size: 0.98rem; max-width: 80ch;">
+        <p>
+          Our metadata extractor decodes Instagram base64 URL shortcodes into 64-bit BigInt media IDs and queries public GraphQL endpoints. It provides digital archivists, marketing analysts, and software developers with structured JSON manifests detailing shortcodes, direct CDN URIs, media dimensions, mime types, and timestamps.
+        </p>
+      </div>
+    {% endif %}
+
+    <!-- Step-by-Step Device Walkthrough Tabs -->
+    <div style="margin-top: var(--space-8); padding-top: var(--space-6); border-top: 1px solid var(--border-hairline);">
+      <span class="mono-label" style="color: var(--light-cyan);">STEP-BY-STEP DEVICE WALKTHROUGHS</span>
+      <h3 style="font-size: 1.35rem; margin: var(--space-2) 0 var(--space-4);">
+        How to Use {{ tool.name }} on iPhone, Android &amp; Desktop
+      </h3>
+
+      <div class="grid-3" style="margin-bottom: var(--space-6);">
+        <!-- iOS Guide -->
+        <div class="glass-subpanel" style="padding: var(--space-5);">
+          <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-3);">
+            <span class="tool-badge">iOS</span>
+            <strong style="color: var(--text-primary);">iPhone &amp; iPad (Safari)</strong>
+          </div>
+          <ol style="padding-left: var(--space-4); font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+            <li>In the Instagram app, tap the <strong>Share</strong> icon on the public post or reel and select <strong>Copy Link</strong>.</li>
+            <li>Open <strong>Safari</strong>, paste the link into the analyzer above, and tap <strong>Preview &amp; Download</strong>.</li>
+            <li>Inspect the video preview, then tap <strong>Download</strong>. Safari will prompt you to download the MP4 file.</li>
+            <li>Tap the <strong>Safari Downloads</strong> button in the address bar, select the video, tap <strong>Share</strong>, and choose <strong>Save Video</strong> to move it to your Photos Camera Roll.</li>
+          </ol>
+        </div>
+
+        <!-- Android Guide -->
+        <div class="glass-subpanel" style="padding: var(--space-5);">
+          <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-3);">
+            <span class="tool-badge">ANDROID</span>
+            <strong style="color: var(--text-primary);">Android (Chrome / Samsung)</strong>
+          </div>
+          <ol style="padding-left: var(--space-4); font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+            <li>In the Instagram app, tap the three dots or Share icon and tap <strong>Copy Link</strong>.</li>
+            <li>Open <strong>Google Chrome</strong> or Samsung Internet, navigate to this tool, paste the link, and tap <strong>Preview &amp; Download</strong>.</li>
+            <li>Review the media preview, then tap the blue <strong>Download</strong> button.</li>
+            <li>The 1080p MP4 or JPEG file will save directly into your device's <strong>Downloads</strong> folder and appear instantly in your Gallery / Google Photos.</li>
+          </ol>
+        </div>
+
+        <!-- Desktop Guide -->
+        <div class="glass-subpanel" style="padding: var(--space-5);">
+          <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-3);">
+            <span class="tool-badge">PC / MAC</span>
+            <strong style="color: var(--text-primary);">macOS &amp; Windows Desktop</strong>
+          </div>
+          <ol style="padding-left: var(--space-4); font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+            <li>On instagram.com in your web browser, navigate to the public Reel or post and copy the URL from your address bar.</li>
+            <li>Paste the URL into the input field above and click <strong>Preview &amp; Download</strong>.</li>
+            <li>Use the integrated HTML5 player to check audio and video fidelity, then click <strong>Download</strong>.</li>
+            <li>The media file saves to your default Downloads directory without compression or quality degradation.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Legal & Attribution Notice -->
+    <div class="glass-subpanel" style="padding: var(--space-5); margin: var(--space-6) 0; border-left: 3px solid var(--electric-cyan);">
+      <h4 style="color: var(--text-primary); margin-bottom: var(--space-2);">Creator Attribution &amp; Ethical Fair Use</h4>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: var(--space-3);">
+        INSTASAVE HUB is committed to supporting digital creators and intellectual property rights. Downloaded media is intended strictly for personal archival, academic study, and transformative commentary under Section 107 of the U.S. Copyright Act. Always credit the original creator's handle when citing or sharing media.
+      </p>
+      <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
+        <a href="{% url 'core:guide_fair_use' %}" class="btn-glass btn-sm btn-secondary">Read Fair Use Guide</a>
+        <a href="{% url 'core:guide_video_specs' %}" class="btn-glass btn-sm">Video Specs Guide</a>
+      </div>
+    </div>
+
+    <!-- Tool-Specific FAQs Accordion -->
+    <div style="margin-top: var(--space-8); padding-top: var(--space-6); border-top: 1px solid var(--border-hairline);">
+      <span class="mono-label" style="color: var(--light-cyan);">FREQUENTLY ASKED QUESTIONS</span>
+      <h3 style="font-size: 1.35rem; margin: var(--space-2) 0 var(--space-5);">
+        Common Questions About {{ tool.name }}
+      </h3>
+
+      <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+        <div class="glass-subpanel" style="padding: var(--space-5);">
+          <h4 style="font-size: 1.05rem; color: var(--text-primary); margin-bottom: var(--space-2);">
+            Is {{ tool.name }} free and are there any usage limits?
+          </h4>
+          <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+            Yes, this tool is 100% free to use. There are no daily download caps or registration requirements. All publicly accessible Instagram media can be inspected and downloaded at full speed.
+          </p>
+        </div>
+
+        <div class="glass-subpanel" style="padding: var(--space-5);">
+          <h4 style="font-size: 1.05rem; color: var(--text-primary); margin-bottom: var(--space-2);">
+            Can I download content from private Instagram accounts?
+          </h4>
+          <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+            No. To respect user privacy and adhere to platform security standards, INSTASAVE HUB only processes publicly available Instagram URLs. Content from private, restricted, or password-protected accounts cannot be analyzed.
+          </p>
+        </div>
+
+        <div class="glass-subpanel" style="padding: var(--space-5);">
+          <h4 style="font-size: 1.05rem; color: var(--text-primary); margin-bottom: var(--space-2);">
+            Why does the video preview have sound but some downloads don't?
+          </h4>
+          <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+            In certain cases, Instagram stores video and licensed music tracks as separate streams. INSTASAVE HUB automatically reconciles and extracts the combined audio-video multiplex stream. If audio is muted, ensure your device media volume is turned on and your browser player is unmuted.
+          </p>
+        </div>
+
+        <div class="glass-subpanel" style="padding: var(--space-5);">
+          <h4 style="font-size: 1.05rem; color: var(--text-primary); margin-bottom: var(--space-2);">
+            Are watermarks or logos added to downloaded videos?
+          </h4>
+          <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+            No. INSTASAVE HUB never adds watermarks, logos, or overlay text. You receive the exact original media file as served by Instagram's CDN.
+          </p>
+        </div>
+
+        <div class="glass-subpanel" style="padding: var(--space-5);">
+          <h4 style="font-size: 1.05rem; color: var(--text-primary); margin-bottom: var(--space-2);">
+            What should I do if the analyzer returns an "Unable to resolve media" error?
+          </h4>
+          <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+            Verify that the URL belongs to a public post and that the link format matches <code>https://www.instagram.com/reel/shortcode/</code> or <code>/p/shortcode/</code>. If the post was just published, wait 2–3 minutes for Instagram's CDN to finish generating the public video renditions.
+          </p>
         </div>
       </div>
     </div>

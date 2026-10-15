@@ -176,17 +176,93 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "Profile Media Utility — INSTASAVE HUB",
-  "url": "https://insavehub.com/tools/profile-media-utility/",
-  "applicationCategory": "MultimediaApplication",
-  "operatingSystem": "All",
-  "description": "Preview and download public Instagram HD profile pictures.",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  }
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Profile Media Utility — INSTASAVE HUB",
+      "url": "https://insavehub.com/tools/profile-media-utility/",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "All, iOS, Android, Windows, macOS",
+      "description": "Preview and download public Instagram HD profile pictures.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    },
+    {
+      "@type": "HowTo",
+      "name": "How to Preview and Download with Profile Media Utility",
+      "description": "Step-by-step instructions for using the Profile Media Utility on iPhone, Android, or desktop computer.",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Copy Public Instagram Link",
+          "text": "Open the Instagram app or website, find the public post, reel, or photo, and tap Share > Copy Link."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Paste URL into Analyzer",
+          "text": "Paste the copied URL into the INSTASAVE HUB analyzer bar and tap Preview & Download."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Inspect Live Stream Preview",
+          "text": "Use the built-in HTML5 player to verify video resolution, audio sync, and duration."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Save High-Definition Media",
+          "text": "Tap Download to save the 1080p MP4 or high-resolution JPEG directly to your device storage."
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does Profile Media Utility require an Instagram account or login?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. INSTASAVE HUB never requires you to enter your Instagram login credentials, session cookies, or personal information. All publicly available posts can be inspected and downloaded freely."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the maximum resolution supported by this tool?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "This tool delivers the original 1080p Full HD stream (up to 1080x1920 for vertical Reels, 1080x1350 for portrait feed videos, and 1080x1080 for square media) directly from Instagram's content delivery network."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I preview the media with audio before saving it?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. INSTASAVE HUB features an integrated HTML5 video preview player that lets you verify image clarity, aspect ratio, and audio synchronization prior to downloading."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does INSTASAVE HUB store or keep copies of downloaded files?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Our platform operates on a strict zero-retention architecture. Media streams are routed directly between your device and the origin CDN edge without permanent storage on our servers."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I save videos to my iPhone Camera Roll?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "On iOS Safari, tap Download, then tap the Safari Downloads icon in the address bar. Select the completed MP4 video, tap the iOS Share icon, and select 'Save Video' to export it to your Photos app."
+          }
+        }
+      ]
+    }
+  ]
 }
 </script>
 
@@ -217,6 +293,9 @@
           </li>
           <li>
             <a href="/tools/" class="nav-link is-current">Tools</a>
+          </li>
+          <li>
+            <a href="/guides/" class="nav-link ">Guides</a>
           </li>
           <li>
             <a href="/about/" class="nav-link ">About</a>
@@ -276,6 +355,9 @@
       <a href="/" class="nav-link">Home</a>
       <a href="/downloads/" class="nav-link">Downloader</a>
       <a href="/tools/" class="nav-link">Instagram Tools</a>
+      <a href="/guides/" class="nav-link">Creator Guides</a>
+      <a href="/editorial-standards/" class="nav-link">Editorial Standards</a>
+      <a href="/status/" class="nav-link">Platform Status</a>
       <a href="/about/" class="nav-link">About Us</a>
       <a href="/contact/" class="nav-link">Contact Us</a>
       <a href="/privacy/" class="nav-link">Privacy Policy</a>
@@ -335,6 +417,17 @@
 
     
 <div class="container-shell" style="padding-top: var(--space-4);">
+  <!-- Breadcrumb Navigation -->
+  <nav aria-label="Breadcrumb" style="margin-bottom: var(--space-4);">
+    <ol style="display: flex; gap: var(--space-2); list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: var(--text-muted); align-items: center;">
+      <li><a href="/" style="color: var(--text-muted); text-decoration: none;">Home</a></li>
+      <li>&rsaquo;</li>
+      <li><a href="/tools/" style="color: var(--text-muted); text-decoration: none;">Tools</a></li>
+      <li>&rsaquo;</li>
+      <li style="color: var(--light-cyan);">Profile Media Utility</li>
+    </ol>
+  </nav>
+
   <div class="glass-panel reveal-item" style="padding: var(--space-8); margin-bottom: var(--space-8);">
     <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4); margin-bottom: var(--space-5);">
       <div>
@@ -343,7 +436,7 @@
           <span class="mono-label">Profile Media Utility</span>
         </div>
         <h1 style="font-size: clamp(1.75rem, 3vw, 2.35rem);">Profile Media Utility</h1>
-        <p style="color: var(--text-secondary); margin-top: var(--space-1);">
+        <p style="color: var(--text-secondary); margin-top: var(--space-1); max-width: 70ch;">
           Preview and download public Instagram HD profile pictures.
         </p>
       </div>
@@ -354,7 +447,7 @@
     </div>
 
     <form id="instagramAnalyzerForm" action="/api/downloads/analyze/" method="post" novalidate>
-      <input type="hidden" name="csrfmiddlewaretoken" value="HKzcb2PGJTbIMbiC0jUTTiIipSQIwMiKWu3wtyQlbl6zFa16hugR8idQlSlNBuEY">
+      <input type="hidden" name="csrfmiddlewaretoken" value="EYwjCSSE32HkraakBwdLsraCZyogVuvfJCUA9wDSUU0lyprfIj0JTvcAv4pTRcLh">
       <input type="hidden" id="instagramToolSlug" name="tool_slug" value="profile-media-utility">
       <label for="instagramUrlInput" class="form-label">Paste Public Instagram URL</label>
       <div class="analyzer-bar">
@@ -461,6 +554,144 @@
     </div>
   </div>
 
+  <!-- Deep Technical Content Section (Bespoke Per Tool) -->
+  <div class="glass-panel reveal-item" style="padding: var(--space-8); margin-bottom: var(--space-8);">
+    
+      <div class="section-header" style="margin-bottom: var(--space-5);">
+        <span class="mono-label">TECHNICAL DOCUMENTATION &bull; PROFILE AVATAR UTILITY</span>
+        <h2 style="font-size: 1.6rem;">How the Instagram Profile Picture Downloader Operates</h2>
+      </div>
+      <div style="line-height: 1.75; color: var(--text-secondary); font-size: 0.98rem; max-width: 80ch;">
+        <p>
+          While the Instagram mobile app displays profile pictures at a compact 150x150 thumbnail size, Instagram's media storage retains high-resolution 1080x1080 source avatar files.
+        </p>
+        <p>
+          Our profile media utility queries public profile headers and resolves the direct CDN link to the full-resolution uncropped avatar. This tool strictly interacts with public profile endpoints and never requests private account access or personal authentication tokens.
+        </p>
+      </div>
+
+    
+
+    <!-- Step-by-Step Device Walkthrough Tabs -->
+    <div style="margin-top: var(--space-8); padding-top: var(--space-6); border-top: 1px solid var(--border-hairline);">
+      <span class="mono-label" style="color: var(--light-cyan);">STEP-BY-STEP DEVICE WALKTHROUGHS</span>
+      <h3 style="font-size: 1.35rem; margin: var(--space-2) 0 var(--space-4);">
+        How to Use Profile Media Utility on iPhone, Android &amp; Desktop
+      </h3>
+
+      <div class="grid-3" style="margin-bottom: var(--space-6);">
+        <!-- iOS Guide -->
+        <div class="glass-subpanel" style="padding: var(--space-5);">
+          <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-3);">
+            <span class="tool-badge">iOS</span>
+            <strong style="color: var(--text-primary);">iPhone &amp; iPad (Safari)</strong>
+          </div>
+          <ol style="padding-left: var(--space-4); font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+            <li>In the Instagram app, tap the <strong>Share</strong> icon on the public post or reel and select <strong>Copy Link</strong>.</li>
+            <li>Open <strong>Safari</strong>, paste the link into the analyzer above, and tap <strong>Preview &amp; Download</strong>.</li>
+            <li>Inspect the video preview, then tap <strong>Download</strong>. Safari will prompt you to download the MP4 file.</li>
+            <li>Tap the <strong>Safari Downloads</strong> button in the address bar, select the video, tap <strong>Share</strong>, and choose <strong>Save Video</strong> to move it to your Photos Camera Roll.</li>
+          </ol>
+        </div>
+
+        <!-- Android Guide -->
+        <div class="glass-subpanel" style="padding: var(--space-5);">
+          <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-3);">
+            <span class="tool-badge">ANDROID</span>
+            <strong style="color: var(--text-primary);">Android (Chrome / Samsung)</strong>
+          </div>
+          <ol style="padding-left: var(--space-4); font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+            <li>In the Instagram app, tap the three dots or Share icon and tap <strong>Copy Link</strong>.</li>
+            <li>Open <strong>Google Chrome</strong> or Samsung Internet, navigate to this tool, paste the link, and tap <strong>Preview &amp; Download</strong>.</li>
+            <li>Review the media preview, then tap the blue <strong>Download</strong> button.</li>
+            <li>The 1080p MP4 or JPEG file will save directly into your device's <strong>Downloads</strong> folder and appear instantly in your Gallery / Google Photos.</li>
+          </ol>
+        </div>
+
+        <!-- Desktop Guide -->
+        <div class="glass-subpanel" style="padding: var(--space-5);">
+          <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-3);">
+            <span class="tool-badge">PC / MAC</span>
+            <strong style="color: var(--text-primary);">macOS &amp; Windows Desktop</strong>
+          </div>
+          <ol style="padding-left: var(--space-4); font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+            <li>On instagram.com in your web browser, navigate to the public Reel or post and copy the URL from your address bar.</li>
+            <li>Paste the URL into the input field above and click <strong>Preview &amp; Download</strong>.</li>
+            <li>Use the integrated HTML5 player to check audio and video fidelity, then click <strong>Download</strong>.</li>
+            <li>The media file saves to your default Downloads directory without compression or quality degradation.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Legal & Attribution Notice -->
+    <div class="glass-subpanel" style="padding: var(--space-5); margin: var(--space-6) 0; border-left: 3px solid var(--electric-cyan);">
+      <h4 style="color: var(--text-primary); margin-bottom: var(--space-2);">Creator Attribution &amp; Ethical Fair Use</h4>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: var(--space-3);">
+        INSTASAVE HUB is committed to supporting digital creators and intellectual property rights. Downloaded media is intended strictly for personal archival, academic study, and transformative commentary under Section 107 of the U.S. Copyright Act. Always credit the original creator's handle when citing or sharing media.
+      </p>
+      <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
+        <a href="/guides/fair-use-copyright-guide/" class="btn-glass btn-sm btn-secondary">Read Fair Use Guide</a>
+        <a href="/guides/instagram-video-specs/" class="btn-glass btn-sm">Video Specs Guide</a>
+      </div>
+    </div>
+
+    <!-- Tool-Specific FAQs Accordion -->
+    <div style="margin-top: var(--space-8); padding-top: var(--space-6); border-top: 1px solid var(--border-hairline);">
+      <span class="mono-label" style="color: var(--light-cyan);">FREQUENTLY ASKED QUESTIONS</span>
+      <h3 style="font-size: 1.35rem; margin: var(--space-2) 0 var(--space-5);">
+        Common Questions About Profile Media Utility
+      </h3>
+
+      <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+        <div class="glass-subpanel" style="padding: var(--space-5);">
+          <h4 style="font-size: 1.05rem; color: var(--text-primary); margin-bottom: var(--space-2);">
+            Is Profile Media Utility free and are there any usage limits?
+          </h4>
+          <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+            Yes, this tool is 100% free to use. There are no daily download caps or registration requirements. All publicly accessible Instagram media can be inspected and downloaded at full speed.
+          </p>
+        </div>
+
+        <div class="glass-subpanel" style="padding: var(--space-5);">
+          <h4 style="font-size: 1.05rem; color: var(--text-primary); margin-bottom: var(--space-2);">
+            Can I download content from private Instagram accounts?
+          </h4>
+          <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+            No. To respect user privacy and adhere to platform security standards, INSTASAVE HUB only processes publicly available Instagram URLs. Content from private, restricted, or password-protected accounts cannot be analyzed.
+          </p>
+        </div>
+
+        <div class="glass-subpanel" style="padding: var(--space-5);">
+          <h4 style="font-size: 1.05rem; color: var(--text-primary); margin-bottom: var(--space-2);">
+            Why does the video preview have sound but some downloads don't?
+          </h4>
+          <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+            In certain cases, Instagram stores video and licensed music tracks as separate streams. INSTASAVE HUB automatically reconciles and extracts the combined audio-video multiplex stream. If audio is muted, ensure your device media volume is turned on and your browser player is unmuted.
+          </p>
+        </div>
+
+        <div class="glass-subpanel" style="padding: var(--space-5);">
+          <h4 style="font-size: 1.05rem; color: var(--text-primary); margin-bottom: var(--space-2);">
+            Are watermarks or logos added to downloaded videos?
+          </h4>
+          <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+            No. INSTASAVE HUB never adds watermarks, logos, or overlay text. You receive the exact original media file as served by Instagram's CDN.
+          </p>
+        </div>
+
+        <div class="glass-subpanel" style="padding: var(--space-5);">
+          <h4 style="font-size: 1.05rem; color: var(--text-primary); margin-bottom: var(--space-2);">
+            What should I do if the analyzer returns an "Unable to resolve media" error?
+          </h4>
+          <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+            Verify that the URL belongs to a public post and that the link format matches <code>https://www.instagram.com/reel/shortcode/</code> or <code>/p/shortcode/</code>. If the post was just published, wait 2–3 minutes for Instagram's CDN to finish generating the public video renditions.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Other Modules -->
   <div>
     <span class="mono-label" style="display: block; margin-bottom: var(--space-4);">MORE INSTAGRAM TOOLS</span>
@@ -546,8 +777,8 @@
   <!-- Glass Footer with SEO Keyword Internal Links & Full Compliance Navigation -->
   <footer class="glass-footer" role="contentinfo">
     <div class="container-shell">
-      <div class="footer-grid" style="grid-template-columns: 1.35fr 1fr 1fr 1fr;">
-        <div>
+      <div class="footer-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+        <div style="grid-column: span 1;">
           <div class="brand-identity" style="margin-bottom: var(--space-3);">
             <img src="/static/images/logo.png" alt="INSTASAVE HUB" class="brand-mark" width="28" height="28" style="border-radius: 7px; object-fit: cover;" loading="lazy" decoding="async">
             <span class="brand-wordmark">INSTASAVE HUB</span>
@@ -566,6 +797,19 @@
             <li><a href="/tools/image-downloader/">Instagram Photo Downloader</a></li>
             <li><a href="/tools/profile-media-utility/">IG Profile Picture Viewer</a></li>
             <li><a href="/tools/content-info-extractor/">Metadata Extractor</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">CREATOR GUIDES</h4>
+          <ul class="footer-links">
+            <li><a href="/guides/">Creator Guides Hub</a></li>
+            <li><a href="/guides/instagram-video-specs/">Instagram Video Specs</a></li>
+            <li><a href="/guides/troubleshoot-blurry-videos/">Troubleshoot Blurry Videos</a></li>
+            <li><a href="/guides/reels-vs-stories-vs-posts/">Reels vs Stories vs Posts</a></li>
+            <li><a href="/guides/fair-use-copyright-guide/">Fair Use &amp; Attribution</a></li>
+            <li><a href="/editorial-standards/">Editorial Standards</a></li>
+            <li><a href="/status/">Platform Status &amp; Logs</a></li>
           </ul>
         </div>
 
@@ -589,6 +833,7 @@
             <li><a href="/terms/">Terms &amp; Conditions</a></li>
             <li><a href="/disclaimer/">Disclaimer &amp; Trademarks</a></li>
             <li><a href="/dmca/">DMCA &amp; Copyright Policy</a></li>
+            <li><a href="/editorial-standards/">Editorial Standards</a></li>
             <li><a href="/faq/">Frequently Asked Questions</a></li>
           </ul>
         </div>
@@ -601,6 +846,10 @@
           <a href="/privacy/" style="color: var(--text-muted);">Privacy</a>
           <span>&bull;</span>
           <a href="/terms/" style="color: var(--text-muted);">Terms</a>
+          <span>&bull;</span>
+          <a href="/editorial-standards/" style="color: var(--text-muted);">Editorial Standards</a>
+          <span>&bull;</span>
+          <a href="/status/" style="color: var(--text-muted);">Status</a>
           <span>&bull;</span>
           <a href="/disclaimer/" style="color: var(--text-muted);">Disclaimer</a>
           <span>&bull;</span>

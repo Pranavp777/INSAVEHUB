@@ -141,11 +141,43 @@ class CoreRateLimitAndSEOTests(TestCase):
             ("/disclaimer/", "Disclaimer"),
             ("/dmca/", "DMCA &amp; Copyright Policy"),
             ("/faq/", "Frequently Asked Questions"),
+            ("/editorial-standards/", "Editorial &amp; Publishing Standards"),
+            ("/status/", "Platform Status"),
+            ("/guides/", "Knowledge Hub"),
+            ("/guides/instagram-video-specs/", "Instagram Video Specifications Guide"),
+            ("/guides/troubleshoot-blurry-videos/", "Why Instagram Compresses Videos"),
+            ("/guides/reels-vs-stories-vs-posts/", "Reels vs Stories vs Posts"),
+            ("/guides/fair-use-copyright-guide/", "Fair Use, Copyright"),
         ]
         for url, expected_text in routes_to_test:
             resp = self.client.get(url, HTTP_HOST="insavehub.com")
             self.assertEqual(resp.status_code, 200, f"Route {url} failed with status {resp.status_code}")
             self.assertContains(resp, expected_text, msg_prefix=f"Route {url} missing expected text: {expected_text}")
+
+    def test_educational_guides_schema_and_technical_content(self) -> None:
+        """Verify educational guide pages render structured TechArticle schema and technical tables."""
+        for guide_slug in [
+            "instagram-video-specs",
+            "troubleshoot-blurry-videos",
+            "reels-vs-stories-vs-posts",
+            "fair-use-copyright-guide",
+        ]:
+            resp = self.client.get(f"/guides/{guide_slug}/", HTTP_HOST="insavehub.com")
+            self.assertEqual(resp.status_code, 200)
+            self.assertContains(resp, "TechArticle")
+            self.assertContains(resp, "INSTASAVE HUB")
+
+        # Test editorial standards page
+        ed_resp = self.client.get("/editorial-standards/", HTTP_HOST="insavehub.com")
+        self.assertEqual(ed_resp.status_code, 200)
+        self.assertContains(ed_resp, "Zero-Retention Security &amp; Privacy Audits")
+        self.assertContains(ed_resp, "Mobile Safari")
+
+        # Test platform status page
+        st_resp = self.client.get("/status/", HTTP_HOST="insavehub.com")
+        self.assertEqual(st_resp.status_code, 200)
+        self.assertContains(st_resp, "Structural Maintenance Changelog")
+        self.assertContains(st_resp, "v2.4.2")
 
     def test_ads_txt_default_and_custom_publisher_id(self) -> None:
         """Verify /ads.txt serves official publisher ID and never an empty comment."""
@@ -167,6 +199,9 @@ class CoreRateLimitAndSEOTests(TestCase):
         self.assertIn("/faq/", sitemap_text)
         self.assertIn("/about/", sitemap_text)
         self.assertIn("/contact/", sitemap_text)
+        self.assertIn("/guides/", sitemap_text)
+        self.assertIn("/editorial-standards/", sitemap_text)
+        self.assertIn("/status/", sitemap_text)
         self.assertNotIn("localhost", sitemap_text)
 
         robots_resp = self.client.get("/robots.txt", HTTP_HOST="insavehub.com")
@@ -176,6 +211,8 @@ class CoreRateLimitAndSEOTests(TestCase):
         self.assertIn("Allow: /dmca/", robots_text)
         self.assertIn("Allow: /faq/", robots_text)
         self.assertIn("Allow: /privacy-policy/", robots_text)
+        self.assertIn("Allow: /guides/", robots_text)
+        self.assertIn("Allow: /editorial-standards/", robots_text)
         self.assertNotIn("localhost", robots_text)
 
     def test_adsense_ad_unit_rendering(self) -> None:

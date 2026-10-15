@@ -105,6 +105,9 @@ def robots_txt(request: HttpRequest) -> HttpResponse:
         "Allow: /",
         "Allow: /tools/",
         "Allow: /downloads/",
+        "Allow: /guides/",
+        "Allow: /editorial-standards/",
+        "Allow: /status/",
         "Allow: /about/",
         "Allow: /contact/",
         "Allow: /privacy/",
@@ -151,7 +154,7 @@ def ads_txt(request: HttpRequest) -> HttpResponse:
 def sitemap_xml(request: HttpRequest) -> HttpResponse:
     """
     Serve dynamic XML sitemap covering all public tools, downloader endpoints,
-    and required informational/legal pages for Google Search Console and crawlers.
+    educational guides, and required compliance pages for Google Search Console and crawlers.
     """
     ensure_default_tools()
     base_url = _get_canonical_base_url(request)
@@ -162,6 +165,13 @@ def sitemap_xml(request: HttpRequest) -> HttpResponse:
         (reverse("core:home"), "daily", "1.0"),
         (reverse("downloads:interface"), "weekly", "0.9"),
         (reverse("downloads:tools_list"), "weekly", "0.9"),
+        (reverse("core:guides_index"), "weekly", "0.9"),
+        (reverse("core:guide_video_specs"), "weekly", "0.8"),
+        (reverse("core:guide_troubleshoot_blurry"), "weekly", "0.8"),
+        (reverse("core:guide_reels_vs_posts"), "weekly", "0.8"),
+        (reverse("core:guide_fair_use"), "weekly", "0.8"),
+        (reverse("core:editorial_standards"), "monthly", "0.8"),
+        (reverse("core:status"), "weekly", "0.8"),
         (reverse("core:about"), "monthly", "0.8"),
         (reverse("core:contact"), "monthly", "0.8"),
         (reverse("core:privacy"), "monthly", "0.7"),
@@ -334,6 +344,111 @@ def faq_view(request: HttpRequest) -> HttpResponse:
             "meta_description": (
                 "Frequently asked questions about downloading 1080p Instagram Reels, Videos, "
                 "Photos, live preview player, browser support, PWA install, and privacy."
+            ),
+        },
+    )
+
+
+def editorial_standards_view(request: HttpRequest) -> HttpResponse:
+    """Render the Editorial & Publishing Standards page detailing testing protocols and curation principles."""
+    return render(
+        request,
+        "pages/editorial_standards.html",
+        {
+            "page_title": "Editorial & Publishing Standards | INSTASAVE HUB",
+            "meta_description": (
+                "Review INSTASAVE HUB's editorial guidelines, testing methodology, multi-platform verification, "
+                "and zero-retention security and privacy commitments."
+            ),
+        },
+    )
+
+
+def status_view(request: HttpRequest) -> HttpResponse:
+    """Render the Platform Status, operational telemetry, and structural maintenance changelog."""
+    return render(
+        request,
+        "pages/status.html",
+        {
+            "page_title": "Platform Status & Maintenance Logs | INSTASAVE HUB",
+            "meta_description": (
+                "Live system health, edge network latency, and structural maintenance changelog "
+                "demonstrating continuous updates and stream compatibility testing."
+            ),
+        },
+    )
+
+
+def guides_index_view(request: HttpRequest) -> HttpResponse:
+    """Render the Creator Knowledge Hub and Educational Guides directory."""
+    return render(
+        request,
+        "guides/index.html",
+        {
+            "page_title": "Instagram Media & Video Creator Knowledge Hub | INSTASAVE HUB",
+            "meta_description": (
+                "Comprehensive technical guides, encoding specifications, aspect ratio breakdowns, "
+                "and Section 107 fair use guidelines for digital creators and archivists."
+            ),
+        },
+    )
+
+
+def guide_video_specs_view(request: HttpRequest) -> HttpResponse:
+    """Render the Complete Instagram Video Specifications Guide."""
+    return render(
+        request,
+        "guides/instagram_video_specs.html",
+        {
+            "page_title": "Complete Instagram Video Specifications Guide (1080p Bitrates & Codecs) | INSTASAVE HUB",
+            "meta_description": (
+                "Engineering breakdown of Instagram video specifications: 9:16 Reels, 4:5 feed, "
+                "1080p bitrates, H.264 profiles, audio codecs, and copy-paste FFmpeg export commands."
+            ),
+        },
+    )
+
+
+def guide_troubleshoot_blurry_view(request: HttpRequest) -> HttpResponse:
+    """Render the Troubleshoot Blurry Videos Guide."""
+    return render(
+        request,
+        "guides/troubleshoot_blurry_videos.html",
+        {
+            "page_title": "Why Instagram Compresses Videos & How to Preserve 1080p Quality | INSTASAVE HUB",
+            "meta_description": (
+                "Troubleshoot blurry Instagram uploads. Learn about Adaptive Bitrate Streaming (ABR), "
+                "color shifts, and exact export presets for Premiere Pro, Final Cut, and CapCut."
+            ),
+        },
+    )
+
+
+def guide_reels_vs_posts_view(request: HttpRequest) -> HttpResponse:
+    """Render the Reels vs Stories vs Posts Media Architecture Guide."""
+    return render(
+        request,
+        "guides/reels_vs_stories_vs_posts.html",
+        {
+            "page_title": "Reels vs Stories vs Posts: Technical Media Architecture & Preservation | INSTASAVE HUB",
+            "meta_description": (
+                "Technical comparison of Meta's CDN storage models: ephemeral 24h Story blobs versus "
+                "permanent Reels and multi-slide carousels, with digital archiving strategies."
+            ),
+        },
+    )
+
+
+def guide_fair_use_view(request: HttpRequest) -> HttpResponse:
+    """Render the Social Media Fair Use & Content Attribution Guide."""
+    return render(
+        request,
+        "guides/fair_use_copyright_guide.html",
+        {
+            "page_title": "Social Media Fair Use, Copyright & Content Attribution Guide | INSTASAVE HUB",
+            "meta_description": (
+                "Essential legal and ethical framework for creators, journalists, and researchers "
+                "using social media content under Section 107 Fair Use doctrine."
             ),
         },
     )
