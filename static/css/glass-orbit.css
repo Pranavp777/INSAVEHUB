@@ -141,17 +141,11 @@
   display: inline-block;
 }
 
-/* Scroll Reveal States */
+/* Scroll Reveal States (Safe by Default: visible immediately, smooth progressive entrance) */
 .reveal-item {
-  opacity: 0;
-  transform: translateY(16px);
-  transition:
-    opacity 480ms var(--ease-out-expo),
-    transform 480ms var(--ease-out-expo);
-  will-change: opacity, transform;
-}
-
-.reveal-item.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
+  transition:
+    opacity 420ms var(--ease-out-expo),
+    transform 420ms var(--ease-out-expo);
 }

@@ -209,14 +209,22 @@ body.nav-drawer-open {
     flex-direction: column;
     align-items: stretch;
     border-radius: var(--radius-md);
-    padding: 12px;
+    padding: 10px;
     gap: 10px;
+  }
+
+  .analyzer-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 2px 8px;
   }
 
   .glass-input {
     width: 100%;
     font-size: 16px !important; /* Prevents auto zoom on iOS Safari */
-    text-align: center;
+    text-align: left;
     padding: 8px 4px;
   }
 
