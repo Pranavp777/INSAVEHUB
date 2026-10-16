@@ -67,11 +67,11 @@
 
   <!-- Progressive Web App (PWA) & Mobile Install Metadata -->
   <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#030712">
+  <meta name="theme-color" content="#FFFFFF">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="INSTASAVE HUB">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="InstaSave Pro">
   <link rel="icon" type="image/png" href="/static/images/logo.png">
   <link rel="apple-touch-icon" href="/static/images/icon-192.png">
 
@@ -177,17 +177,12 @@
 <body>
   <a href="#mainContent" class="sr-only">Skip to main content</a>
 
-  <!-- Atmospheric Layers & Subtle Light Waves -->
-  <div class="atmosphere-layer" aria-hidden="true"></div>
-  <div class="atmosphere-grid" aria-hidden="true"></div>
-  <canvas id="ambientParticleCanvas" class="ambient-particle-canvas" aria-hidden="true"></canvas>
-
   <!-- Floating Pill-Shaped Glass Navigation Bar -->
   <header class="glass-header" role="banner">
     <div class="nav-inner">
-      <a href="/" class="brand-identity" aria-label="INSTASAVE HUB Home">
-        <img src="/static/images/logo.png" alt="INSTASAVE HUB Logo" class="brand-mark" width="34" height="34" style="border-radius: 9px; object-fit: cover;" fetchpriority="high" decoding="async">
-        <span class="brand-wordmark">INSTASAVE HUB</span>
+      <a href="/" class="brand-identity" aria-label="InstaSave Pro Home">
+        <img src="/static/images/logo.png" alt="InstaSave Pro Logo" class="brand-mark" width="34" height="34" style="border-radius: 9px; object-fit: cover;" fetchpriority="high" decoding="async">
+        <span class="brand-wordmark">InstaSave <span>Pro</span></span>
       </a>
 
       <nav aria-label="Primary Navigation">
@@ -196,53 +191,45 @@
             <a href="/" class="nav-link ">Home</a>
           </li>
           <li>
-            <a href="/downloads/" class="nav-link ">Downloader</a>
+            <a href="/#features" class="nav-link">Features</a>
           </li>
           <li>
-            <a href="/tools/" class="nav-link ">Tools</a>
+            <a href="/#howItWorks" class="nav-link">How It Works</a>
           </li>
           <li>
-            <a href="/guides/" class="nav-link ">Guides</a>
-          </li>
-          <li>
-            <a href="/about/" class="nav-link is-current">About</a>
+            <a href="/#faq" class="nav-link">FAQ</a>
           </li>
           <li>
             <a href="/contact/" class="nav-link ">Contact</a>
-          </li>
-          <li>
-            <a href="/faq/" class="nav-link ">FAQ</a>
           </li>
         </ul>
       </nav>
 
       <div class="nav-actions">
-        <!-- Install App Button (PWA / Native Install) -->
-        <button type="button" id="installAppNavBtn" class="btn-glass btn-sm nav-install-btn hide-tablet pwa-install-trigger" title="Install INSTASAVE HUB App" aria-label="Install INSTASAVE HUB App">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 3v12"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <path d="M5 21h14"></path>
-          </svg>
-          <span>Install App</span>
-        </button>
-
-        <!-- Small "Buy Us Coffee" Icon Option -->
-        <a href="/donations/"
-           class="nav-icon-btn nav-donate-icon hide-tablet "
-           title="Buy Us Coffee"
-           aria-label="Buy Us Coffee">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
-            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
-            <line x1="6" y1="1" x2="6" y2="4"></line>
-            <line x1="10" y1="1" x2="10" y2="4"></line>
-            <line x1="14" y1="1" x2="14" y2="4"></line>
-          </svg>
-        </a>
+        <!-- Language Selector -->
+        <div class="lang-selector-wrap" id="langSelectorWrap">
+          <button type="button" class="lang-selector-btn" id="langSelectorBtn" aria-label="Language Selector" aria-expanded="false" aria-controls="langDropdown">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span id="currentLangLabel">EN</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="lang-dropdown" id="langDropdown" role="menu">
+            <button type="button" class="lang-option is-active" data-lang="en" role="menuitem">English (US)</button>
+            <button type="button" class="lang-option" data-lang="es" role="menuitem">Español</button>
+            <button type="button" class="lang-option" data-lang="fr" role="menuitem">Français</button>
+            <button type="button" class="lang-option" data-lang="de" role="menuitem">Deutsch</button>
+            <button type="button" class="lang-option" data-lang="pt" role="menuitem">Português</button>
+          </div>
+        </div>
 
         
-          <a href="/#videoDownloader" class="btn-glass btn-primary btn-sm">Download Now</a>
+          <a href="/auth/login/" class="btn-glass btn-primary btn-sm">Login</a>
         
 
         <button type="button" id="mobileMenuToggle" class="mobile-menu-toggle" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobileDrawer">
@@ -260,19 +247,17 @@
   <div id="mobileDrawer" class="mobile-drawer" role="region" aria-label="Mobile Navigation Drawer">
     <div style="display: flex; flex-direction: column; gap: var(--space-3);">
       <a href="/" class="nav-link">Home</a>
+      <a href="/#features" class="nav-link">Features</a>
+      <a href="/#howItWorks" class="nav-link">How It Works</a>
+      <a href="/#faq" class="nav-link">FAQ</a>
+      <a href="/contact/" class="nav-link">Contact</a>
       <a href="/downloads/" class="nav-link">Downloader</a>
       <a href="/tools/" class="nav-link">Instagram Tools</a>
       <a href="/guides/" class="nav-link">Creator Guides</a>
-      <a href="/editorial-standards/" class="nav-link">Editorial Standards</a>
       <a href="/status/" class="nav-link">Platform Status</a>
       <a href="/about/" class="nav-link">About Us</a>
-      <a href="/contact/" class="nav-link">Contact Us</a>
       <a href="/privacy/" class="nav-link">Privacy Policy</a>
       <a href="/terms/" class="nav-link">Terms &amp; Conditions</a>
-      <a href="/disclaimer/" class="nav-link">Disclaimer</a>
-      <a href="/dmca/" class="nav-link">DMCA Policy</a>
-      <a href="/faq/" class="nav-link">FAQ</a>
-      <a href="/donations/" class="nav-link">Buy Us Coffee</a>
       <button type="button" id="installAppMobileBtn" class="btn-glass btn-sm pwa-install-trigger" style="justify-content: center;">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12 3v12"></path>
@@ -283,7 +268,7 @@
       </button>
 
       
-        <a href="/auth/login/" class="btn-glass btn-primary btn-sm" style="margin-top: var(--space-2); justify-content: center;">Sign In</a>
+        <a href="/auth/login/" class="btn-glass btn-primary btn-sm" style="margin-top: var(--space-2); justify-content: center;">Login</a>
       
     </div>
   </div>
@@ -476,88 +461,65 @@
     
   </main>
 
-  <!-- Glass Footer with SEO Keyword Internal Links & Full Compliance Navigation -->
+  <!-- Minimalist iOS Footer -->
   <footer class="glass-footer" role="contentinfo">
     <div class="container-shell">
-      <div class="footer-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-        <div style="grid-column: span 1;">
-          <div class="brand-identity" style="margin-bottom: var(--space-3);">
-            <img src="/static/images/logo.png" alt="INSTASAVE HUB" class="brand-mark" width="28" height="28" style="border-radius: 7px; object-fit: cover;" loading="lazy" decoding="async">
-            <span class="brand-wordmark">INSTASAVE HUB</span>
-          </div>
-          <p style="color: var(--text-muted); font-size: 0.86rem; max-width: 34ch; line-height: 1.6;">
-            Free 1080p HD Instagram Video, Reel, Photo &amp; Post Downloader with live stream preview. Fast, private, and zero server-side media retention.
+      <div class="footer-main-row">
+        <div class="footer-brand-col">
+          <a href="/" class="brand-identity" aria-label="InstaSave Pro Home">
+            <img src="/static/images/logo.png" alt="InstaSave Pro" class="brand-mark" width="30" height="30" style="border-radius: 8px; object-fit: cover;" loading="lazy" decoding="async">
+            <span class="brand-wordmark">InstaSave <span>Pro</span></span>
+          </a>
+          <p class="footer-tagline" style="font-weight: 600; color: var(--text-primary); margin-top: 4px;">Save what you love.</p>
+          <p style="color: var(--text-muted); font-size: 0.84rem; max-width: 32ch; line-height: 1.5; margin-top: 2px;">
+            Fast, private Instagram video, reel, and photo downloader in original high-definition quality.
           </p>
         </div>
 
-        <div>
-          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">INSTAGRAM UTILITIES</h4>
-          <ul class="footer-links">
-            <li><a href="/tools/video-downloader/">Instagram Video Downloader</a></li>
-            <li><a href="/tools/reel-downloader/">Instagram Reel Downloader</a></li>
-            <li><a href="/tools/public-post-downloader/">Instagram Post &amp; Carousel</a></li>
-            <li><a href="/tools/image-downloader/">Instagram Photo Downloader</a></li>
-            <li><a href="/tools/profile-media-utility/">IG Profile Picture Viewer</a></li>
-            <li><a href="/tools/content-info-extractor/">Metadata Extractor</a></li>
-          </ul>
-        </div>
+        <nav class="footer-center-nav" aria-label="Quick Links">
+          <a href="/" class="footer-nav-link">Home</a>
+          <a href="/#features" class="footer-nav-link">Features</a>
+          <a href="/#howItWorks" class="footer-nav-link">How It Works</a>
+          <a href="/#faq" class="footer-nav-link">FAQ</a>
+          <a href="/contact/" class="footer-nav-link">Contact</a>
+          <a href="/downloads/" class="footer-nav-link">Downloader</a>
+          <a href="/tools/" class="footer-nav-link">Tools</a>
+          <a href="/guides/" class="footer-nav-link">Guides</a>
+        </nav>
 
-        <div>
-          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">CREATOR GUIDES</h4>
-          <ul class="footer-links">
-            <li><a href="/guides/">Creator Guides Hub</a></li>
-            <li><a href="/guides/instagram-video-specs/">Instagram Video Specs</a></li>
-            <li><a href="/guides/troubleshoot-blurry-videos/">Troubleshoot Blurry Videos</a></li>
-            <li><a href="/guides/reels-vs-stories-vs-posts/">Reels vs Stories vs Posts</a></li>
-            <li><a href="/guides/fair-use-copyright-guide/">Fair Use &amp; Attribution</a></li>
-            <li><a href="/editorial-standards/">Editorial Standards</a></li>
-            <li><a href="/status/">Platform Status &amp; Logs</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">COMPANY &amp; TOOLS</h4>
-          <ul class="footer-links">
-            <li><a href="/">Home</a></li>
-            <li><a href="/downloads/">Live Downloader &amp; Preview</a></li>
-            <li><a href="/tools/">All Instagram Tools</a></li>
-            <li><a href="/about/">About Us</a></li>
-            <li><a href="/contact/">Contact Us</a></li>
-            <li><a href="/donations/">Buy Us Coffee</a></li>
-            <li><a href="/downloads/history/">Download History</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 class="mono-label" style="margin-bottom: var(--space-3); color: var(--text-primary);">LEGAL &amp; COMPLIANCE</h4>
-          <ul class="footer-links">
-            <li><a href="/privacy/">Privacy Policy</a></li>
-            <li><a href="/terms/">Terms &amp; Conditions</a></li>
-            <li><a href="/disclaimer/">Disclaimer &amp; Trademarks</a></li>
-            <li><a href="/dmca/">DMCA &amp; Copyright Policy</a></li>
-            <li><a href="/editorial-standards/">Editorial Standards</a></li>
-            <li><a href="/faq/">Frequently Asked Questions</a></li>
-          </ul>
+        <div class="footer-right-col">
+          <div class="lang-selector-wrap">
+            <button type="button" class="lang-selector-btn" aria-label="Language Selector" aria-expanded="false">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+              <span>English (US)</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
-      <div style="padding-top: var(--space-6); border-top: 1px solid var(--border-hairline); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4); font-size: 0.8rem; color: var(--text-dim);">
-        <span>&copy; 2026 INSTASAVE HUB. All rights reserved.</span>
-        <span>Independent tool. Not affiliated with, endorsed by, or sponsored by Instagram or Meta Platforms, Inc.</span>
-        <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
-          <a href="/privacy/" style="color: var(--text-muted);">Privacy</a>
+      <div class="footer-bottom-row">
+        <span>&copy; 2026 InstaSave Pro. All rights reserved.</span>
+        <div class="footer-legal-links">
+          <a href="/privacy/">Privacy</a>
           <span>&bull;</span>
-          <a href="/terms/" style="color: var(--text-muted);">Terms</a>
+          <a href="/terms/">Terms</a>
           <span>&bull;</span>
-          <a href="/editorial-standards/" style="color: var(--text-muted);">Editorial Standards</a>
+          <a href="/contact/">Support</a>
           <span>&bull;</span>
-          <a href="/status/" style="color: var(--text-muted);">Status</a>
+          <a href="/status/">Status</a>
           <span>&bull;</span>
-          <a href="/disclaimer/" style="color: var(--text-muted);">Disclaimer</a>
+          <a href="/disclaimer/">Disclaimer</a>
           <span>&bull;</span>
-          <a href="/dmca/" style="color: var(--text-muted);">DMCA</a>
+          <a href="/dmca/">DMCA</a>
           <span>&bull;</span>
-          <a href="/faq/" style="color: var(--text-muted);">FAQ</a>
+          <a href="/faq/">FAQ</a>
         </div>
       </div>
     </div>

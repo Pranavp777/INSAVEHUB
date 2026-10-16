@@ -1,10 +1,9 @@
 /* ==========================================================================
-   INSTASAVE HUB — RESPONSIVE DESKTOP, TABLET & MOBILE ADAPTATIONS
-   Futuristic iOS-Inspired Dark Glass Edition
-   Tested Breakpoints: 320px, 375px, 390px, 414px, 480px, 768px, 1024px, 1280px, 1440px, 1920px
+   INSTASAVE PRO — RESPONSIVE ADAPTATIONS & DEDICATED MOBILE-FIRST LAYOUT
+   Tested Breakpoints: 320px, 375px, 390px, 414px, 430px, 768px, 1024px, 1280px+
    ========================================================================== */
 
-/* Universal Overflow & Media Containment Guards */
+/* Universal Overflow & Containment Guards */
 html,
 body {
   overflow-x: hidden;
@@ -14,83 +13,68 @@ body {
 
 img,
 video,
-canvas,
 svg {
   max-width: 100%;
   height: auto;
 }
 
-.glass-table-wrap {
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Mobile Navigation Toggle & Drawer (Hidden on Desktop) */
+/* Mobile Menu Toggle Button */
 .mobile-menu-toggle {
   display: none;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  width: 42px;
+  height: 42px;
+  background: #FFFFFF;
+  border: 1px solid var(--border-hairline);
   border-radius: 50%;
   color: var(--text-primary);
   cursor: pointer;
   touch-action: manipulation;
+  box-shadow: var(--shadow-subtle);
   transition: all var(--duration-fast) ease;
 }
 
 .mobile-menu-toggle:hover,
 .mobile-menu-toggle:active {
-  background: rgba(59, 130, 246, 0.2);
-  border-color: rgba(96, 165, 250, 0.4);
+  background: #F8FAFC;
+  border-color: var(--border-subtle);
 }
 
+/* Mobile Drawer Overlay */
 .mobile-drawer {
   display: none;
   position: fixed;
-  top: 86px;
+  top: 76px;
   left: var(--space-4);
   right: var(--space-4);
-  z-index: 99;
-  background: rgba(8, 15, 34, 0.94);
+  z-index: 150;
+  background: rgba(255, 255, 255, 0.98);
   backdrop-filter: var(--blur-lg);
   -webkit-backdrop-filter: var(--blur-lg);
-  border: 1px solid rgba(96, 165, 250, 0.28);
-  border-radius: 26px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
   padding: var(--space-6);
-  box-shadow: var(--shadow-ambient);
-  max-height: calc(100vh - 120px);
+  box-shadow: 0 20px 48px -8px rgba(15, 23, 42, 0.12);
+  max-height: calc(100vh - 100px);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
 
 .mobile-drawer.is-open {
   display: block;
-  animation: drawerSlideDown 260ms var(--ease-out-expo);
+  animation: drawerSlideDown 240ms var(--ease-out-expo);
 }
 
 @keyframes drawerSlideDown {
   from {
     opacity: 0;
-    transform: translateY(-12px);
+    transform: translateY(-10px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-/* Core Web Vitals Optimization: Content Visibility for offscreen sections */
-#features,
-#howToDownload,
-#faq,
-.pricing-section,
-.glass-footer {
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 600px;
 }
 
 body.nav-drawer-open {
@@ -99,34 +83,78 @@ body.nav-drawer-open {
 }
 
 /* ==========================================================================
-   BREAKPOINT 1: Laptop & Compact Desktop (<= 1120px)
+   TABLET BREAKPOINT (<= 992px)
    ========================================================================== */
-@media (max-width: 1120px) {
+@media (max-width: 992px) {
   .hero-grid {
-    grid-template-columns: 1.05fr 0.95fr;
+    grid-template-columns: 1fr;
     gap: var(--space-8);
   }
 
-  .grid-4 {
+  .hero-right {
+    min-height: auto;
+  }
+
+  .content-types-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .features-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .pricing-wide-panel {
+  .recent-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .how-it-works-grid {
     grid-template-columns: 1fr;
     gap: var(--space-6);
   }
 
-  .result-spec-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .step-connector-arrow {
+    display: none;
+  }
+
+  .step-connector-line {
+    display: block;
+    width: 2px;
+    height: 24px;
+    background: var(--border-subtle);
+    margin: -12px auto;
+  }
+
+  .footer-main-row {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    text-align: center;
+  }
+
+  .footer-brand-col,
+  .footer-center-nav,
+  .footer-right-col {
+    justify-content: center;
+    align-items: center;
   }
 }
 
 /* ==========================================================================
-   BREAKPOINT 2: Tablet & Small Laptop (<= 880px)
+   STANDARD MOBILE BREAKPOINT (<= 768px)
    ========================================================================== */
-@media (max-width: 880px) {
+@media (max-width: 768px) {
+  .container-shell {
+    padding: 0 var(--space-4);
+  }
+
+  .main-viewport {
+    padding-top: 84px;
+    padding-bottom: var(--space-12);
+  }
+
+  /* Navigation */
   .nav-links,
-  .nav-actions .hide-tablet {
+  .nav-actions .hide-tablet,
+  .nav-actions .lang-selector-wrap {
     display: none;
   }
 
@@ -134,359 +162,263 @@ body.nav-drawer-open {
     display: inline-flex;
   }
 
-  .hero-grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-8);
-  }
-
-  .ios-phone-stage {
-    min-height: 520px;
-  }
-
-  .grid-3,
-  .grid-2,
-  .video-preview-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .footer-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-6);
-  }
-
-  .main-viewport {
-    padding-bottom: calc(84px + env(safe-area-inset-bottom, 16px));
-  }
-
-  /* Dedicated iOS Floating Glass Bottom Navigation Bar */
-  .ios-bottom-nav {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    position: fixed;
-    bottom: max(12px, env(safe-area-inset-bottom, 12px));
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 24px);
-    max-width: 420px;
-    height: 60px;
-    z-index: 98;
-    border-radius: var(--radius-pill);
-    background: rgba(8, 14, 30, 0.92);
-    backdrop-filter: var(--blur-md);
-    -webkit-backdrop-filter: var(--blur-md);
-    border: 1px solid rgba(148, 184, 255, 0.22);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.82), 0 0 24px -4px rgba(59, 130, 246, 0.25);
-    padding: 0 6px;
-    align-items: center;
-    touch-action: manipulation;
-  }
-
-  /* Prevent automatic iOS Safari zoom by enforcing 16px on form inputs */
-  .glass-input,
-  .glass-select,
-  .glass-textarea {
-    font-size: 16px !important;
-  }
-}
-
-/* ==========================================================================
-   BREAKPOINT 3: Phablets & Large Handsets (<= 600px)
-   ========================================================================== */
-@media (max-width: 600px) {
-  .container-shell {
-    padding: 0 var(--space-4);
-  }
-
   .glass-header {
     top: 10px;
     padding: 0 10px;
+    margin-bottom: -64px;
   }
 
   .nav-inner {
-    height: 56px;
+    height: 52px;
     padding: 0 12px;
   }
 
+  /* Single Column Mobile Hero */
   .hero-section {
-    padding: var(--space-3) 0 var(--space-8);
+    padding: var(--space-4) 0 var(--space-8);
   }
 
-  .hero-headline {
-    font-size: 2.15rem;
-    line-height: 1.1;
-  }
-
-  .hero-cta-group {
-    flex-direction: column;
-  }
-
-  .hero-cta-group .btn-glass {
-    width: 100%;
-    min-height: 48px;
-  }
-
-  .analyzer-bar {
-    grid-template-columns: 1fr;
-    gap: var(--space-2);
-    border-radius: 22px;
-    padding: 12px;
-  }
-
-  .analyzer-bar .btn-glass {
-    width: 100%;
-    min-height: 48px;
-  }
-
-  .result-spec-grid,
-  .grid-4,
-  .donation-tier-grid,
-  .footer-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .pricing-wide-panel {
-    padding: var(--space-5);
-  }
-
-  .tier-btn,
-  .btn-glass,
-  .glass-input,
-  .glass-select {
-    min-height: 48px;
-  }
-
-  .ad-countdown-stage {
-    padding: var(--space-5) var(--space-4);
-  }
-}
-
-/* ==========================================================================
-   BREAKPOINT 4: Standard Mobile Screens (<= 480px)
-   Covering: 480px, 414px (iPhone Plus/Max), 390px (iPhone 12-15), 375px (iPhone X/11)
-   ========================================================================== */
-@media (max-width: 480px) {
-  .container-shell {
-    padding: 0 14px;
-  }
-
-  .hero-section {
-    padding: var(--space-2) 0 var(--space-6);
-  }
-
-  .hero-headline {
-    font-size: 1.85rem;
-    line-height: 1.12;
-    letter-spacing: -0.025em;
-    word-break: break-word;
-  }
-
-  .hero-lead {
-    font-size: 0.95rem;
-    margin-bottom: var(--space-4);
+  .hero-left {
+    align-items: center;
+    text-align: center;
   }
 
   .hero-eyebrow-pill {
-    font-size: 0.68rem;
-    padding: 5px 10px;
-    letter-spacing: 0.08em;
+    align-self: center;
+    font-size: 0.78rem;
+    padding: 5px 12px;
   }
 
-  .hero-social-proof {
+  .hero-headline {
+    font-size: clamp(2rem, 8vw, 2.75rem);
+    line-height: 1.15;
+  }
+
+  .hero-lead {
+    font-size: 0.96rem;
+    margin: 0 auto;
+    max-width: 44ch;
+  }
+
+  /* Full Width Mobile Download Bar */
+  .analyzer-form-wrap {
+    width: 100%;
+  }
+
+  .analyzer-bar {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    border-radius: var(--radius-md);
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .glass-input {
+    width: 100%;
+    font-size: 16px !important; /* Prevents auto zoom on iOS Safari */
+    text-align: center;
+    padding: 8px 4px;
+  }
+
+  .analyzer-bar-actions {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
     gap: 8px;
     width: 100%;
-    padding: 8px 12px;
   }
 
-  /* Phone Stage & Mockup Responsive Clamping */
-  .ios-phone-stage {
-    min-height: auto;
-    padding: var(--space-3) 0;
-    overflow: hidden;
+  .btn-paste-link,
+  .btn-download-primary {
     width: 100%;
-    perspective: none;
+    min-height: 46px;
+    justify-content: center;
   }
 
-  .ios-phone-glow {
-    width: 260px;
-    height: 320px;
-    filter: blur(36px);
+  .hero-trust-badges {
+    justify-content: center;
+    gap: var(--space-4);
   }
 
-  .ios-phone-frame {
-    width: 100%;
-    max-width: 290px;
-    height: 530px;
-    margin: 0 auto;
-    border-radius: 40px;
-    padding: 9px;
+  .hero-right {
+    display: none; /* Hide abstract shapes column on mobile for clean focus */
   }
 
-  .ios-phone-frame:hover {
-    transform: none;
-  }
-
-  .ios-screen {
-    border-radius: 32px;
-    padding: 12px 10px 14px;
-  }
-
-  /* Conceal floating cards on small screens to eliminate horizontal overflow */
-  .ios-floating-card {
-    display: none !important;
-  }
-
-  /* Video Preview Layout Responsive Adaptations */
-  .video-preview-layout {
-    width: 100%;
-    max-width: 100%;
+  /* Horizontally Scrollable Content Types Navigation */
+  .content-types-container {
+    padding: var(--space-4) 10px;
     overflow: hidden;
   }
 
-  .video-preview-screen {
-    width: 100%;
-    max-width: 100%;
-    min-height: 240px;
-    border-radius: 18px;
+  .content-types-grid {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    padding: 4px 6px;
+    gap: 10px;
   }
 
-  .video-preview-overlay-bottom {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-    padding: 8px 10px;
+  .content-types-grid::-webkit-scrollbar {
+    display: none;
   }
 
-  .result-spec-grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-2);
+  .content-type-card {
+    flex: 0 0 108px;
+    scroll-snap-align: start;
+    padding: var(--space-3) 8px;
+    border-radius: 14px;
+    background: #F8FAFC;
+    border: 1px solid var(--border-hairline);
   }
 
-  .spec-cell {
-    padding: 8px 12px;
+  .content-type-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    margin-bottom: 6px;
   }
 
-  .glass-panel {
-    padding: var(--space-5) var(--space-4) !important;
-    border-radius: 20px;
-  }
-
-  .section-title {
-    font-size: 1.65rem;
-  }
-
-  .section-subtitle {
-    font-size: 0.92rem;
-  }
-
-  .downloader-mode-tabs {
-    gap: 6px;
-  }
-
-  .downloader-tab-btn {
-    padding: 0.42rem 0.8rem;
-    font-size: 0.78rem;
-  }
-}
-
-/* ==========================================================================
-   BREAKPOINT 5: Ultra-Compact Mobile Screens (<= 360px & 320px)
-   Covering: iPhone SE (320px), Galaxy Fold closed (320-340px), etc.
-   ========================================================================== */
-@media (max-width: 360px) {
-  .container-shell {
-    padding: 0 10px;
-  }
-
-  .glass-panel {
-    padding: var(--space-4) var(--space-3) !important;
-    border-radius: 16px;
-  }
-
-  .brand-wordmark {
+  .content-type-title {
     font-size: 0.86rem;
   }
 
-  .brand-mark {
+  .content-type-sub {
+    font-size: 0.7rem;
+  }
+
+  /* Recent Downloads Mobile Grid */
+  .recent-downloads-section {
+    padding: var(--space-4) 0 var(--space-8);
+  }
+
+  .section-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  .recent-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .recent-thumb-wrap {
+    height: 110px;
+    margin-bottom: 8px;
+  }
+
+  .recent-username {
+    font-size: 0.8rem;
+  }
+
+  .recent-filesize {
+    font-size: 0.7rem;
+  }
+
+  .recent-action-icon {
     width: 28px;
     height: 28px;
   }
 
+  /* Features Section */
+  .features-pastel-container {
+    padding: var(--space-6) var(--space-4);
+    border-radius: var(--radius-md);
+  }
+
+  .features-header-center {
+    margin-bottom: var(--space-6);
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .feature-box {
+    padding: var(--space-4);
+    border-radius: var(--radius-sm);
+  }
+
+  .feature-icon-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+
+  .feature-title {
+    font-size: 0.98rem;
+  }
+
+  .feature-desc {
+    font-size: 0.82rem;
+  }
+
+  /* How It Works Vertical Mobile Stack */
+  .how-it-works-grid {
+    margin-top: var(--space-6);
+  }
+
+  .step-card {
+    padding: var(--space-5);
+  }
+
+  /* FAQ Accordion Mobile */
+  .faq-question-btn {
+    padding: 14px 16px;
+    font-size: 0.95rem;
+  }
+
+  .faq-answer-panel {
+    padding: 0 16px 16px;
+    font-size: 0.88rem;
+  }
+
+  /* Footer Mobile */
+  .footer-bottom-row {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space-3);
+  }
+
+  .footer-legal-links {
+    justify-content: center;
+  }
+
+  /* Result Panel Mobile */
+  .video-preview-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .video-preview-screen {
+    min-height: 240px;
+  }
+
+  .result-spec-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ios-format-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ==========================================================================
+   VERY COMPACT HANDSETS (<= 360px: iPhone SE, older phones)
+   ========================================================================== */
+@media (max-width: 360px) {
+  .features-grid,
+  .recent-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
   .hero-headline {
-    font-size: 1.55rem;
-    line-height: 1.14;
+    font-size: 1.85rem;
   }
 
-  .hero-eyebrow-pill {
-    font-size: 0.62rem;
-    padding: 4px 8px;
-  }
-
-  .ios-phone-frame {
-    max-width: 256px;
-    height: 480px;
-    border-radius: 34px;
-    padding: 8px;
-  }
-
-  .ios-screen {
-    border-radius: 26px;
-    padding: 10px 8px 12px;
-  }
-
-  .ios-dynamic-island {
-    width: 84px;
-    height: 22px;
-    padding: 0 6px;
-  }
-
-  .ios-bottom-nav {
-    width: calc(100% - 12px);
-    max-width: 340px;
-    height: 56px;
-    bottom: max(8px, env(safe-area-inset-bottom, 8px));
-    padding: 0 4px;
-  }
-
-  .ios-bottom-nav-item {
-    font-size: 0.62rem;
-    min-height: 44px;
-    gap: 2px;
-  }
-
-  .ios-bottom-nav-item svg {
-    width: 17px;
-    height: 17px;
-  }
-
-  .btn-glass {
-    padding: 0.6rem 0.95rem;
-    font-size: 0.84rem;
-  }
-
-  .section-title {
-    font-size: 1.45rem;
+  .analyzer-bar-actions {
+    grid-template-columns: 1fr;
   }
 }
-
-/* AdSense Mobile Viewport & Container Zero-Overflow Guard */
-@media (max-width: 768px) {
-  .adsense-slot-container {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: var(--space-4) auto !important;
-    padding: var(--space-2) !important;
-    overflow: hidden !important;
-  }
-
-  .adsense-ad-viewport {
-    width: 100% !important;
-    overflow: hidden !important;
-  }
-
-  .adsense-ad-viewport ins.adsbygoogle {
-    max-width: 100% !important;
-  }
-}
-

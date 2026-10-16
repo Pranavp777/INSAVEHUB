@@ -1,8 +1,8 @@
 /* ==========================================================================
-   INSTASAVE HUB — FUTURISTIC iOS-INSPIRED DARK CINEMATIC GLASS ENGINE
+   INSTASAVE PRO — LIGHT iOS-INSPIRED GLASS & AMBIENT SYSTEM
    ========================================================================== */
 
-/* Deep Cinematic Near-Black & Electric-Blue Atmospheric Background */
+/* Subtle Ambient Pastel Gradients on Clean Off-White */
 .atmosphere-layer {
   position: fixed;
   inset: 0;
@@ -10,405 +10,148 @@
   pointer-events: none;
   overflow: hidden;
   background:
-    radial-gradient(circle at 18% 15%, rgba(37, 99, 235, 0.22) 0%, transparent 46%),
-    radial-gradient(circle at 78% 24%, rgba(99, 102, 241, 0.18) 0%, transparent 48%),
-    radial-gradient(circle at 52% 80%, rgba(59, 130, 246, 0.14) 0%, transparent 54%),
-    linear-gradient(160deg, #02050E 0%, #050C1D 48%, #030712 100%);
+    radial-gradient(circle at 12% 10%, rgba(59, 130, 246, 0.05) 0%, transparent 42%),
+    radial-gradient(circle at 85% 18%, rgba(139, 92, 246, 0.05) 0%, transparent 44%),
+    radial-gradient(circle at 50% 80%, rgba(236, 72, 153, 0.03) 0%, transparent 50%),
+    linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 40%, #F1F5F9 100%);
 }
 
 .atmosphere-layer::after {
   content: "";
   position: absolute;
-  width: 1100px;
-  height: 520px;
-  top: -120px;
-  right: -180px;
-  background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.18) 0%, rgba(99, 102, 241, 0.08) 45%, transparent 72%);
-  filter: blur(65px);
-  animation: waveDriftSlow 18s ease-in-out infinite alternate;
+  width: 900px;
+  height: 480px;
+  top: -100px;
+  right: -120px;
+  background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.04) 0%, rgba(59, 130, 246, 0.03) 45%, transparent 70%);
+  filter: blur(80px);
 }
 
 .atmosphere-grid {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  pointer-events: none;
-  background-image: url('/static/images/orbit-grid.svg');
-  background-position: center top;
-  background-size: cover;
-  background-repeat: no-repeat;
-  opacity: 0.9;
-  animation: waveFloatSubtle 24s ease-in-out infinite alternate;
+  display: none;
 }
 
 .ambient-particle-canvas {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0.55;
+  display: none !important;
 }
 
-/* Selective Dark Translucent iOS Glassmorphism Panels */
+/* Light iOS Glassmorphism Panels */
 .glass-panel {
   position: relative;
-  background: linear-gradient(
-    145deg,
-    rgba(15, 26, 52, 0.62) 0%,
-    rgba(8, 15, 33, 0.72) 100%
-  );
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: var(--blur-md);
   -webkit-backdrop-filter: var(--blur-md);
-  border: 1px solid rgba(148, 184, 255, 0.13);
-  border-top-color: rgba(255, 255, 255, 0.18);
+  border: 1px solid var(--border-hairline);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-panel);
   transition:
     transform var(--duration-normal) var(--ease-out-expo),
     border-color var(--duration-normal) var(--ease-standard),
-    box-shadow var(--duration-normal) var(--ease-standard),
-    background var(--duration-normal) var(--ease-standard);
+    box-shadow var(--duration-normal) var(--ease-standard);
 }
 
-.glass-panel::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background: radial-gradient(
-    80% 55% at 20% 0%,
-    rgba(96, 165, 250, 0.09) 0%,
-    transparent 70%
-  );
+.glass-panel-interactive {
+  cursor: pointer;
 }
 
 .glass-panel-interactive:hover {
-  transform: translateY(-5px);
-  border-color: rgba(96, 165, 250, 0.36);
+  transform: translateY(-3px);
+  border-color: rgba(59, 130, 246, 0.35);
   box-shadow: var(--shadow-interactive);
-  background: linear-gradient(
-    145deg,
-    rgba(19, 34, 68, 0.72) 0%,
-    rgba(10, 19, 42, 0.82) 100%
-  );
 }
 
 .glass-subpanel {
-  background: rgba(12, 22, 46, 0.55);
-  backdrop-filter: var(--blur-sm);
-  -webkit-backdrop-filter: var(--blur-sm);
-  border: 1px solid rgba(148, 184, 255, 0.12);
-  border-top-color: rgba(255, 255, 255, 0.12);
+  background: #F8FAFC;
+  border: 1px solid var(--border-hairline);
   border-radius: var(--radius-sm);
 }
 
-/* ==========================================================================
-   HERO RIGHT SIDE: REALISTIC FUTURISTIC iOS-INSPIRED SMARTPHONE MOCKUP
-   ========================================================================== */
-
-.ios-phone-stage {
-  position: relative;
-  display: flex;
+/* iOS Pastel Badges & Telemetry Pills */
+.telemetry-pill {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  min-height: 580px;
-  perspective: 1400px;
-}
-
-/* Soft Ambient Blue Halo Behind Phone */
-.ios-phone-glow {
-  position: absolute;
-  width: 380px;
-  height: 480px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(59, 130, 246, 0.34) 0%,
-    rgba(99, 102, 241, 0.2) 45%,
-    transparent 72%
-  );
-  filter: blur(54px);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Titanium & Ceramic-Glass Rounded Phone Frame */
-.ios-phone-frame {
-  position: relative;
-  z-index: 2;
-  width: 316px;
-  height: 618px;
-  padding: 11px;
-  border-radius: 50px;
-  background: linear-gradient(
-    145deg,
-    rgba(62, 84, 128, 0.55) 0%,
-    rgba(15, 23, 42, 0.95) 38%,
-    rgba(8, 13, 26, 0.98) 72%,
-    rgba(59, 130, 246, 0.42) 100%
-  );
-  box-shadow:
-    0 38px 90px -18px rgba(0, 0, 0, 0.88),
-    0 0 60px -12px rgba(59, 130, 246, 0.32),
-    inset 0 1px 2px rgba(255, 255, 255, 0.35),
-    inset 0 -1px 2px rgba(59, 130, 246, 0.28);
-  transition: transform 600ms var(--ease-out-expo);
-}
-
-.ios-phone-frame:hover {
-  transform: translateY(-6px) rotateX(2deg) rotateY(-3deg);
-}
-
-/* Inner OLED Screen with Blue/Violet Aurora Wallpaper */
-.ios-screen {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border-radius: 40px;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 25% 18%, rgba(59, 130, 246, 0.52) 0%, transparent 48%),
-    radial-gradient(circle at 82% 32%, rgba(99, 102, 241, 0.46) 0%, transparent 52%),
-    radial-gradient(circle at 50% 88%, rgba(37, 99, 235, 0.36) 0%, transparent 55%),
-    linear-gradient(165deg, #060D24 0%, #091534 52%, #040816 100%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 16px 15px 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-/* Specular Diagonal Glass Reflection on Screen */
-.ios-screen-reflection {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    125deg,
-    rgba(255, 255, 255, 0.11) 0%,
-    rgba(255, 255, 255, 0.03) 28%,
-    transparent 46%
-  );
-  z-index: 5;
-}
-
-/* Dynamic-Island-Style Top Capsule */
-.ios-status-bar {
-  position: relative;
-  z-index: 6;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 2px 6px 10px;
-  font-size: 0.68rem;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(59, 130, 246, 0.06);
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  font-size: 0.78rem;
   font-weight: 600;
-  color: rgba(248, 250, 252, 0.9);
+  color: var(--light-blue);
+  letter-spacing: 0.02em;
 }
 
-.ios-dynamic-island {
-  width: 108px;
-  height: 27px;
-  border-radius: 999px;
-  background: #02040A;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  display: flex;
+.tool-badge {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 10px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.65);
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: rgba(139, 92, 246, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.18);
+  color: var(--light-violet);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
-.ios-island-dot {
+.tool-format-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: #F1F5F9;
+  border: 1px solid var(--border-hairline);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.mono-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.status-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #3B82F6;
-  box-shadow: 0 0 8px #60A5FA;
-  animation: pulseLuminescence 2.4s ease-in-out infinite;
+  display: inline-block;
+  flex-shrink: 0;
 }
 
-.ios-island-wave {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
+.status-dot-emerald {
+  background-color: #10B981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
 }
 
-.ios-island-wave span {
-  display: block;
-  width: 2px;
-  border-radius: 2px;
-  background: #60A5FA;
+.status-dot-cyan {
+  background-color: #0284C7;
+  box-shadow: 0 0 6px rgba(2, 132, 199, 0.4);
 }
 
-/* Screen Inner Widgets Stack */
-.ios-widgets-stack {
-  position: relative;
-  z-index: 4;
-  display: flex;
-  flex-direction: column;
-  gap: 11px;
-  margin-top: 2px;
+/* Subtle Gradient Text Highlight */
+.text-gradient-ios {
+  background: var(--gradient-text-hero);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
 }
 
-.ios-widget {
-  background: rgba(10, 19, 42, 0.62);
-  backdrop-filter: blur(20px) saturate(170%);
-  -webkit-backdrop-filter: blur(20px) saturate(170%);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-top-color: rgba(255, 255, 255, 0.24);
-  border-radius: 22px;
-  padding: 13px 14px;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.38);
-}
-
-.ios-widget-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-/* Home Bar Indicator at Bottom of Phone */
-.ios-bottom-dock {
-  position: relative;
-  z-index: 4;
-  margin-top: auto;
-  padding-top: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-.ios-dock-bar {
-  width: 100%;
-  padding: 10px 14px;
-  border-radius: 24px;
-  background: rgba(15, 26, 56, 0.66);
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
-
-.ios-dock-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 11px;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.28), rgba(99, 102, 241, 0.22));
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #F8FAFC;
-}
-
-.ios-home-indicator {
-  width: 112px;
-  height: 4px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.42);
-}
-
-/* Floating Glass Cards Around the Smartphone */
-.ios-floating-card {
-  position: absolute;
-  z-index: 6;
-  padding: 13px 16px;
-  border-radius: 20px;
-  background: rgba(9, 17, 38, 0.76);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(148, 184, 255, 0.22);
-  border-top-color: rgba(255, 255, 255, 0.28);
-  box-shadow:
-    0 22px 48px -10px rgba(0, 0, 0, 0.78),
-    0 0 28px rgba(59, 130, 246, 0.18);
-  animation: floatGentle 6s ease-in-out infinite alternate;
-}
-
-.ios-floating-card-left {
-  top: 74px;
-  left: -24px;
-  animation-delay: 0s;
-}
-
-.ios-floating-card-right {
-  bottom: 92px;
-  right: -22px;
-  animation-delay: -3s;
-}
-
-/* Scroll Reveal Animation States */
+/* Scroll Reveal States */
 .reveal-item {
   opacity: 0;
-  transform: translateY(18px);
+  transform: translateY(16px);
   transition:
-    opacity var(--duration-slow) var(--ease-out-expo),
-    transform var(--duration-slow) var(--ease-out-expo);
+    opacity 480ms var(--ease-out-expo),
+    transform 480ms var(--ease-out-expo);
+  will-change: opacity, transform;
 }
 
 .reveal-item.is-visible {
   opacity: 1;
   transform: translateY(0);
-}
-
-@keyframes floatGentle {
-  0% { transform: translateY(0px); }
-  100% { transform: translateY(-10px); }
-}
-
-@keyframes waveDriftSlow {
-  0% { transform: translate3d(0, 0, 0) scale(1); }
-  100% { transform: translate3d(-40px, 25px, 0) scale(1.06); }
-}
-
-@keyframes waveFloatSubtle {
-  0% { transform: translateY(0px); }
-  100% { transform: translateY(-14px); }
-}
-
-@keyframes pulseLuminescence {
-  0%, 100% { opacity: 0.55; }
-  50% { opacity: 1; }
-}
-
-/* Mobile GPU & Battery Saver: Pause infinite background animations */
-@media (max-width: 768px) {
-  .atmosphere-layer::after {
-    animation: none !important;
-    filter: blur(28px) !important;
-    width: 520px;
-    height: 260px;
-    top: -50px;
-    right: -80px;
-  }
-
-  .atmosphere-grid {
-    animation: none !important;
-  }
-
-  .ambient-particle-canvas {
-    display: none !important;
-  }
-}
-
-
-/* Strict Accessibility: Respect prefers-reduced-motion */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-
-  .reveal-item {
-    opacity: 1 !important;
-    transform: none !important;
-  }
 }

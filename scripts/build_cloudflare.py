@@ -150,31 +150,48 @@ def _render_without_db(dist_dir: Path) -> None:
 
     faqs = [
         {
-            "question": "How do I preview and download Instagram Videos or Reels in 1080p?",
+            "question": "Is InstaSave Pro free to use?",
             "answer": (
-                "Paste any public Instagram Reel, Video, or Post URL into the downloader box, "
-                "click Analyze, use the built-in Video Preview player, and tap Download MP4."
+                "Yes, InstaSave Pro is 100% free to use. There are no subscriptions, "
+                "hidden fees, or daily download limits. You can save as many videos, "
+                "reels, photos, and stories as you like."
             ),
         },
         {
-            "question": "Can I watch a video preview before downloading?",
+            "question": "Do I need to log into my Instagram account?",
             "answer": (
-                "Yes. Every analyzed Instagram Reel or Video includes an instant HD video preview "
-                "player with audio and fullscreen controls before you save the file."
+                "No. You never need to enter your login credentials, passwords, or "
+                "connect your Instagram account. Simply paste any public Instagram URL to download."
             ),
         },
         {
-            "question": "Is INSTASAVE HUB free and does it require login?",
+            "question": "What is the maximum video quality available?",
             "answer": (
-                "INSTASAVE HUB is free to use and never requires your Instagram login. "
-                "All public Reels, Videos, Photos, Carousels, and Profile Avatars are supported."
+                "We fetch the original source media streams directly from Instagram, "
+                "delivering up to 1080p Full HD at 60fps (and 4K when available) with "
+                "high-bitrate AAC audio."
             ),
         },
         {
-            "question": "Does it work on iPhone, Android, Mac, and Windows?",
+            "question": "Can I download private Instagram posts?",
             "answer": (
-                "Yes. Works in any modern browser and can be installed as a standalone app "
-                "via the Install App button."
+                "No. To protect creator privacy and honor platform terms, InstaSave Pro "
+                "only processes content from public Instagram accounts."
+            ),
+        },
+        {
+            "question": "Where are downloaded files saved on my device?",
+            "answer": (
+                "On iPhone and iPad (Safari), downloads appear in the Files app under the "
+                "'Downloads' folder and can be saved directly to your Camera Roll. On Android, "
+                "Mac, and Windows, files are saved in your default browser 'Downloads' directory."
+            ),
+        },
+        {
+            "question": "Does InstaSave Pro work on iPhone and Android?",
+            "answer": (
+                "Yes. InstaSave Pro is fully web-based and responsive across all smartphones, "
+                "tablets, and computers. You can also install it to your home screen as a standalone web app."
             ),
         },
     ]

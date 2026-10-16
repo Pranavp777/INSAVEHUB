@@ -281,12 +281,97 @@
     refreshTickers: initFreeAccessTickers,
   };
 
+  function initFaqAccordion() {
+    const questionButtons = document.querySelectorAll(".faq-question-btn");
+    questionButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const row = btn.closest(".faq-row");
+        if (!row) return;
+        const isExpanded = row.classList.contains("is-expanded");
+
+        // Close other rows for clean single-expanded iOS accordion
+        document.querySelectorAll(".faq-row.is-expanded").forEach((other) => {
+          if (other !== row) {
+            other.classList.remove("is-expanded");
+            const otherBtn = other.querySelector(".faq-question-btn");
+            if (otherBtn) otherBtn.setAttribute("aria-expanded", "false");
+          }
+        });
+
+        if (isExpanded) {
+          row.classList.remove("is-expanded");
+          btn.setAttribute("aria-expanded", "false");
+        } else {
+          row.classList.add("is-expanded");
+          btn.setAttribute("aria-expanded", "true");
+        }
+      });
+    });
+  }
+
+  function initContentTypeSelector() {
+    const cards = document.querySelectorAll(".content-type-card");
+    const toolSlugInput = document.getElementById("instagramToolSlug");
+    const urlInput = document.getElementById("instagramUrlInput");
+
+    cards.forEach((card) => {
+      card.addEventListener("click", () => {
+        cards.forEach((c) => {
+          c.classList.remove("is-active");
+          c.setAttribute("aria-selected", "false");
+        });
+        card.classList.add("is-active");
+        card.setAttribute("aria-selected", "true");
+
+        const slug = card.getAttribute("data-tool-slug");
+        const placeholder = card.getAttribute("data-placeholder");
+        if (toolSlugInput && slug) {
+          toolSlugInput.value = slug;
+        }
+        if (urlInput && placeholder) {
+          urlInput.placeholder = placeholder;
+          urlInput.focus();
+        }
+      });
+    });
+  }
+
+  function initLanguageDropdown() {
+    const btn = document.getElementById("langSelectorBtn");
+    const dropdown = document.getElementById("langDropdown");
+    const label = document.getElementById("currentLangLabel");
+    if (!btn || !dropdown) return;
+
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = dropdown.classList.toggle("is-open");
+      btn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+
+    dropdown.querySelectorAll(".lang-option").forEach((opt) => {
+      opt.addEventListener("click", () => {
+        dropdown.querySelectorAll(".lang-option").forEach((o) => o.classList.remove("is-active"));
+        opt.classList.add("is-active");
+        const langCode = opt.getAttribute("data-lang") || "en";
+        if (label) label.textContent = langCode.toUpperCase();
+        dropdown.classList.remove("is-open");
+        btn.setAttribute("aria-expanded", "false");
+      });
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.classList.remove("is-open");
+        btn.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+
   function initPwaAppInstaller() {
     if (window.PwaInstallEngine && typeof window.PwaInstallEngine.syncInstallState === "function") {
       window.PwaInstallEngine.syncInstallState();
     }
   }
-
 
   document.addEventListener("DOMContentLoaded", () => {
     initScrollReveal();
@@ -294,6 +379,9 @@
     initFeatureCardPreviews();
     initMobileDrawer();
     initFreeAccessTickers();
+    initFaqAccordion();
+    initContentTypeSelector();
+    initLanguageDropdown();
     initPwaAppInstaller();
   });
 })();

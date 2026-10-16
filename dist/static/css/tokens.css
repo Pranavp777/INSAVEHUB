@@ -1,77 +1,86 @@
 /* ==========================================================================
-   INSTASAVE HUB — DESIGN TOKENS & TYPOGRAPHY SYSTEM
-   Futuristic iOS-Inspired Dark Cinematic Glass Design Language
+   INSTASAVE PRO — DESIGN TOKENS & TYPOGRAPHY SYSTEM
+   Premium iOS-Inspired Minimalist Light Theme
    ========================================================================== */
 
 :root {
-  /* Deep Cinematic Near-Black & Midnight Navy Surfaces */
-  --bg-void: #030712;
-  --bg-obsidian: #050B1A;
-  --bg-elevated: #0A1328;
-  --bg-surface-1: rgba(10, 19, 40, 0.62);
-  --bg-surface-2: rgba(14, 25, 52, 0.72);
-  --bg-surface-3: rgba(20, 35, 70, 0.48);
-  --bg-glass-strong: rgba(7, 13, 28, 0.84);
+  /* Clean White, Off-White & Pastel Light Surfaces */
+  --bg-void: #F8FAFC;
+  --bg-obsidian: #FFFFFF;
+  --bg-elevated: #FFFFFF;
+  --bg-surface-1: rgba(255, 255, 255, 0.88);
+  --bg-surface-2: rgba(255, 255, 255, 0.95);
+  --bg-surface-3: #F1F5F9;
+  --bg-glass-strong: rgba(255, 255, 255, 0.96);
+  --bg-card: #FFFFFF;
+  --bg-card-subtle: #F8FAFC;
 
-  /* Subtle 1px Specular & Electric-Blue Borders */
-  --border-hairline: rgba(148, 184, 255, 0.12);
-  --border-illuminated: rgba(96, 165, 250, 0.26);
-  --border-refraction-top: rgba(255, 255, 255, 0.15);
-  --border-cyan-glow: rgba(59, 130, 246, 0.48);
-  --border-violet-glow: rgba(99, 102, 241, 0.42);
+  /* Subtle Pastel Ambient Mesh Tints */
+  --pastel-blue: rgba(59, 130, 246, 0.08);
+  --pastel-purple: rgba(139, 92, 246, 0.08);
+  --pastel-pink: rgba(236, 72, 153, 0.08);
+  --pastel-emerald: rgba(16, 185, 129, 0.08);
+  --pastel-amber: rgba(245, 158, 11, 0.08);
+  --pastel-indigo: rgba(99, 102, 241, 0.08);
+  --pastel-rose: rgba(244, 63, 94, 0.08);
 
-  /* Electric Blue, Neon Purple & Vibrant Pink Accent System */
-  --light-cyan: #60A5FA;
-  --light-blue: #3B82F6;
-  --light-violet: #A78BFA;
+  /* Delicate 1px Translucent Borders */
+  --border-hairline: rgba(226, 232, 240, 0.85);
+  --border-subtle: #E2E8F0;
+  --border-illuminated: rgba(59, 130, 246, 0.25);
+  --border-refraction-top: rgba(255, 255, 255, 0.9);
+  --border-cyan-glow: rgba(59, 130, 246, 0.35);
+  --border-violet-glow: rgba(139, 92, 246, 0.35);
+
+  /* Deep Navy & Muted Blue-Gray Typography */
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+  --text-dim: #94A3B8;
+  --text-on-accent: #FFFFFF;
+
+  /* Refined Accent Colors */
+  --light-blue: #2563EB;
+  --light-cyan: #0284C7;
+  --light-violet: #7C3AED;
   --neon-purple: #8B5CF6;
   --neon-pink: #EC4899;
   --accent-electric: #2563EB;
-  --accent-indigo: #7C3AED;
+  --accent-indigo: #6366F1;
   --accent-pink: #DB2777;
   --light-silver: #F8FAFC;
-  --light-emerald: #34D399;
-  --light-amber: #FBBF24;
-  --light-rose: #FB7185;
+  --light-emerald: #059669;
+  --light-amber: #D97706;
+  --light-rose: #E11D48;
 
-  /* Premium iOS-Inspired Tri-Color Neon Gradients */
-  --gradient-ios-primary: linear-gradient(135deg, #2563EB 0%, #7C3AED 50%, #EC4899 100%);
-  --gradient-ios-hover: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #F43F5E 100%);
-  --gradient-ios-subtle: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(139, 92, 246, 0.14) 50%, rgba(236, 72, 153, 0.12) 100%);
-  --gradient-text-hero: linear-gradient(135deg, #60A5FA 0%, #C084FC 50%, #F472B6 100%);
-  --gradient-card-border: linear-gradient(135deg, rgba(96, 165, 250, 0.32) 0%, rgba(168, 85, 247, 0.32) 50%, rgba(244, 114, 182, 0.32) 100%);
-  --glow-button: 0 10px 32px -4px rgba(124, 58, 237, 0.52), 0 0 24px -2px rgba(236, 72, 153, 0.38);
-  --glow-subtle: 0 0 32px -4px rgba(139, 92, 246, 0.25);
-  --glow-pink: 0 0 28px rgba(236, 72, 153, 0.32);
+  /* Premium iOS-Inspired Blue, Purple & Soft Pink Gradients */
+  --gradient-ios-primary: linear-gradient(135deg, #2563EB 0%, #7C3AED 55%, #EC4899 100%);
+  --gradient-ios-hover: linear-gradient(135deg, #1D4ED8 0%, #6D28D9 55%, #DB2777 100%);
+  --gradient-ios-subtle: linear-gradient(135deg, rgba(239, 246, 255, 0.9) 0%, rgba(245, 243, 255, 0.9) 50%, rgba(253, 242, 248, 0.9) 100%);
+  --gradient-text-hero: linear-gradient(135deg, #2563EB 0%, #7C3AED 60%, #DB2777 100%);
+  --gradient-card-border: linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(139, 92, 246, 0.25) 50%, rgba(236, 72, 153, 0.2) 100%);
 
-  /* Crisp White & Cool Gray Editorial Typography */
-  --text-primary: #F8FAFC;
-  --text-secondary: #CBD5E1;
-  --text-muted: #94A3B8;
-  --text-dim: #64748B;
+  /* Subtle Soft Apple Shadows */
+  --shadow-subtle: 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 1px 2px -1px rgba(15, 23, 42, 0.03);
+  --shadow-panel: 0 10px 30px -4px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+  --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+  --shadow-interactive: 0 14px 34px -4px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.04);
+  --shadow-ambient: 0 20px 48px -10px rgba(15, 23, 42, 0.08);
+  --glow-button: 0 6px 20px -2px rgba(37, 99, 235, 0.32), 0 2px 8px 0 rgba(124, 58, 237, 0.2);
+  --glow-subtle: 0 4px 14px -2px rgba(37, 99, 235, 0.15);
+  --glow-pink: 0 4px 14px -2px rgba(236, 72, 153, 0.2);
 
-  /* Multi-Layer iOS Optical Backdrop Blur */
-  --blur-sm: blur(16px) saturate(160%);
-  --blur-md: blur(26px) saturate(175%);
-  --blur-lg: blur(42px) saturate(190%);
+  /* iOS Optical Backdrop Blur */
+  --blur-sm: blur(14px) saturate(160%);
+  --blur-md: blur(22px) saturate(175%);
+  --blur-lg: blur(36px) saturate(190%);
 
-  /* Layered Cinematic Depth Shadows & Soft Blue Glow */
-  --shadow-ambient: 0 28px 70px -16px rgba(0, 0, 0, 0.78);
-  --shadow-panel:
-    0 20px 50px -12px rgba(2, 6, 23, 0.72),
-    0 0 36px -10px rgba(37, 99, 235, 0.14),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.11);
-  --shadow-interactive:
-    0 26px 60px -12px rgba(2, 6, 23, 0.85),
-    0 0 44px -6px rgba(59, 130, 246, 0.28),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+  /* Apple SF Pro / Inter Typography Stack */
+  --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', -moz-fixed, system-ui, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Inter', system-ui, sans-serif;
+  --font-mono: 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
 
-  /* Apple-Inspired Geometric Sans-Serif Typography Stack */
-  --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Space Grotesk', system-ui, sans-serif;
-  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', system-ui, -moz-fixed, sans-serif;
-  --font-mono: 'SFMono-Regular', 'JetBrains Mono', Menlo, Monaco, Consolas, monospace;
-
-  /* Generous Whitespace & Modular Spacing Scale */
+  /* Apple-Style Whitespace & Modular Spacing */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -81,22 +90,22 @@
   --space-8: 2rem;
   --space-10: 2.5rem;
   --space-12: 3.25rem;
-  --space-16: 4.75rem;
-  --space-20: 6.5rem;
+  --space-16: 4.5rem;
+  --space-20: 6rem;
 
-  /* Large Rounded Corners (iOS 20px–32px + Pill) */
-  --radius-xs: 12px;
-  --radius-sm: 18px;
-  --radius-md: 24px;
-  --radius-lg: 32px;
+  /* Large Rounded Corners (16px–24px + Pill) */
+  --radius-xs: 10px;
+  --radius-sm: 16px;
+  --radius-md: 20px;
+  --radius-lg: 26px;
   --radius-pill: 9999px;
 
   /* Smooth Motion Curves */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
-  --duration-fast: 180ms;
-  --duration-normal: 320ms;
-  --duration-slow: 560ms;
+  --duration-fast: 160ms;
+  --duration-normal: 280ms;
+  --duration-slow: 480ms;
 }
 
 *,
@@ -119,11 +128,7 @@ html {
 
 body {
   min-height: 100vh;
-  background:
-    radial-gradient(ellipse 80% 55% at 50% -10%, rgba(37, 99, 235, 0.22) 0%, transparent 65%),
-    radial-gradient(ellipse 60% 45% at 85% 22%, rgba(99, 102, 241, 0.15) 0%, transparent 60%),
-    linear-gradient(180deg, #030712 0%, #050C1E 45%, #040917 100%);
-  background-attachment: fixed;
+  background: var(--bg-void);
   color: var(--text-primary);
   line-height: 1.62;
   overflow-x: hidden;
@@ -145,20 +150,7 @@ textarea,
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Mobile-tuned optical blur & scroll performance */
-@media (max-width: 768px) {
-  :root {
-    --blur-sm: blur(8px) saturate(130%);
-    --blur-md: blur(12px) saturate(140%);
-    --blur-lg: blur(16px) saturate(150%);
-  }
-
-  body {
-    background-attachment: scroll !important;
-  }
-}
-
-/* Accessibility: strict prefers-reduced-motion support */
+/* Reduced Motion Respect */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -168,76 +160,4 @@ textarea,
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  line-height: 1.12;
-  letter-spacing: -0.03em;
-  color: var(--text-primary);
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-  transition: color var(--duration-fast) var(--ease-standard);
-}
-
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-  outline: 2px solid var(--light-blue);
-  outline-offset: 2px;
-}
-
-/* Small Uppercase Eyebrow Labels with Generous Letter Spacing */
-.mono-label,
-.eyebrow-label {
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--light-cyan);
-}
-
-.text-gradient-blue {
-  background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 45%, #818CF8 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-}
-
-.text-gradient-ios {
-  background: linear-gradient(135deg, #60A5FA 0%, #A855F7 50%, #EC4899 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  display: inline;
-}
-
-.text-gradient-purple {
-  background: linear-gradient(135deg, #A855F7 0%, #EC4899 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  display: inline;
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
 }
